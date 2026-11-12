@@ -46,6 +46,7 @@ export function BottomSheet({ open, onClose, title, eyebrow, children, hideClose
       }}
     >
       {open && (
+        <div className={styles.panel}>
         <div className={styles.body}>
           <div className={styles.header}>
             <div>
@@ -59,6 +60,7 @@ export function BottomSheet({ open, onClose, title, eyebrow, children, hideClose
             )}
           </div>
           {children}
+        </div>
         </div>
       )}
     </dialog>
