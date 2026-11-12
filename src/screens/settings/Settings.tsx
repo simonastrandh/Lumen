@@ -54,7 +54,7 @@ export default function Settings() {
 
   function clearAll() {
     Object.keys(readAllData()).forEach((k) => localStorage.removeItem(k))
-    window.location.assign('/')
+    window.location.assign(import.meta.env.BASE_URL)
   }
 
   return (
