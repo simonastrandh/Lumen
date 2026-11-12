@@ -1,0 +1,33 @@
+.wrap { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.label { font-size: 12px; font-weight: 600; color: var(--text-secondary); }
+.field {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 3px 10px;
+  border: 1px solid var(--surface-border);
+  border-radius: var(--radius-pill);
+  background: var(--input-bg);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.field:focus-within { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-glow); }
+.invalid { border-color: var(--danger); }
+.input {
+  width: 3ch;
+  min-width: 0;
+  padding: 7px 2px;
+  border: 0;
+  outline: none;
+  box-shadow: none;
+  background: none;
+  color: var(--text-primary);
+  font: inherit;
+  font-size: 16px; /* hindrar zoom på iOS */
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+}
+.input:first-child { width: 4ch; }
+.input:focus, .input:focus-visible { outline: none; box-shadow: none; }
+.input::placeholder { color: var(--text-secondary); }
+.colon { font-weight: 700; color: var(--text-secondary); }

@@ -1,0 +1,70 @@
+.sheet {
+  width: 100%;
+  max-width: var(--app-max-width);
+  max-height: 88dvh;
+  margin: auto auto 0;
+  padding: 0;
+  overflow: hidden; /* innehållet (.body) scrollar, så att kanten ligger still */
+  border: 0;
+  border-radius: 0;
+  --cut: 16px;
+  /* Samma krom-stil som korten: kapat hörn uppe till höger och en iriserande hårfin kant */
+  clip-path: polygon(0 0, calc(100% - var(--cut)) 0, 100% var(--cut), 100% 100%, 0 100%);
+  background: var(--surface-bg);
+  color: var(--text-primary);
+  animation: slide-up 0.25s ease;
+}
+.sheet[open] { display: flex; flex-direction: column; }
+.sheet::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(135deg, #3fe8da 0%, #9b7bff 38%, #d9b35c 66%, #3fe8da 100%);
+  background-size: 220% 220%;
+  clip-path: polygon(
+    evenodd,
+    0 0, calc(100% - var(--cut)) 0, 100% var(--cut), 100% 100%, 0 100%, 0 0,
+    1.5px 1.5px, 1.5px 100%, calc(100% - 1.5px) 100%, calc(100% - 1.5px) calc(var(--cut) + 0.62px), calc(100% - var(--cut) - 0.62px) 1.5px, 1.5px 1.5px
+  );
+  animation: sheetShift 16s linear infinite;
+}
+@keyframes sheetShift { from { background-position: 0% 0%; } to { background-position: 220% 220%; } }
+@media (prefers-reduced-motion: reduce) { .sheet::before { animation: none; } }
+.sheet::backdrop { background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(2px); }
+.body { display: flex; flex-direction: column; flex: 1 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain; gap: 16px; padding: 24px 20px calc(24px + env(safe-area-inset-bottom)); }
+.header { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+.eyebrow { margin-bottom: 4px; }
+.title { font-size: 20px; font-weight: 700; }
+.close {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: 1px solid var(--surface-border);
+  border-radius: var(--radius-pill);
+  background: var(--input-bg);
+  color: var(--text-secondary);
+}
+
+@keyframes slide-up {
+  from { transform: translateY(40px); opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sheet { animation: none; }
+}
+
+/* Datorskärm: sheeten ligger i telefonramens bredd, nederst i ramen */
+@media (min-width: 700px) and (min-height: 620px) {
+  .sheet {
+    max-width: var(--frame-width);
+    max-height: min(80dvh, 760px);
+    margin-bottom: 24px;
+    clip-path: polygon(0 0, calc(100% - var(--cut)) 0, 100% var(--cut), 100% 100%, 0 100%);
+  }
+}
+
+.sheet:focus, .sheet:focus-visible { outline: none; }

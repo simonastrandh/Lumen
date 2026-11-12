@@ -1,0 +1,34 @@
+.nav {
+  position: sticky;
+  bottom: 0;
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 28px calc(12px + env(safe-area-inset-bottom));
+  background: var(--surface-bg);
+  border-top: 1px solid var(--surface-border);
+}
+.item {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  min-width: 48px;
+  text-decoration: none;
+  color: var(--text-secondary);
+  transition: color 0.2s ease;
+}
+.label { font-size: 10px; }
+.active { color: var(--accent); }
+.active .label { font-weight: 600; color: var(--text-primary); }
+/* Glödande streck över aktiv flik */
+.active::before {
+  content: '';
+  position: absolute;
+  top: -13px;
+  width: 24px;
+  height: 2px;
+  border-radius: var(--radius-pill);
+  background: var(--accent);
+  box-shadow: 0 0 10px 1px var(--accent-glow);
+}

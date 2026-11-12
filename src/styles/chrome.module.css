@@ -1,0 +1,54 @@
+/*
+ * "Krom"-kort för hela appen: skarpa hörn med två kapade hörn (uppe till höger, nere till vänster)
+ * och en hårfin kant som skiftar turkos → lila → guld, som färgskiftet över ryggraden.
+ * Används via `composes: card from './chrome.module.css'`. Kanten ritas med en clip-path med hål
+ * (evenodd), eftersom vanlig border inte följer ett kapat hörn. Sätt --cut lokalt för mindre hörn.
+ */
+.card {
+  --cut: 16px;
+  position: relative;
+  border: 0;
+  border-radius: 0;
+  clip-path: polygon(0 0, calc(100% - var(--cut)) 0, 100% var(--cut), 100% 100%, var(--cut) 100%, 0 calc(100% - var(--cut)));
+}
+.card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(135deg, #3fe8da 0%, #9b7bff 38%, #d9b35c 66%, #3fe8da 100%);
+  background-size: 220% 220%;
+  clip-path: polygon(
+    evenodd,
+    0 0, calc(100% - var(--cut)) 0, 100% var(--cut), 100% 100%, var(--cut) 100%, 0 calc(100% - var(--cut)), 0 0,
+    1.5px 1.5px, 1.5px calc(100% - var(--cut) - 0.62px), calc(var(--cut) + 0.62px) calc(100% - 1.5px), calc(100% - 1.5px) calc(100% - 1.5px),
+    calc(100% - 1.5px) calc(var(--cut) + 0.62px), calc(100% - var(--cut) - 0.62px) 1.5px, 1.5px 1.5px
+  );
+  animation: chromeShift 16s linear infinite;
+}
+@keyframes chromeShift {
+  from { background-position: 0% 0%; }
+  to { background-position: 220% 220%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .card::before { animation: none; }
+}
+
+/* Löpande text som ligger direkt på bakgrunden: en mjuk, mörk och suddig fläck bakom gör den läsbar
+   utan ruta, så att ryggraden fortfarande syns runt om. Används med composes. */
+.legible {
+  position: relative;
+  isolation: isolate;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.7);
+}
+.legible::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  inset: -8px -12px;
+  border-radius: 14px;
+  background: rgba(3, 5, 8, 0.72);
+  filter: blur(9px);
+  pointer-events: none;
+}

@@ -1,0 +1,48 @@
+.field {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 8px 0 16px;
+  border: 1px solid var(--surface-border);
+  border-radius: var(--radius-pill);
+  background: var(--input-bg);
+  color: var(--text-secondary);
+}
+.field { transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease; }
+.field:focus-within {
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 6%, var(--input-bg));
+  color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-glow), 0 0 22px -6px var(--accent-glow);
+}
+.icon { flex-shrink: 0; }
+.input {
+  flex: 1;
+  min-width: 0;
+  padding: 13px 0;
+  border: 0;
+  outline: none;
+  box-shadow: none;
+  background: none;
+  color: var(--text-primary);
+  font: inherit;
+  font-size: 16px; /* hindrar zoom på iOS */
+}
+.input::placeholder { color: var(--text-secondary); }
+.input::-webkit-search-cancel-button { display: none; }
+.clear {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: var(--surface-bg);
+  color: var(--text-secondary);
+}
+
+/* Global :focus-visible ger annars en kantig ruta runt själva input-fältet; hela pillen markeras istället */
+.field .input:focus,
+.field .input:focus-visible { outline: none; box-shadow: none; }
+.clear:focus-visible { outline-offset: 0; border-radius: var(--radius-pill); }

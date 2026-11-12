@@ -1,0 +1,66 @@
+.shell {
+  /* Höjd på skärmen (används av sidor som inte ska scrolla, t.ex. aktivt pass) */
+  --shell-h: 100dvh;
+  --nav-h: calc(64px + env(safe-area-inset-bottom)); /* menyns höjd inkl. hak i botten */
+  position: relative;
+  z-index: 1; /* ovanför BackgroundSpine */
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: var(--app-max-width);
+  min-height: 100dvh;
+  margin: 0 auto;
+}
+.scroller {
+  position: relative;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+}
+.content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  /* Marginaler som följer skärmbredden (16–24 px) och hakets säkra yta */
+  padding: max(32px, env(safe-area-inset-top)) clamp(16px, 5.5vw, 24px) 32px;
+}
+
+/* Datorskärm: visa appen i en telefonram i mitten, så man ser hur den ser ut i en mobil.
+   Bara .scroller scrollar; bakgrundsbilden ligger kvar i ramen och rör sig inte. */
+@media (min-width: 700px) and (min-height: 620px) {
+  .shell {
+    width: var(--frame-width);
+    max-width: var(--frame-width);
+    --shell-h: min(860px, calc(100dvh - 48px));
+    height: var(--shell-h);
+    min-height: 0;
+    margin: 24px auto;
+    overflow: hidden;
+    border-radius: 44px;
+    background: var(--page-bg);
+    box-shadow: 0 0 0 10px #2a3138, 0 0 0 11px #56636c, 0 30px 80px rgba(0, 0, 0, 0.45);
+  }
+  .scroller {
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+    scrollbar-width: none;
+  }
+  .scroller::-webkit-scrollbar { display: none; }
+}
+
+
+/* Första besöket: appens delar är dolda under välkomnandet och tonar sedan fram en efter en */
+.hidden { opacity: 0; pointer-events: none; max-height: 100dvh; overflow: hidden; }
+.entering .content > * { animation: appear 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+.entering .content > :nth-child(1) { animation-delay: 0.25s; }
+.entering .content > :nth-child(2) { animation-delay: 0.4s; }
+.entering .content > :nth-child(3) { animation-delay: 0.55s; }
+.entering .content > :nth-child(4) { animation-delay: 0.7s; }
+.entering .content > :nth-child(n + 5) { animation-delay: 0.85s; }
+.entering nav, .entering > nav { animation: appear 0.9s 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+@keyframes appear { from { opacity: 0; transform: translateY(22px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) {
+  .entering .content > *, .entering nav { animation: none; }
+}

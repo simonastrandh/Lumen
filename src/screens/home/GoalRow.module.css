@@ -1,0 +1,32 @@
+.row { display: flex; align-items: center; gap: 18px; }
+.editArea {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: 18px;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  text-align: left;
+}
+.text { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.title { font-size: 14px; font-weight: 600; }
+.value { font-size: 13px; color: var(--text-secondary); }
+.remaining { font-size: 12px; font-weight: 600; color: var(--accent); }
+
+.remove {
+  position: relative;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: var(--input-bg);
+  color: var(--danger);
+}
+.remove::after { content: ''; position: absolute; inset: -8px; } /* större träffyta */
+.aim { font-weight: 700; color: var(--text-primary); }

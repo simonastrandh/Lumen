@@ -1,0 +1,6 @@
+.chart { display: flex; align-items: flex-end; justify-content: space-between; gap: 10px; height: 130px; }
+.col { display: flex; flex: 1; flex-direction: column; align-items: center; gap: 8px; height: 100%; min-width: 0; }
+.track { display: flex; flex: 1; align-items: flex-end; width: 100%; max-width: 34px; }
+.bar { width: 100%; border-radius: 0; background: var(--surface-border); transition: height 0.4s ease; }
+.last { background: var(--accent); box-shadow: 0 0 14px -3px var(--accent-glow); }
+.label { font-size: 11px; color: var(--text-secondary); }

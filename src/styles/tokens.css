@@ -1,0 +1,103 @@
+/*
+ * Designtokens för Lumen.
+ * Värden hämtade från Figma ("Design System – Styrkeloggen").
+ *
+ * Tema väljs i denna ordning:
+ *  1. data-theme="light" | "dark" på <html>
+ *  2. annars prefers-color-scheme
+ *  3. fallback: mörkt
+ */
+
+:root {
+  /* Tema-oberoende */
+  --font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  --radius-card: 0px; /* korten är skarpa med kapade hörn (se chrome.module.css) */
+  --radius-pill: 2px; /* knappar, fält och etiketter: nästan skarpa */
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+
+  --fs-caption: 12px;
+  --fs-body: 14px;
+  --fs-h3: 18px;
+  --fs-h2: 22px;
+  --fs-h1: 28px;
+
+  --app-max-width: 560px; /* på mobil fyller appen hela bredden; bredare skärmar (t.ex. liggande telefon) begränsas */
+  --frame-width: 390px; /* telefonramen på datorskärm */
+}
+
+/* Mörkt läge (standard) */
+:root,
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --page-bg: #06080a;
+  --surface-bg: #10161a;
+  --surface-border: #223238;
+  --input-bg: #0c1114;
+  --text-primary: #eaf6f6;
+  --text-secondary: #8fa7ac;
+  --accent: #3fe8da;
+  --accent-strong: #3fe8da; /* turkos som klarar kontrast för text/linjer */
+  --accent-text: #06080a;
+  --accent-2: #9b7bff;
+  --accent-2-strong: #b7a1ff; /* lila text/kant med hög kontrast (≈8:1 mot kortyta) */
+  --gold: #d9b35c;
+  --gold-text: #d9b35c;
+  --danger: #ef6e6e;
+  --accent-glow: rgba(63, 232, 218, 0.45);
+  --glass-opacity: 60%;
+  --glass-highlight: rgba(255, 255, 255, 0.08);
+}
+
+/* Ljust läge – följer systemet om användaren inte valt något */
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme='dark']) {
+    color-scheme: light;
+    --page-bg: #f5fafa;
+    --surface-bg: #e6f2f1;
+    --surface-border: #cbe2e0;
+    --input-bg: #f5fafa;
+    --text-primary: #0b1a1a;
+    --text-secondary: #567877;
+    --accent: #0e9e90;
+    --accent-strong: #0a6f65;
+    --accent-text: #ffffff;
+    --accent-2: #7b5ce0;
+    --accent-2-strong: #5b3fc4; /* ≈6:1 mot kortyta */
+    --gold: #b8872e;
+    --gold-text: #7a5a0c; /* ≈5,6:1 mot kortyta (guldet i --gold är för ljust som text i ljust läge) */
+    --danger: #d64545;
+    --accent-glow: rgba(14, 158, 144, 0.35);
+    --glass-opacity: 75%;
+    --glass-highlight: rgba(255, 255, 255, 0.6);
+  }
+}
+
+/* Ljust läge – explicit val */
+:root[data-theme='light'] {
+  color-scheme: light;
+  --page-bg: #f5fafa;
+  --surface-bg: #e6f2f1;
+  --surface-border: #cbe2e0;
+  --input-bg: #f5fafa;
+  --text-primary: #0b1a1a;
+  --text-secondary: #567877;
+  --accent: #0e9e90;
+  --accent-strong: #0a6f65;
+  --accent-text: #ffffff;
+  --accent-2: #7b5ce0;
+  --accent-2-strong: #5b3fc4; /* ≈6:1 mot kortyta */
+  --gold: #b8872e;
+  --gold-text: #7a5a0c; /* ≈5,6:1 mot kortyta */
+  --danger: #d64545;
+  --accent-glow: rgba(14, 158, 144, 0.35);
+  --glass-opacity: 75%;
+  --glass-highlight: rgba(255, 255, 255, 0.6);
+}

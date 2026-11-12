@@ -1,0 +1,30 @@
+.header { display: flex; align-items: center; justify-content: space-between; }
+.eyebrow { font-size: 12px; font-weight: 600; color: var(--text-secondary); }
+.empty { font-size: 13px; color: var(--text-secondary); }
+
+.section { display: flex; flex-direction: column; gap: 12px; }
+.toggleRow { display: flex; justify-content: flex-end; }
+.dimmed { opacity: 0.35; transition: opacity 0.2s ease; }
+
+.goals { display: flex; flex-direction: column; gap: 16px; }
+.addGoal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  padding: 15px 0;
+  border: 1.5px solid var(--accent);
+  border-radius: 2px;
+  background: none;
+  color: var(--accent);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.stats { display: flex; justify-content: space-between; }
+
+.chart { display: flex; flex-direction: column; gap: 10px; }
+.chartHeader { display: flex; justify-content: space-between; font-size: 12px; }
+.chartTitle { font-weight: 600; color: var(--text-secondary); }
+.trend { display: inline-flex; align-items: center; gap: 4px; font-weight: 700; color: var(--accent); }

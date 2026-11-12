@@ -1,0 +1,25 @@
+.badge {
+  --tone: var(--accent);
+  --tone-glow: var(--accent-glow);
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-pill);
+  background: var(--input-bg);
+  color: var(--tone);
+  border: 1px solid color-mix(in srgb, var(--tone) 45%, transparent);
+  box-shadow: 0 0 16px -4px var(--tone-glow), inset 0 0 10px -6px var(--tone-glow);
+}
+.badge svg { filter: drop-shadow(0 0 5px var(--tone-glow)); }
+.accent-2 {
+  --tone: var(--accent-2);
+  --tone-glow: color-mix(in srgb, var(--accent-2) 45%, transparent);
+}
+
+.flat {
+  border: 0;
+  background: color-mix(in srgb, var(--tone) 12%, var(--input-bg));
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--tone) 35%, transparent);
+}
+.flat svg { filter: none; }

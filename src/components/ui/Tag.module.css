@@ -1,0 +1,15 @@
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px;
+  border-radius: var(--radius-pill);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+}
+.accent { color: var(--accent); background: color-mix(in srgb, var(--accent) 14%, transparent); }
+.accent-2 { color: var(--accent-2); background: color-mix(in srgb, var(--accent-2) 16%, transparent); }
+.gold { color: var(--gold-text); background: color-mix(in srgb, var(--gold) 16%, transparent); }
+.neutral { color: var(--text-secondary); background: var(--input-bg); }

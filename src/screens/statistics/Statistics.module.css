@@ -1,0 +1,34 @@
+.title { font-size: 24px; font-weight: 700; }
+.empty { composes: legible from '../../styles/chrome.module.css'; font-size: 14px; line-height: 1.5; color: var(--text-secondary); }
+.tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.tile { composes: card from '../../styles/chrome.module.css'; --cut: 10px; padding: 14px 16px;  background: var(--surface-bg); }
+.card { composes: card from '../../styles/chrome.module.css'; display: flex; flex-direction: column; gap: 10px; padding: 16px;  background: var(--surface-bg); }
+.cardTitle { font-size: 13px; font-weight: 700; color: var(--text-secondary); }
+.section { display: flex; flex-direction: column; gap: 10px; }
+.list { composes: card from '../../styles/chrome.module.css'; display: flex; flex-direction: column; margin: 0; padding: 4px 18px; list-style: none;  background: var(--surface-bg); }
+.row { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 0; }
+.row + .row { border-top: 1px solid var(--surface-border); }
+.rowTitle { font-size: 15px; font-weight: 600; }
+.rowMeta { margin-top: 2px; font-size: 12px; color: var(--text-secondary); }
+.pb { padding: 3px 8px; border-radius: var(--radius-pill); font-size: 10px; font-weight: 700; color: var(--gold-text); background: color-mix(in srgb, var(--gold) 16%, transparent); }
+.exList { display: flex; flex-direction: column; gap: 2px; margin: 8px 0 0; padding: 0; list-style: none; font-size: 12px; line-height: 1.45; color: var(--text-secondary); }
+.exList strong { font-weight: 600; color: var(--text-primary); }
+.sub { margin-top: 4px; font-size: 13px; color: var(--text-secondary); }
+.hero { composes: card from '../../styles/chrome.module.css'; display: flex; flex-direction: column; gap: 6px; padding: 18px;   background: var(--surface-bg); }
+.heroLabel { font-size: 11px; font-weight: 600; letter-spacing: 0.05em; color: var(--text-secondary); }
+.heroRow { display: flex; align-items: center; gap: 14px; }
+.heroValue { font-size: 36px; font-weight: 800; color: var(--accent-2-strong); font-variant-numeric: tabular-nums; }
+.heroText { font-size: 13px; line-height: 1.4; color: var(--text-secondary); }
+.cardHead { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.trend { display: inline-flex; align-items: center; gap: 4px; font-size: 13px; font-weight: 700; color: var(--accent-strong); }
+.gold { composes: card from '../../styles/chrome.module.css'; display: flex; align-items: center; gap: 14px; padding: 16px;   background: var(--surface-bg); }
+.goldTitle { font-size: 15px; font-weight: 700; color: var(--gold-text); }
+.goldText { margin-top: 2px; font-size: 12px; line-height: 1.45; color: var(--text-secondary); }
+.delta { font-size: 15px; font-weight: 700; color: var(--accent-strong); white-space: nowrap; }
+.tiles3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.tileC { composes: card from '../../styles/chrome.module.css'; --cut: 10px; display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 14px 6px;   background: var(--surface-bg); }
+.tileC strong { font-size: 16px; font-variant-numeric: tabular-nums; }
+.tileC span { font-size: 12px; color: var(--text-secondary); }
+.rowSide { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+.del { position: relative; display: grid; place-items: center; width: 28px; height: 28px; padding: 0; border: 1px solid var(--surface-border); border-radius: var(--radius-pill); background: var(--input-bg); color: var(--danger); }
+.del::after { content: ''; position: absolute; inset: -8px; }

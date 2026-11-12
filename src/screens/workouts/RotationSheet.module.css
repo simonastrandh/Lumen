@@ -1,0 +1,13 @@
+.help { font-size: 13px; line-height: 1.5; color: var(--text-secondary); }
+.toggleRow { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 14px 16px; border-radius: 2px; background: var(--input-bg); }
+.toggleTitle { display: block; font-size: 14px; font-weight: 600; }
+.toggleHint { display: block; margin-top: 2px; font-size: 11px; color: var(--text-secondary); }
+.empty { font-size: 13px; color: var(--text-secondary); }
+.item { display: flex; align-items: center; gap: 12px; }
+.step { display: grid; place-items: center; width: 24px; height: 24px; border-radius: var(--radius-pill); font-size: 12px; font-weight: 700; color: var(--accent-2); background: color-mix(in srgb, var(--accent-2) 16%, transparent); }
+.itemName { flex: 1; font-size: 15px; font-weight: 600; }
+.remove { position: relative; display: grid; place-items: center; width: 28px; height: 28px; padding: 0; border: 0; border-radius: var(--radius-pill); background: var(--input-bg); color: var(--danger); }
+.remove::after { content: ''; position: absolute; inset: -8px; }
+.addLabel { margin-bottom: 8px; font-size: 12px; font-weight: 600; color: var(--text-secondary); }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { display: inline-flex; align-items: center; gap: 6px; padding: 9px 14px; border: 1px solid var(--accent-2-strong); border-radius: var(--radius-pill); background: none; color: var(--accent-2-strong); font-size: 13px; font-weight: 600; }

@@ -1,0 +1,59 @@
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 14px;
+  border: 1px solid var(--surface-border);
+  border-radius: var(--radius-pill);
+  background: var(--input-bg);
+  color: var(--text-primary);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+.pill:hover { border-color: var(--accent); }
+.caret { transform: rotate(90deg); color: var(--text-secondary); }
+
+.columns { display: flex; gap: 8px; }
+.column { display: flex; flex: 1; flex-direction: column; align-items: center; gap: 6px; min-width: 0; }
+.unit { font-size: 12px; font-weight: 600; color: var(--text-secondary); }
+.wheelWrap { position: relative; width: 100%; height: 220px; }
+/* Markering av det valda värdet, som i iPhones hjul */
+.band {
+  position: absolute;
+  inset-inline: 0;
+  top: 88px;
+  height: 44px;
+  border-radius: 2px;
+  background: color-mix(in srgb, var(--accent) 14%, var(--input-bg));
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent) 35%, transparent);
+}
+.wheel {
+  position: relative;
+  height: 100%;
+  overflow-y: auto;
+  scroll-snap-type: y mandatory;
+  overscroll-behavior: contain;
+  scrollbar-width: none;
+  cursor: grab;
+  touch-action: pan-y;
+  user-select: none;
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 30%, #000 70%, transparent 100%);
+  mask-image: linear-gradient(to bottom, transparent 0%, #000 30%, #000 70%, transparent 100%);
+  border-radius: 2px;
+}
+.wheel::-webkit-scrollbar { display: none; }
+.wheel:focus-visible { outline: none; box-shadow: 0 0 0 2px var(--accent-glow); }
+.item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 44px;
+  scroll-snap-align: center;
+  font-size: 20px;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-secondary);
+  transition: color 0.12s ease, font-weight 0.12s ease;
+}
+.selected { color: var(--text-primary); font-weight: 700; }

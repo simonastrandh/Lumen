@@ -1,0 +1,14 @@
+.header { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+.accent { color: var(--accent); }
+.accent-2 { color: var(--accent-2); }
+.neutral { color: var(--text-secondary); }

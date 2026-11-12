@@ -1,0 +1,213 @@
+.root {
+  position: fixed;
+  inset: 0;
+  z-index: -1; /* under allt innehåll i AppShell (som skapar egen stapelordning) */
+  overflow: hidden;
+  pointer-events: none;
+  display: none; /* visas bara i mörkt läge, se nederst */
+}
+
+/* Scenen hålls i appens kolumnbredd så ryggraden inte blåses upp på stora skärmar.
+   Den flyttas ner så att det färgstarka mittpartiet hamnar bakom hero-kortet (glaset). */
+.stage {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: min(100%, 620px);
+  transform: translateX(-50%) translateY(24%) scale(1.15);
+  animation: float 22s ease-in-out infinite alternate;
+  will-change: transform;
+  /* Mjuka ut bildens egna kanter så att ingen hård bildkant syns */
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 20%, #000 88%, transparent 100%);
+  mask-image: linear-gradient(to bottom, transparent 0%, #000 20%, #000 88%, transparent 100%);
+}
+
+.image,
+.sheen,
+.glint {
+  position: absolute;
+  inset: 0;
+  background-image: var(--spine-url);
+  background-size: cover;
+  background-position: 62% 40%;
+}
+
+.image {
+  opacity: 0.5;
+  animation: breathe 7s ease-in-out infinite alternate;
+}
+
+/* Ljussvep: en överexponerad kopia av bilden som bara syns i ett smalt diagonalt band.
+   Eftersom det är samma bild lyser bara kromet upp – den svarta bakgrunden förblir svart. */
+.sheen {
+  filter: brightness(1.9) saturate(1.6);
+  mix-blend-mode: screen;
+  opacity: 0.55;
+  -webkit-mask-image: linear-gradient(160deg, transparent 42%, #000 50%, transparent 58%);
+  mask-image: linear-gradient(160deg, transparent 42%, #000 50%, transparent 58%);
+  -webkit-mask-size: 100% 300%;
+  mask-size: 100% 300%;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  animation: sweep 9s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+}
+
+.glint {
+  mix-blend-mode: screen;
+  filter: brightness(2.6) saturate(1.8) contrast(1.2);
+  opacity: 0;
+  -webkit-mask-image: radial-gradient(closest-side, #000 0%, rgba(0, 0, 0, 0.5) 55%, transparent 100%);
+  mask-image: radial-gradient(closest-side, #000 0%, rgba(0, 0, 0, 0.5) 55%, transparent 100%);
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+}
+.glintA { -webkit-mask-size: 42% 22%; mask-size: 42% 22%; animation: glintA 13s ease-in-out infinite; }
+.glintB { -webkit-mask-size: 30% 16%; mask-size: 30% 16%; animation: glintB 9s ease-in-out infinite 2s; filter: brightness(3) saturate(2.2) hue-rotate(-15deg); }
+.glintC { -webkit-mask-size: 52% 26%; mask-size: 52% 26%; animation: glintC 17s ease-in-out infinite 5s; filter: brightness(2.2) saturate(1.5) hue-rotate(40deg); }
+
+/* Färgton i appens palett som långsamt glider – ger kromet en skiftande oljefilm-känsla */
+.tint {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    160deg,
+    #3fe8da 0%,
+    #9b7bff 25%,
+    #d9b35c 50%,
+    #9b7bff 75%,
+    #3fe8da 100%
+  );
+  background-size: 100% 400%;
+  mix-blend-mode: color;
+  opacity: 0.2;
+  animation: iridescence 28s linear infinite;
+}
+
+.particles,
+.foreground {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* Vinjett: mörk i kanterna, genomskinlig i mitten – allt smälter in i --page-bg */
+.vignette {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 55% at 50% 66%, transparent 0%, transparent 40%, var(--page-bg) 100%),
+    linear-gradient(to bottom, var(--page-bg) 0%, transparent 30%, transparent 90%, var(--page-bg) 100%);
+}
+
+.placeholder {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: min(80vw, 320px);
+  padding: 20px;
+  transform: translate(-50%, -50%);
+  border: 1px dashed var(--surface-border);
+  border-radius: var(--radius-card);
+  background: var(--input-bg);
+  color: var(--text-secondary);
+  font-size: 12px;
+  text-align: center;
+  opacity: 0.6;
+}
+
+/* Långsam svävning: ryggraden "andas" och vrider sig en aning */
+@keyframes float {
+  0% {
+    transform: translateX(-50%) translateY(25%) scale(1.15) rotate(-0.6deg);
+  }
+  100% {
+    transform: translateX(-51.5%) translateY(21%) scale(1.19) rotate(0.8deg);
+  }
+}
+
+/* Ljusbandet sveper uppifrån och ner längs kotpelaren, med en paus mellan varven */
+@keyframes sweep {
+  0% {
+    -webkit-mask-position: 0 100%;
+    mask-position: 0 100%;
+  }
+  70%,
+  100% {
+    -webkit-mask-position: 0 0%;
+    mask-position: 0 0%;
+  }
+}
+
+@keyframes iridescence {
+  from {
+    background-position: 0 0%;
+  }
+  to {
+    background-position: 0 100%;
+  }
+}
+
+/* Minska rörelser: allt står still (partiklarna ritas en gång, se ParticleField) */
+@media (prefers-reduced-motion: reduce) {
+  .stage,
+  .sheen,
+  .image,
+  .glint,
+  .tint {
+    animation: none;
+  }
+  .sheen,
+  .glint {
+    opacity: 0;
+  }
+}
+
+:root[data-theme='dark'] .root {
+  display: block;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) .root {
+    display: block;
+  }
+}
+
+.foreground { filter: blur(1.2px); opacity: 0.6; }
+
+/* Ryggradens ljus "andas" – ser ut som att ljuskällan varierar */
+@keyframes breathe {
+  from { opacity: 0.42; filter: brightness(0.95); }
+  to { opacity: 0.56; filter: brightness(1.15); }
+}
+
+/* Ljusfläckar som vandrar över olika delar av ryggraden i olika takt, och fadar in/ut */
+@keyframes glintA {
+  0% { -webkit-mask-position: 80% 10%; mask-position: 80% 10%; opacity: 0; }
+  15% { opacity: 0.75; }
+  50% { -webkit-mask-position: 45% 45%; mask-position: 45% 45%; opacity: 0.9; }
+  85% { opacity: 0.6; }
+  100% { -webkit-mask-position: 60% 95%; mask-position: 60% 95%; opacity: 0; }
+}
+@keyframes glintB {
+  0% { -webkit-mask-position: 30% 70%; mask-position: 30% 70%; opacity: 0; }
+  25% { opacity: 0.9; }
+  60% { -webkit-mask-position: 70% 35%; mask-position: 70% 35%; opacity: 0.7; }
+  100% { -webkit-mask-position: 90% 15%; mask-position: 90% 15%; opacity: 0; }
+}
+@keyframes glintC {
+  0% { -webkit-mask-position: 55% 100%; mask-position: 55% 100%; opacity: 0; }
+  40% { opacity: 0.8; }
+  70% { -webkit-mask-position: 40% 30%; mask-position: 40% 30%; opacity: 0.55; }
+  100% { -webkit-mask-position: 65% 0%; mask-position: 65% 0%; opacity: 0; }
+}
+
+/* Telefonram på dator: bakgrunden fyller ramen (inte fönstret) och scrollar inte med innehållet */
+@media (min-width: 700px) and (min-height: 620px) {
+  .root { position: absolute; }
+}
+
+/* Inställningen "Animerad bakgrund" av: allt står still */
+.still .stage, .still .image, .still .sheen, .still .glint, .still .tint { animation: none; }
+.still .sheen, .still .glint { opacity: 0; }

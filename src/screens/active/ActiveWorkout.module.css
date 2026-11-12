@@ -1,0 +1,106 @@
+.header { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+.headText { min-width: 0; }
+.title { font-size: 24px; font-weight: 700; }
+.sub { margin-top: 2px; font-size: 12px; line-height: 1.5; color: var(--text-secondary); }
+.empty { composes: legible from '../../styles/chrome.module.css'; font-size: 14px; line-height: 1.5; color: var(--text-secondary); }
+.clock { display: inline-flex; align-items: center; gap: 6px; flex-shrink: 0; padding: 7px 12px; border: 1px solid var(--surface-border); border-radius: var(--radius-pill); background: var(--surface-bg); font-size: 13px; font-weight: 600; font-variant-numeric: tabular-nums; }
+
+.dots { display: flex; justify-content: center; gap: 8px; }
+.dot { width: 22px; height: 6px; padding: 0; border: 0; border-radius: 3px; background: var(--surface-border); position: relative; }
+.dot::after { content: ''; position: absolute; inset: -10px -4px; }
+.dotDone { background: color-mix(in srgb, var(--accent) 55%, var(--surface-border)); }
+.dotActive { background: var(--accent); box-shadow: 0 0 10px -1px var(--accent-glow); }
+
+.timer { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+.ringInner { display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 0 28px; text-align: center; }
+.ringTime { font-size: clamp(26px, 9.5vw, 40px); font-weight: 700; font-variant-numeric: tabular-nums; color: var(--accent); }
+.work { color: var(--accent-2-strong); }
+.ringLabel { font-size: 12px; font-weight: 400; line-height: 1.4; color: var(--text-secondary); }
+.timerButtons { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; width: 100%; }
+.pill { display: inline-flex; align-items: center; justify-content: center; gap: 6px; flex: 1 1 0; min-width: 0; padding: 9px 12px; border: 1px solid var(--surface-border); border-radius: var(--radius-pill); background: var(--surface-bg); color: var(--text-primary); font: inherit; font-size: 13px; font-weight: 600; }
+.pillPrimary { border-color: var(--accent); color: var(--accent-strong); }
+
+.card {
+  --cut: 16px;
+  display: flex;
+  flex-direction: column;
+  padding: 4px 18px;
+  border: 1.5px solid transparent;
+  /* Kant som skiftar turkos → lila → guld (en scrollande ruta kan inte ha en pseudo-kant, så den ritas som bakgrund) */
+  background: linear-gradient(var(--surface-bg), var(--surface-bg)) padding-box, linear-gradient(135deg, #3fe8da, #9b7bff 40%, #d9b35c 70%, #3fe8da) border-box;
+  clip-path: polygon(0 0, calc(100% - var(--cut)) 0, 100% var(--cut), 100% 100%, var(--cut) 100%, 0 calc(100% - var(--cut)));
+}
+.cardTitle { padding: 14px 0 6px; font-size: 13px; font-weight: 700; color: var(--text-secondary); }
+.setRow { display: flex; align-items: center; gap: 10px; padding: 11px 0; }
+.setRow + .setRow { border-top: 1px solid var(--surface-border); }
+.setName { font-size: 14px; font-weight: 600; min-width: 48px; }
+.setValues { flex: 1; min-width: 0; padding: 6px 0; border: 0; background: none; color: var(--text-secondary); font: inherit; font-size: 13px; text-align: right; text-decoration: underline dotted; text-underline-offset: 4px; }
+.play { display: grid; place-items: center; width: 28px; height: 28px; padding: 0; border: 1px solid var(--accent-2-strong); border-radius: var(--radius-pill); background: none; color: var(--accent-2-strong); }
+.check { position: relative; display: grid; place-items: center; flex-shrink: 0; width: 26px; height: 26px; padding: 0; border: 1.5px solid var(--surface-border); border-radius: var(--radius-pill); background: var(--input-bg); color: var(--accent-text); }
+.check::after { content: ''; position: absolute; inset: -9px; }
+.checkDone { border-color: var(--accent); background: var(--accent); box-shadow: 0 0 12px -3px var(--accent-glow); }
+.addSet { align-self: center; padding: 14px 0; border: 0; border-top: 1px solid var(--surface-border); width: 100%; background: none; color: var(--accent-strong); font: inherit; font-size: 13px; font-weight: 600; }
+
+.nav { display: flex; align-items: center; gap: 10px; }
+.prev { display: grid; place-items: center; flex-shrink: 0; width: 52px; height: 52px; padding: 0; border: 1px solid var(--surface-border); border-radius: var(--radius-pill); background: var(--surface-bg); color: var(--text-primary); }
+.prev:disabled { opacity: 0.35; cursor: default; }
+.end { background: var(--surface-bg) !important; padding-block: 12px !important; font-size: 14px !important; }
+
+.summaryHead { display: flex; flex-direction: column; align-items: center; gap: 6px; padding-top: 16px; text-align: center; }
+.trophy { display: grid; place-items: center; width: 56px; height: 56px; border-radius: var(--radius-pill); color: var(--gold-text); background: color-mix(in srgb, var(--gold) 14%, var(--input-bg)); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--gold) 40%, transparent); }
+.stats { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 8px; }
+.stat { composes: card from '../../styles/chrome.module.css'; --cut: 10px; display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 14px 8px;  background: var(--surface-bg); }
+.stat strong { font-size: 20px; font-variant-numeric: tabular-nums; }
+.stat span { font-size: 11px; color: var(--text-secondary); }
+.pbRow { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 12px 0; font-size: 14px; font-weight: 600; }
+.pbRow + .pbRow { border-top: 1px solid var(--surface-border); }
+/* Fylld yta bakom ringen så att texten alltid går att läsa över bakgrundsbilden */
+.ringWrap { border-radius: 50%; background: color-mix(in srgb, var(--page-bg) 82%, transparent); }
+
+/* Hela sidan ryms på en skärm: bara setlistan scrollar om den blir för lång */
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  height: calc(var(--shell-h) - var(--nav-h) - 32px - max(32px, env(safe-area-inset-top))); /* innehållets padding uppe + nere */
+  min-height: 0;
+  overflow: hidden;
+}
+.page > * { flex-shrink: 0; }
+.page > .setsCard { flex: 1 1 0; flex-shrink: 1; min-height: 96px; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; }
+
+/* Mörkare kant längst ned (inte genomskinlig) visar att listan går att scrolla */
+.fadeBottom::after {
+  content: '';
+  position: sticky;
+  bottom: 0;
+  flex-shrink: 0;
+  height: 48px;
+  margin: -48px -18px 0;
+  pointer-events: none;
+  background: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.5));
+}
+:root[data-theme='light'] .fadeBottom::after { background: linear-gradient(to bottom, transparent, rgba(0, 30, 28, 0.16)); }
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme]) .fadeBottom::after { background: linear-gradient(to bottom, transparent, rgba(0, 30, 28, 0.16)); }
+}
+
+.restPick { display: flex; flex: 1 1 0; min-width: 0; }
+.restPick > button { width: 100%; justify-content: space-between; padding-block: 10px; white-space: nowrap; }
+
+.headTools { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+.addEx { display: grid; place-items: center; width: 34px; height: 34px; padding: 0; border: 1px solid var(--surface-border); border-radius: var(--radius-pill); background: var(--surface-bg); color: var(--accent); }
+
+/* Små skärmar (≈ 360 px och smalare): tajtare avstånd */
+@media (max-width: 370px) {
+  .page { gap: 10px; }
+  .title { font-size: 21px; }
+  .pill { padding: 8px 6px; font-size: 12px; white-space: nowrap; }
+  .restPick > button { padding-inline: 8px; font-size: 12px; }
+  .setRow { gap: 8px; }
+}
+/* Liggande telefon / mycket låg skärm: sidan får scrolla i stället för att pressas ihop */
+@media (max-height: 560px) {
+  .page { height: auto; overflow: visible; }
+  .page > .setsCard { flex: none; max-height: none; overflow: visible; }
+}
