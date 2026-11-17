@@ -1,11 +1,15 @@
-/* Hela sidan ryms på en skärm: bara setlistan scrollar om den blir för lång */
+/* Sidan ryms på en skärm: setlistan krymper först, och är innehållet ändå för högt scrollar sidan */
 .page {
   display: flex;
   flex-direction: column;
   height: calc(var(--shell-h) - var(--nav-h) - 28px - max(56px, calc(env(safe-area-inset-top) + 28px))); /* innehållets padding uppe + nere */
   min-height: 0;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: none;
 }
+.page::-webkit-scrollbar { display: none; }
 .page > * { flex-shrink: 0; }
 .page > .setsCard { flex: 1 1 0; flex-shrink: 1; min-height: 96px; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; }
 
