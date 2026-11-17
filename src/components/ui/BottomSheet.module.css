@@ -33,7 +33,7 @@
 .body { display: flex; flex-direction: column; flex: 1 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain; gap: 16px; padding: 22px 20px calc(28px + env(safe-area-inset-bottom)); }
 .header { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
 .eyebrow { margin-bottom: 6px; }
-.title { font-family: var(--font-display); font-size: 30px; font-weight: 400; line-height: 1.05; text-transform: uppercase; }
+.title { font-family: var(--font-display); font-size: 30px; font-weight: 400; line-height: 1.25; text-transform: uppercase; }
 .close {
   display: grid;
   place-items: center;

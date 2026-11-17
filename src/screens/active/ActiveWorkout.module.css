@@ -12,7 +12,7 @@
 /* Rubrik */
 .header { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
 .headText { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
-.title { font-family: var(--font-display); font-size: 40px; font-weight: 400; line-height: 1.1; text-transform: uppercase; overflow-wrap: anywhere; }
+.title { font-family: var(--font-display); font-size: 40px; font-weight: 400; line-height: 1.25; text-transform: uppercase; overflow-wrap: anywhere; }
 .sub { font-size: 15px; font-weight: 500; line-height: 1.2; color: var(--text-secondary); }
 .empty { margin-top: 22px; font-size: 16px; line-height: 1.5; color: var(--text-secondary); }
 .clock { display: inline-flex; align-items: center; gap: 6px; flex-shrink: 0; padding: 8px 12px; border: 1px solid var(--field-border); border-radius: var(--radius-pill); font-size: 14px; font-weight: 600; font-variant-numeric: tabular-nums; }

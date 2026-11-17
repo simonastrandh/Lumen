@@ -30,7 +30,7 @@
 .next:active { transform: translate(1px, 1px); }
 .nextText { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
 .nextLabel { font-size: 13px; font-weight: 600; line-height: 1.2; }
-.nextTitle { font-family: var(--font-display); font-size: 44px; font-weight: 400; line-height: 1; text-transform: uppercase; overflow-wrap: anywhere; }
+.nextTitle { font-family: var(--font-display); font-size: 44px; font-weight: 400; line-height: 1.25; text-transform: uppercase; overflow-wrap: anywhere; }
 .nextMeta { font-size: 13px; font-weight: 500; line-height: 1.2; }
 .play {
   display: grid;
