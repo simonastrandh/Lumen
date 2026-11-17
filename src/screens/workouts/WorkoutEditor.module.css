@@ -1,5 +1,7 @@
-.header { display: flex; align-items: center; gap: 12px; }
-.title { margin-top: 4px; font-size: 15px; font-weight: 500; color: var(--text-secondary); }
+.page { display: flex; flex-direction: column; gap: 22px; }
+.header { display: flex; align-items: center; gap: 16px; padding-bottom: 4px; }
+.headText { display: flex; flex-direction: column; gap: 8px; align-items: flex-start; min-width: 0; }
+.title { font-family: var(--font-display); font-size: 32px; font-weight: 400; line-height: 1; text-transform: uppercase; color: var(--text-primary); }
 .back { display: grid; place-items: center; width: 40px; height: 40px; padding: 0; border: 1px solid var(--field-border); border-radius: var(--radius-pill); background: transparent; color: var(--text-primary); }
 .section { display: flex; flex-direction: column; gap: 12px; }
 .label { font-size: 13px; font-weight: 500; color: var(--text-secondary); }

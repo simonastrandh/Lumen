@@ -61,12 +61,12 @@ function Editor({ initial }: { initial?: Workout }) {
   }
 
   return (
-    <>
+    <div className={styles.page}>
       <header className={styles.header}>
         <button type="button" className={styles.back} onClick={() => navigate('/pass')} aria-label="Tillbaka till Pass">
           <Icon name="chevronLeft" size={20} />
         </button>
-        <div>
+        <div className={styles.headText}>
           <Tag tone="accent-2" icon="layers">PASS</Tag>
           <h1 className={styles.title}>{initial ? 'Redigera pass' : 'Nytt pass'}</h1>
         </div>
@@ -144,7 +144,7 @@ function Editor({ initial }: { initial?: Workout }) {
       </div>
 
       <AddExerciseSheet open={picking} onClose={() => setPicking(false)} listFirst defaultKind={kind} onPick={addExercise} pickedIds={items.map((i) => i.exerciseId)} />
-    </>
+    </div>
   )
 }
 
