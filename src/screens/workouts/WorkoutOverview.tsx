@@ -26,10 +26,24 @@ export default function WorkoutOverview() {
         <button type="button" className={styles.back} onClick={() => navigate('/pass')} aria-label="Tillbaka till Pass">
           <Icon name="chevronLeft" size={20} />
         </button>
-        <p className={styles.meta}>{workoutMeta(workout)}</p>
       </header>
 
-      <h1 className={styles.name} style={{ fontSize: Math.max(56, Math.min(150, Math.floor(330 / (Math.max(3, workout.name.length) * 0.47)))) }}>{workout.name}</h1>
+      <button
+        type="button"
+        className={styles.hero}
+        onClick={() => (otherActive ? setConfirmNew(true) : navigate(`/pass/aktivt/${workout.id}`))}
+        disabled={workout.exercises.length === 0}
+        aria-label={`${active && !otherActive ? 'Fortsätt' : 'Starta'} pass ${workout.name}`}
+      >
+        <span className={styles.heroText}>
+          <span className={styles.heroLabel}>{active && !otherActive ? 'Pågående pass' : 'Pass'}</span>
+          <span className={styles.heroTitle}>{workout.name}</span>
+          <span className={styles.heroMeta}>{workoutMeta(workout)}</span>
+        </span>
+        <span className={styles.play} aria-hidden="true">
+          <Icon name="play" size={22} />
+        </span>
+      </button>
 
       {workout.exercises.length > 0 ? (
         <ol className={styles.list}>
@@ -50,9 +64,6 @@ export default function WorkoutOverview() {
       <div className={styles.actions}>
         <Button variant="secondary" icon="edit" fullWidth onClick={() => navigate(`/pass/${workout.id}/redigera`)} >
           Redigera övningar
-        </Button>
-        <Button variant="primary" icon="play" fullWidth onClick={() => (otherActive ? setConfirmNew(true) : navigate(`/pass/aktivt/${workout.id}`))} disabled={workout.exercises.length === 0}>
-          {active && !otherActive ? 'Fortsätt pass' : 'Starta pass'}
         </Button>
       </div>
 
