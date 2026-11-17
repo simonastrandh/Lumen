@@ -31,6 +31,8 @@ interface AddExerciseSheetProps {
   pickedIds?: string[]
   /** Text på knappen som skapar övningen */
   submitLabel?: string
+  /** Rubrik (standard: Lägg till övning) */
+  title?: string
   /** Visa först en lista med egna övningar och en knapp för att skapa ny */
   listFirst?: boolean
   /** Vilken typ en ny övning förvalas som (t.ex. passets typ) och vilka som visas först i listan */
@@ -41,7 +43,7 @@ const norm = (s: string) => s.toLocaleLowerCase('sv-SE').trim()
 const measures: CardioMeasure[] = ['tid', 'distans', 'tid-distans']
 
 /** "Lägg till övning": man skriver in en egen övning (styrka eller kondition, som mäts olika). */
-export function AddExerciseSheet({ open, onClose, onPick, submitLabel = 'Lägg till i passet', listFirst = false, defaultKind = 'styrka' }: AddExerciseSheetProps) {
+export function AddExerciseSheet({ open, onClose, onPick, submitLabel = 'Lägg till i passet', title = 'Lägg till övning', listFirst = false, defaultKind = 'styrka' }: AddExerciseSheetProps) {
   const { customExercises, addCustomExercise, getExercise, myExercises, savedExerciseIds, toggleSavedExercise } = useWorkoutStore()
   const [creating, setCreating] = useState(!listFirst)
   const [query, setQuery] = useState('')
@@ -97,7 +99,7 @@ export function AddExerciseSheet({ open, onClose, onPick, submitLabel = 'Lägg t
   }
 
   return (
-    <BottomSheet open={open} onClose={close} title="Lägg till övning">
+    <BottomSheet open={open} onClose={close} title={title}>
       {!creating ? (
         <div className={styles.stack}>
           {myExercises.length > 6 && <SearchField value={query} onChange={setQuery} label="Sök bland dina övningar" placeholder="Sök bland dina övningar..." />}

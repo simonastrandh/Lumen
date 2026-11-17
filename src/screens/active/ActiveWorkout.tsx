@@ -46,6 +46,7 @@ export default function ActiveWorkout() {
   const [confirmEnd, setConfirmEnd] = useState(false)
   const [adding, setAdding] = useState(false)
   const [managing, setManaging] = useState(false)
+  const [replacing, setReplacing] = useState<number | null>(null)
   const [summary, setSummary] = useState<SessionSummary | null>(null)
   const finishedAlarm = useRef(false)
   // Text som läses upp för skärmläsare (vila slut, ny övning, set klart)
@@ -128,9 +129,24 @@ export default function ActiveWorkout() {
   function addExercise(e: Exercise) {
     // En nyskapad egen övning finns inte i butiken förrän nästa rendering, så använd objektet vi fick
     const entry = entryForExercise(e.id, getExercise(e.id) ?? e)
+    if (replacing !== null) {
+      const at = replacing
+      if (timer && timer.ei === at) setTimer(null)
+      setItems((prev) => prev.map((it, k) => (k === at ? { exerciseId: e.id, sets: makeSets(entry) } : it)))
+      setReplacing(null)
+      setAdding(false)
+      setManaging(true)
+      return
+    }
     setItems((prev) => [...prev, { exerciseId: e.id, sets: makeSets(entry) }])
     setAdding(false)
     goTo(items.length)
+  }
+
+  function reorderExercises(order: number[]) {
+    setItems((prev) => order.map((o) => prev[o]))
+    setEi((cur) => Math.max(0, order.indexOf(cur)))
+    setTimer((t) => (t ? { ...t, ei: Math.max(0, order.indexOf(t.ei)) } : t))
   }
 
   function removeExercise(i: number) {
@@ -203,11 +219,13 @@ export default function ActiveWorkout() {
       <ManageExercisesSheet
         open={managing}
         onClose={() => setManaging(false)}
-        exercises={items.map((it) => ({ name: getExercise(it.exerciseId)?.name ?? 'Övning', done: it.sets.every((x) => x.done) }))}
+        exercises={items.map((it) => ({ name: getExercise(it.exerciseId)?.name ?? 'Övning' }))}
+        onReorder={reorderExercises}
         onRemove={removeExercise}
+        onReplace={(i) => { setReplacing(i); setManaging(false); setAdding(true) }}
         onAdd={() => { setManaging(false); setAdding(true) }}
       />
-      <AddExerciseSheet open={adding} onClose={() => setAdding(false)} listFirst onPick={addExercise} submitLabel="Lägg till i passet" />
+      <AddExerciseSheet open={adding} onClose={() => { setAdding(false); if (replacing !== null) { setReplacing(null); setManaging(true) } }} listFirst onPick={addExercise} title={replacing !== null ? 'Byt övning' : undefined} submitLabel={replacing !== null ? 'Byt till övningen' : 'Lägg till i passet'} />
     </>
   )
 
