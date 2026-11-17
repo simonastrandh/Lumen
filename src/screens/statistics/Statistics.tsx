@@ -89,14 +89,19 @@ export default function Statistics() {
   )
 }
 
+/** Antal loggade pass som visas åt gången i Senaste pass */
+const RECENT_PAGE = 5
+
 function Overview({ history }: { history: CompletedWorkout[] }) {
   const { exerciseStats, deleteHistoryEntry, getExercise } = useWorkoutStore()
   const [query, setQuery] = useState('')
+  /** Så många loggade pass visas; "Visa mer" lägger till fler */
+  const [shown, setShown] = useState(RECENT_PAGE)
   const [deleting, setDeleting] = useState<string | null>(null)
   const deletingEntry = history.find((h) => h.completedAt === deleting)
   const q = norm(query)
   const matches = [...history].reverse().filter((h) => !q || norm(h.name).includes(q) || (h.exercises ?? []).some((e) => norm(e.name).includes(q)))
-  const recent = q ? matches : matches.slice(0, 8)
+  const recent = matches.slice(0, shown)
   const bests = Object.entries(exerciseStats)
     .map(([id, st]) => {
       const ex = getExercise(id)
@@ -137,7 +142,7 @@ function Overview({ history }: { history: CompletedWorkout[] }) {
 
       <section className={styles.section} aria-labelledby="recent-t">
         <h2 id="recent-t" className={styles.heading}>Senaste pass</h2>
-        <SearchField value={query} onChange={setQuery} label="Sök bland loggade pass" placeholder="Sök pass eller övning..." />
+        <SearchField value={query} onChange={(v) => { setQuery(v); setShown(RECENT_PAGE) }} label="Sök bland loggade pass" placeholder="Sök pass eller övning..." />
         {recent.length === 0 && <p className={styles.empty}>{q ? `Inga loggade pass matchar ”${query}”.` : 'Inga pass i den här perioden.'}</p>}
         {recent.length > 0 && <ul className={styles.list}>
           {recent.map((h, i) => (
@@ -166,6 +171,11 @@ function Overview({ history }: { history: CompletedWorkout[] }) {
             </li>
           ))}
         </ul>}
+        {matches.length > shown && (
+          <Button variant="secondary" fullWidth onClick={() => setShown((n) => n + RECENT_PAGE)}>
+            Visa mer ({matches.length - shown} till)
+          </Button>
+        )}
       </section>
 
       {bests.length > 0 && (
