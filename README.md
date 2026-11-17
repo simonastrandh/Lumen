@@ -42,7 +42,7 @@ telefon fyller den skärmen.
 - **Välkomnande:** första gången appen öppnas visas LUMEN i stort. Man går vidare genom att trycka på skärmen eller på
   knappen (Enter fungerar med tangentbord), och därefter tonar appen fram.
 - **Hem:** en stor affischsiffra (pass denna månad), nästa pass som en gul rad med spelknapp, "Starta tomt pass",
-  startguide för nya användare och "Din utveckling" med dina mål. Pennan öppnar redigeringsläge där mål läggs till,
+  startguide för nya användare och "Mina mål". Pennan öppnar redigeringsläge där mål läggs till,
   tas bort och flyttas.
 - **Pass:**
   - Nuvarande rotation överst (passen i ordning, vilket som är näst, Aktiv/Pausad) med "Ändra rotation".
@@ -87,7 +87,7 @@ src/
     pickers/    hjulen (WheelPicker), tidsfält och MeasureFields (set, reps, vikt, tid, distans)
     layout/     skalet runt alla skärmar: AppShell, BottomNav, välkomnandet
   screens/      en mapp per skärm, med skärmens egna delar bredvid
-    home/       Hem: hälsning, Din utveckling, mål, startguide
+    home/       Hem: Mina mål, startguide
     workouts/   Pass: lista, redigerare, översikt, övningsblad, rotation
     active/     Aktivt pass: timer, setlista, sammanfattning, sparat pågående pass
     statistics/ Statistik

@@ -1,7 +1,5 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
 import { Button } from '../../components/ui/Button'
-import { Icon } from '../../components/ui/Icon'
 import { SortableList } from '../../components/ui/SortableList'
 import type { Goal } from '../../data/goals'
 import { effectiveGoal } from '../../data/stats'
@@ -12,9 +10,8 @@ import styles from './DevelopmentCard.module.css'
 
 type SheetState = { mode: 'add' } | { mode: 'edit'; goal: Goal } | null
 
-/** "Din utveckling": dina mål. Pennan växlar till redigeringsläge där mål kan läggas till, tas bort och flyttas. */
+/** "Mina mål". Pennan växlar till redigeringsläge där mål kan läggas till, tas bort och flyttas. */
 export function DevelopmentCard() {
-  const navigate = useNavigate()
   const [editing, setEditing] = useState(false)
   const { goals, exerciseStats, getExercise, saveGoal: storeSaveGoal, removeGoal, reorderGoals } = useWorkoutStore()
   const [sheet, setSheet] = useState<SheetState>(null)
@@ -31,11 +28,11 @@ export function DevelopmentCard() {
   return (
     <section className={styles.wrap} aria-labelledby="development-title">
       <div className={styles.header}>
-        <h2 id="development-title" className={styles.title}>Din utveckling</h2>
+        <h2 id="development-title" className={styles.title}>Mina mål</h2>
         <Button
           variant="ghost"
           icon={editing ? 'check' : 'edit'}
-          aria-label={editing ? 'Klar med redigering' : 'Redigera Din utveckling'}
+          aria-label={editing ? 'Klar med redigering' : 'Redigera mål'}
           onClick={() => setEditing((e) => !e)}
         />
       </div>
@@ -60,12 +57,7 @@ export function DevelopmentCard() {
           </Button>
           {goals.length > 1 && <p className={styles.hint}>Håll och dra i de tre strecken för att ändra ordning.</p>}
         </div>
-      ) : (
-        <button key="more" type="button" className={`${styles.more} reveal`} onClick={() => navigate('/statistik')}>
-          Se all statistik
-          <Icon name="chevronRight" size={16} />
-        </button>
-      )}
+      ) : null}
 
       <EditGoalSheet
         open={sheet !== null}
