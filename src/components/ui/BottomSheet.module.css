@@ -47,11 +47,18 @@
   color: var(--text-primary);
 }
 
+@keyframes slide-down { to { transform: translateY(40px); opacity: 0; } }
+@keyframes fade-in { from { opacity: 0; } }
+@keyframes fade-out { to { opacity: 0; } }
+.sheet[open] { animation: fade-in 0.25s ease; }
+.sheet.closing { animation: fade-out 0.22s ease forwards; pointer-events: none; }
+.closing .panel { animation: slide-down 0.22s ease forwards; }
+
 @keyframes slide-up {
   from { transform: translateY(40px); opacity: 0; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .panel { animation: none; }
+  .panel, .sheet[open], .sheet.closing, .closing .panel { animation: none; }
 }
 
 /* Datorskärm: allt som öppnas ligger inuti telefonramen (ramens kant och ram ligger alltid överst) */

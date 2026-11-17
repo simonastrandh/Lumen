@@ -26,6 +26,12 @@ import styles from './ActiveWorkout.module.css'
  */
 export default function ActiveWorkout() {
   const { id = '' } = useParams()
+  // En ny instans per pass, så att tillståndet inte följer med när man byter pass i samma sida
+  return <ActiveWorkoutInner key={id} />
+}
+
+function ActiveWorkoutInner() {
+  const { id = '' } = useParams()
   const navigate = useNavigate()
   const store = useWorkoutStore()
   const { getExercise } = store
@@ -47,19 +53,23 @@ export default function ActiveWorkout() {
   const [adding, setAdding] = useState(false)
   const [managing, setManaging] = useState(false)
   const [replacing, setReplacing] = useState<number | null>(null)
+  const [confirmReplace, setConfirmReplace] = useState<number | null>(null)
   const [summary, setSummary] = useState<SessionSummary | null>(null)
   const finishedAlarm = useRef(false)
   // Text som läses upp för skärmläsare (vila slut, ny övning, set klart)
   const [announce, setAnnounce] = useState('')
 
   const missing = !isEmpty && !workout && !resume
-  useWakeLock(!summary && !missing)
+  // Ett annat pass är redan sparat som pågående: fråga innan det skrivs över
+  const [proceed, setProceed] = useState(false)
+  const blocked = !!saved && saved.id !== id && !proceed
+  useWakeLock(!summary && !missing && !blocked)
 
   // Spara passet löpande
   useEffect(() => {
-    if (summary || missing) return
+    if (summary || missing || blocked) return
     writeSession({ id, startedAt: startedAt.current, ei, items, timer })
-  }, [id, ei, items, timer, summary, missing])
+  }, [id, ei, items, timer, summary, missing, blocked])
 
   // En tick var 250 ms driver både totalklockan och timern (räknar mot klockslag, så den går rätt även om fliken sover)
   useEffect(() => {
@@ -150,7 +160,8 @@ export default function ActiveWorkout() {
   }
 
   function removeExercise(i: number) {
-    if (timer) setTimer(null)
+    // En pågående timer följer med sin övning, eller avbryts om det är den som tas bort
+    setTimer((t) => (!t || t.ei === i ? null : t.ei > i ? { ...t, ei: t.ei - 1 } : t))
     setItems((prev) => prev.filter((_, k) => k !== i))
     setEi((cur) => Math.max(0, Math.min(cur > i ? cur - 1 : cur, items.length - 2)))
   }
@@ -189,6 +200,16 @@ export default function ActiveWorkout() {
 
   const requestFinish = () => (doneSets < totalSets || doneSets === 0 ? setConfirmEnd(true) : finish())
 
+  if (blocked && saved) {
+    return (
+      <div className={styles.page}>
+        <h1 className={styles.title}>Du har ett pågående pass</h1>
+        <p className={styles.empty}>Om du startar det här passet avbryts det pågående passet och dess klara set sparas inte.</p>
+        <Button variant="primary" fullWidth onClick={() => setProceed(true)}>Starta det här passet</Button>
+        <Button variant="secondary" fullWidth onClick={() => navigate(`/pass/aktivt/${saved.id}`, { replace: true })}>Fortsätt pågående pass</Button>
+      </div>
+    )
+  }
   if (missing) return <p style={{ color: 'var(--text-secondary)' }}>Passet finns inte längre.</p>
   if (summary) return <Summary name={workout?.name ?? 'Tomt pass'} summary={summary} />
 
@@ -222,9 +243,17 @@ export default function ActiveWorkout() {
         exercises={items.map((it) => ({ name: getExercise(it.exerciseId)?.name ?? 'Övning' }))}
         onReorder={reorderExercises}
         onRemove={removeExercise}
-        onReplace={(i) => { setReplacing(i); setManaging(false); setAdding(true) }}
+        onReplace={(i) => {
+          if (items[i].sets.some((x) => x.done)) setConfirmReplace(i)
+          else { setReplacing(i); setManaging(false); setAdding(true) }
+        }}
         onAdd={() => { setManaging(false); setAdding(true) }}
       />
+      <BottomSheet open={confirmReplace !== null} onClose={() => setConfirmReplace(null)} title="Byta övning?">
+        <p className={styles.sub}>Du har redan bockat av set på den här övningen. Byter du ut den sparas inte de seten.</p>
+        <Button variant="primary" fullWidth onClick={() => { setReplacing(confirmReplace); setConfirmReplace(null); setManaging(false); setAdding(true) }}>Byt ändå</Button>
+        <Button variant="secondary" fullWidth onClick={() => setConfirmReplace(null)}>Behåll övningen</Button>
+      </BottomSheet>
       <AddExerciseSheet open={adding} onClose={() => { setAdding(false); if (replacing !== null) { setReplacing(null); setManaging(true) } }} listFirst onPick={addExercise} title={replacing !== null ? 'Byt övning' : undefined} submitLabel={replacing !== null ? 'Byt till övningen' : 'Lägg till i passet'} />
     </>
   )

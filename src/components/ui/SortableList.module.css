@@ -31,4 +31,4 @@
   background: var(--surface-bg);
   box-shadow: 0 0 0 1px var(--field-border);
 }
-.dragging .handle { color: var(--accent); cursor: grabbing; }
+.dragging .handle { color: var(--accent-ink); cursor: grabbing; }
