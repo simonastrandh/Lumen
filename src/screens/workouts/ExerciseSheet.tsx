@@ -6,7 +6,7 @@ import { MeasureFields, showFor } from '../../components/pickers/MeasureFields'
 import { durationLabel } from '../../components/pickers/TimeField'
 import { Tag } from '../../components/ui/Tag'
 import { TextField } from '../../components/ui/TextField'
-import { cardioMeasureLabel, isCardio, loadLabel, strengthParts, strengthPartLabel, partsOf, toggledMeasure, type CardioMeasure, type Exercise, type ExerciseDefaults, type PbMetric } from '../../data/exercises'
+import { cardioMeasureLabel, isCardio, strengthParts, strengthPartLabel, partsOf, toggledMeasure, type CardioMeasure, type Exercise, type ExerciseDefaults, type PbMetric } from '../../data/exercises'
 import { useWorkoutStore } from '../../store/WorkoutStore'
 import { describeValues } from './labels'
 import styles from './Sheets.module.css'
@@ -58,11 +58,7 @@ export function ExerciseSheet({ exercise: selected, onClose }: ExerciseSheetProp
   const inWorkouts = workouts.filter((w) => w.exercises.some((e) => e.exerciseId === exercise.id)).length
 
   return (
-    <BottomSheet open onClose={close} closeIcon={changed ? 'check' : 'close'} title={exercise.name} eyebrow={<Tag tone="accent">ÖVNING</Tag>}>
-      <div className={styles.tags}>
-        <Tag>{exercise.muscleGroup}</Tag>
-        <Tag>{loadLabel[exercise.load]}</Tag>
-      </div>
+    <BottomSheet open onClose={close} closeIcon={changed ? 'check' : 'close'} title={exercise.name}>
 
       {exercise.custom && (
         <TextField
