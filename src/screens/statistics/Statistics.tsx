@@ -3,14 +3,11 @@ import { useState } from 'react'
 import { BarChart } from '../../components/ui/BarChart'
 import { BottomSheet } from '../../components/ui/BottomSheet'
 import { Button } from '../../components/ui/Button'
+import { Tag } from '../../components/ui/Tag'
 import { Icon } from '../../components/ui/Icon'
-import { IconBadge } from '../../components/ui/IconBadge'
-import { LineChart } from '../../components/ui/LineChart'
 import { showFor } from '../../components/pickers/MeasureFields'
 import { SearchField } from '../../components/ui/SearchField'
-import { SectionHeader } from '../../components/ui/SectionHeader'
 import { SegmentedControl } from '../../components/ui/SegmentedControl'
-import { StatChip } from '../../components/ui/StatChip'
 import { formatTime } from '../../components/pickers/TimeField'
 import {
   ago,
@@ -19,7 +16,6 @@ import {
   loggedExercises,
   metricUnit,
   strengthIncreases,
-  totalSeconds,
   totalVolume,
   weeksInRow,
   workoutsPerMonth,
@@ -33,13 +29,14 @@ import styles from './Statistics.module.css'
 type Tab = 'overview' | 'exercise'
 type Range = '4v' | '3m' | 'ar' | 'allt'
 const rangeDays: Record<Range, number> = { '4v': 28, '3m': 92, ar: 365, allt: Infinity }
+const rangeText: Record<Range, string> = { '4v': 'Pass de senaste 4 veckorna', '3m': 'Pass de senaste 3 månaderna', ar: 'Pass det senaste året', allt: 'Pass totalt' }
 const norm = (t: string) => t.toLocaleLowerCase('sv-SE').trim()
 
 const when = (iso: string) => new Date(iso).toLocaleDateString('sv-SE', { day: 'numeric', month: 'short' })
 const comma = (n: number) => String(Math.round(n * 10) / 10).replace('.', ',')
 const sign = (n: number) => (n > 0 ? '+' : '')
 
-/** Statistik över avslutade pass. Varje pass som avslutas i Aktivt pass loggas här (Figma "05 – Statistik"). */
+/** Statistik över avslutade pass. Varje pass som avslutas i Aktivt pass loggas här. */
 export default function Statistics() {
   const { history } = useWorkoutStore()
   const [tab, setTab] = useState<Tab>('overview')
@@ -49,24 +46,33 @@ export default function Statistics() {
 
   return (
     <>
-      <header>
-        <h1 className={styles.title}>Statistik</h1>
-        <p className={styles.sub}>{tab === 'overview' ? 'Din utveckling totalt sett' : 'Din utveckling i en övning'}</p>
-      </header>
-      <SegmentedControl<Tab>
-        label="Visa statistik"
-        value={tab}
-        onChange={setTab}
-        options={[{ value: 'overview', label: 'Översikt' }, { value: 'exercise', label: 'Per övning' }]}
-      />
-      {tab === 'overview' && history.length > 0 && (
-        <SegmentedControl<Range>
-          label="Tidsperiod"
-          value={range}
-          onChange={setRange}
-          options={[{ value: '4v', label: '4 v' }, { value: '3m', label: '3 mån' }, { value: 'ar', label: 'År' }, { value: 'allt', label: 'Allt' }]}
-        />
+      <h1 className={styles.top}>Statistik</h1>
+
+      {history.length > 0 && tab === 'overview' && (
+        <section className={styles.big} aria-label="Pass totalt">
+          <p className={styles.bigNumber}>{inRange.length}</p>
+          <p className={styles.bigSub}>{rangeText[range]}</p>
+        </section>
       )}
+
+      <div className={styles.controls}>
+        <SegmentedControl<Tab>
+          label="Visa statistik"
+          value={tab}
+          onChange={setTab}
+          options={[{ value: 'overview', label: 'Översikt' }, { value: 'exercise', label: 'Per övning' }]}
+        />
+        {tab === 'overview' && history.length > 0 && (
+          <div className={styles.chips} role="group" aria-label="Tidsperiod">
+            {([['4v', '4 v'], ['3m', '3 mån'], ['ar', 'År'], ['allt', 'Allt']] as [Range, string][]).map(([value, label]) => (
+              <button key={value} type="button" className={styles.chip} aria-pressed={range === value} onClick={() => setRange(value)}>
+                {label}
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
+
       {history.length === 0 ? (
         <p className={styles.empty}>Inga pass loggade än. När du avslutar ett pass i Aktivt pass sparas det här med tid, set och vikt.</p>
       ) : tab === 'overview' ? (
@@ -104,76 +110,38 @@ function Overview({ history }: { history: CompletedWorkout[] }) {
   const more = increases.slice(1, 5)
   const monthly = workoutsPerMonth(history)
   const trend = (monthly[monthly.length - 1]?.value ?? 0) - (monthly[monthly.length - 2]?.value ?? 0)
-  const setsTotal = history.reduce((n, h) => n + (h.setsDone ?? 0), 0)
 
   return (
     <>
-      {avg !== null && (
-        <section className={styles.hero} aria-label="Genomsnittlig styrkeökning">
-          <p className={styles.heroLabel}>GENOMSNITTLIG STYRKEÖKNING</p>
-          <div className={styles.heroRow}>
-            <span className={styles.heroValue}>{sign(avg)}{Math.round(avg)}%</span>
-            <span className={styles.heroText}>sedan ditt första pass, över alla övningar med vikt</span>
-          </div>
-        </section>
-      )}
-
       <div className={styles.tiles}>
-        <div className={styles.tile}><StatChip value={history.length} label="pass totalt" /></div>
-        <div className={styles.tile}><StatChip value={workoutsThisMonth(history)} label="denna månad" /></div>
-        <div className={styles.tile}><StatChip value={weeksInRow(history)} label="veckor i rad" /></div>
-        <div className={styles.tile}><StatChip value={setsTotal} label="set totalt" /></div>
-        <div className={styles.tile}><StatChip value={formatTime(totalSeconds(history))} label="total tid" /></div>
-        <div className={styles.tile}><StatChip value={Math.round(kgToDisplay(totalVolume(history)))} label={`${weightUnit()} totalt`} /></div>
+        <div className={styles.tile}><strong>{workoutsThisMonth(history)}</strong><span>Denna månad</span></div>
+        <div className={styles.tile}><strong>{weeksInRow(history)}</strong><span>Veckor i rad</span></div>
+        <div className={styles.tile}><strong>{Math.round(kgToDisplay(totalVolume(history)))}</strong><span>{weightUnit()} totalt</span></div>
       </div>
 
       <section className={styles.card} aria-labelledby="chart-t">
         <div className={styles.cardHead}>
           <h2 id="chart-t" className={styles.cardTitle}>Pass per månad</h2>
           <span className={styles.trend}>
-            {trend > 0 && <Icon name="trendUp" size={14} />}
+            {trend > 0 && <Icon name="trendUp" size={16} />}
             {trend > 0 ? 'stigande' : trend === 0 ? 'jämn' : 'sjunkande'}
           </span>
         </div>
-        <LineChart data={monthly} />
+        <BarChart data={monthly} label="Pass per månad" />
       </section>
 
-      {latest && (
-        <section className={styles.gold} aria-label="Senaste ökningen">
-          <IconBadge icon="trophy" size={40} flat />
-          <div>
-            <p className={styles.goldTitle}>Senaste ökningen: {latest.name}</p>
-            <p className={styles.goldText}>{comma(kgToDisplay(latest.from))} → {comma(kgToDisplay(latest.to))} {weightUnit()} ({sign(latest.to - latest.from)}{comma(kgToDisplay(latest.to) - kgToDisplay(latest.from))} {weightUnit()}) · {ago(latest.date)}</p>
-          </div>
-        </section>
-      )}
-
-      {more.length > 0 && (
-        <section className={styles.section} aria-labelledby="more-t">
-          <SectionHeader id="more-t" title="Fler ökningar" icon="trendUp" tone="accent" />
-          <ul className={styles.list}>
-            {more.map((m, i) => (
-              <li key={`${m.exerciseId}-${m.date}-${i}`} className={styles.row}>
-                <div>
-                  <p className={styles.rowTitle}>{m.name}</p>
-                  <p className={styles.rowMeta}>{ago(m.date)}</p>
-                </div>
-                <span className={styles.delta}>{sign(m.to - m.from)}{comma(kgToDisplay(m.to) - kgToDisplay(m.from))} {weightUnit()}</span>
-              </li>
-            ))}
-          </ul>
-        </section>
-      )}
-
       <section className={styles.section} aria-labelledby="recent-t">
-        <SectionHeader id="recent-t" title="Senaste pass" icon="clock" tone="accent-2" />
+        <h2 id="recent-t" className={styles.heading}>Senaste pass</h2>
         <SearchField value={query} onChange={setQuery} label="Sök bland loggade pass" placeholder="Sök pass eller övning..." />
         {recent.length === 0 && <p className={styles.empty}>{q ? `Inga loggade pass matchar ”${query}”.` : 'Inga pass i den här perioden.'}</p>}
         {recent.length > 0 && <ul className={styles.list}>
           {recent.map((h, i) => (
             <li key={`${h.completedAt}-${i}`} className={styles.row}>
-              <div>
-                <p className={styles.rowTitle}>{h.name}</p>
+              <div className={styles.rowMain}>
+                <p className={styles.rowTitle}>
+                  {h.name}
+                  {h.pbs && h.pbs.length > 0 && <Tag tone="gold">PB</Tag>}
+                </p>
                 <p className={styles.rowMeta}>
                   {when(h.completedAt)}
                   {h.durationSeconds !== undefined && ` · ${formatTime(h.durationSeconds)}`}
@@ -187,37 +155,57 @@ function Overview({ history }: { history: CompletedWorkout[] }) {
                   </ul>
                 )}
               </div>
-              <div className={styles.rowSide}>
-                {h.pbs && h.pbs.length > 0 && <span className={styles.pb}>PB</span>}
-                <button type="button" className={styles.del} onClick={() => setDeleting(h.completedAt)} aria-label={`Ta bort ${h.name} den ${when(h.completedAt)}`}>
-                  <Icon name="trash" size={14} />
-                </button>
-              </div>
+              <button type="button" className={styles.del} onClick={() => setDeleting(h.completedAt)} aria-label={`Ta bort ${h.name} den ${when(h.completedAt)}`}>
+                <Icon name="trash" size={16} />
+              </button>
             </li>
           ))}
         </ul>}
       </section>
 
-      <BottomSheet open={!!deletingEntry} onClose={() => setDeleting(null)} title="Ta bort loggat pass?">
-        <p className={styles.sub}>{deletingEntry ? `${deletingEntry.name} (${when(deletingEntry.completedAt)}) tas bort ur statistiken och personbästa räknas om. Det går inte att ångra.` : ''}</p>
-        <Button variant="secondary" fullWidth onClick={() => { if (deleting) deleteHistoryEntry(deleting); setDeleting(null) }} style={{ color: 'var(--danger)', borderColor: 'var(--danger)' }}>Ja, ta bort</Button>
-        <Button variant="secondary" fullWidth onClick={() => setDeleting(null)}>Avbryt</Button>
-      </BottomSheet>
-
       {bests.length > 0 && (
         <section className={styles.section} aria-labelledby="pb-t">
-          <SectionHeader id="pb-t" title="Personbästa" icon="trendUp" tone="accent" />
+          <h2 id="pb-t" className={styles.heading}>Personbästa</h2>
           <p className={styles.sub}>Bästa set: högst distans eller vikt först, sedan längst tid eller flest reps. Värdena hör ihop i samma set.</p>
           <ul className={styles.list}>
             {bests.map((e) => (
               <li key={e.id} className={styles.row}>
                 <p className={styles.rowTitle}>{e.name}</p>
-                <p className={styles.rowMeta}>{describeValues(e.set && Object.keys(e.set).length > 0 ? e.set : e.best)}</p>
+                <p className={styles.rowValue}>{describeValues(e.set && Object.keys(e.set).length > 0 ? e.set : e.best)}</p>
               </li>
             ))}
           </ul>
         </section>
       )}
+
+      {(avg !== null || latest || more.length > 0) && (
+        <section className={styles.section} aria-labelledby="inc-t">
+          <h2 id="inc-t" className={styles.heading}>Styrkeökning</h2>
+          <ul className={styles.list}>
+            {avg !== null && (
+              <li className={styles.row}>
+                <p className={styles.rowTitle}>Genomsnitt sedan första passet</p>
+                <p className={styles.delta}>{sign(avg)}{Math.round(avg)} %</p>
+              </li>
+            )}
+            {[...(latest ? [latest] : []), ...more].map((m, i) => (
+              <li key={`${m.exerciseId}-${m.date}-${i}`} className={styles.row}>
+                <div>
+                  <p className={styles.rowTitle}>{m.name}</p>
+                  <p className={styles.rowMeta}>{ago(m.date)}</p>
+                </div>
+                <span className={styles.delta}>{sign(m.to - m.from)}{comma(kgToDisplay(m.to) - kgToDisplay(m.from))} {weightUnit()}</span>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
+      <BottomSheet open={!!deletingEntry} onClose={() => setDeleting(null)} title="Ta bort loggat pass?">
+        <p className={styles.sub}>{deletingEntry ? `${deletingEntry.name} (${when(deletingEntry.completedAt)}) tas bort ur statistiken och personbästa räknas om. Det går inte att ångra.` : ''}</p>
+        <Button variant="secondary" fullWidth onClick={() => { if (deleting) deleteHistoryEntry(deleting); setDeleting(null) }} className={styles.dangerBtn}>Ja, ta bort</Button>
+        <Button variant="secondary" fullWidth onClick={() => setDeleting(null)}>Avbryt</Button>
+      </BottomSheet>
     </>
   )
 }
@@ -234,38 +222,47 @@ function PerExercise() {
   const unit = unitLabel(metricUnit[sum.metric])
   const disp = (n: number) => toDisplay(metricUnit[sum.metric], n)
   const fmt = (n: number) => (sum.metric === 'seconds' ? formatTime(n) : `${comma(disp(n))} ${unit}`)
+  const best = Math.max(sum.best, stats?.best[sum.metric] ?? 0)
 
   return (
     <>
-      <ExercisePicker label="Övning" value={chosen.name} options={options.map((o) => o.name)} onChange={setName} emptyText="Inga övningar loggade än." />
+      <div className={styles.picker}>
+        <ExercisePicker label="Övning" value={chosen.name} options={options.map((o) => o.name)} onChange={setName} emptyText="Inga övningar loggade än." />
+      </div>
+
+      <section className={styles.big} aria-label="Personbästa">
+        <p className={styles.bigLabel}>
+          Personbästa
+          {stats?.lastPb && <Tag tone="gold">Nytt</Tag>}
+        </p>
+        <div className={styles.bigValue}>
+          <span className={styles.bigNumber}>{sum.metric === 'seconds' ? formatTime(best) : comma(disp(best))}</span>
+          {sum.metric !== 'seconds' && <span className={styles.bigUnit}>{unit}</span>}
+        </div>
+        {stats?.lastPb && <p className={styles.bigSub}>{ago(stats.lastPb.date)}</p>}
+      </section>
+
+      <div className={styles.tiles}>
+        <div className={styles.tile}><strong>{fmt(best)}</strong><span>PR</span></div>
+        <div className={styles.tile}><strong>{fmt(sum.average)}</strong><span>Snitt</span></div>
+        <div className={styles.tile}><strong>{sum.sessions} st</strong><span>Pass</span></div>
+      </div>
 
       <section className={styles.card} aria-labelledby="ex-chart">
         <div className={styles.cardHead}>
           <h2 id="ex-chart" className={styles.cardTitle}>Senaste 6 månaderna</h2>
           {sum.change !== null && (
             <span className={styles.trend}>
-              {sum.change > 0 && <Icon name="trendUp" size={14} />}
-              {sign(sum.change)}{Math.round(sum.change)}%
+              {sum.change > 0 && <Icon name="trendUp" size={16} />}
+              {sign(sum.change)}{Math.round(sum.change)} %
             </span>
           )}
         </div>
         <BarChart data={sum.monthly.map((d) => ({ ...d, value: disp(d.value) }))} label={`Bästa värde per månad (${unit})`} unit={` ${unit}`} />
       </section>
 
-      <div className={styles.tiles3}>
-        <div className={styles.tileC}><strong>{fmt(Math.max(sum.best, stats?.best[sum.metric] ?? 0))}</strong><span>PR</span></div>
-        <div className={styles.tileC}><strong>{fmt(sum.average)}</strong><span>Snitt</span></div>
-        <div className={styles.tileC}><strong>{sum.sessions} st</strong><span>Pass</span></div>
-      </div>
-
-      {stats?.lastPb && stats.bestSet && (
-        <section className={styles.gold} aria-label="Personbästa">
-          <IconBadge icon="trophy" size={40} flat />
-          <div>
-            <p className={styles.goldTitle}>Nytt personbästa!</p>
-            <p className={styles.goldText}>{describeValues(stats.bestSet)} · {ago(stats.lastPb.date)}</p>
-          </div>
-        </section>
+      {stats?.bestSet && (
+        <p className={styles.sub}>Bästa set: {describeValues(stats.bestSet)}</p>
       )}
     </>
   )

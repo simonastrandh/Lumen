@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
 import { Outlet } from 'react-router-dom'
-import { BackgroundSpine } from './BackgroundSpine'
 import { BottomNav } from './BottomNav'
 import { Welcome } from './Welcome'
 import styles from './AppShell.module.css'
@@ -38,9 +37,7 @@ export function AppShell() {
 
   return (
     <div className={styles.shell}>
-      {/* En enda bakgrund för alla sidor – den remountas inte när man byter sida */}
-      <BackgroundSpine />
-      {/* Bara det här lagret scrollar i telefonramen – bakgrunden ligger utanför och står stilla */}
+      {/* Bara det här lagret scrollar i telefonramen */}
       <div className={`${styles.scroller} ${phase === 'intro' ? styles.hidden : ''} ${phase === 'enter' ? styles.entering : ''}`} aria-hidden={phase === 'intro' || undefined}>
         <main className={styles.content}>
           <Outlet />

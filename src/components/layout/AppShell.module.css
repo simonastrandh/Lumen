@@ -1,9 +1,9 @@
 .shell {
   /* Höjd på skärmen (används av sidor som inte ska scrolla, t.ex. aktivt pass) */
   --shell-h: 100dvh;
-  --nav-h: calc(64px + env(safe-area-inset-bottom)); /* menyns höjd inkl. hak i botten */
+  --nav-h: calc(78px + env(safe-area-inset-bottom)); /* menyns höjd inkl. hak i botten */
   position: relative;
-  z-index: 1; /* ovanför BackgroundSpine */
+  background: var(--page-bg);
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -21,13 +21,13 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  /* Marginaler som följer skärmbredden (16–24 px) och hakets säkra yta */
-  padding: max(32px, env(safe-area-inset-top)) clamp(16px, 5.5vw, 24px) 32px;
+  gap: 0;
+  /* Marginaler som följer skärmbredden (16–20 px) och hakets säkra yta. Varje skärm sätter själv avstånden mellan sina delar. */
+  padding: max(56px, calc(env(safe-area-inset-top) + 28px)) clamp(16px, 5vw, 20px) 28px;
 }
 
 /* Datorskärm: visa appen i en telefonram i mitten, så man ser hur den ser ut i en mobil.
-   Bara .scroller scrollar; bakgrundsbilden ligger kvar i ramen och rör sig inte. */
+   Bara .scroller scrollar; . */
 @media (min-width: 700px) and (min-height: 620px) {
   .shell {
     width: var(--frame-width);
@@ -39,7 +39,7 @@
     overflow: hidden;
     border-radius: 44px;
     background: var(--page-bg);
-    box-shadow: 0 0 0 10px #2a3138, 0 0 0 11px #56636c, 0 30px 80px rgba(0, 0, 0, 0.45);
+    box-shadow: 0 0 0 10px #232b33, 0 0 0 11px #4a5864, 0 30px 80px rgba(0, 0, 0, 0.45);
   }
   .scroller {
     height: 100%;

@@ -1,25 +1,19 @@
 .field {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
   padding: 0 8px 0 16px;
-  border: 1px solid var(--surface-border);
+  border: 1px solid var(--field-border);
   border-radius: var(--radius-pill);
   background: var(--input-bg);
   color: var(--text-secondary);
 }
-.field { transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease; }
-.field:focus-within {
-  border-color: var(--accent);
-  background: color-mix(in srgb, var(--accent) 6%, var(--input-bg));
-  color: var(--accent);
-  box-shadow: 0 0 0 3px var(--accent-glow), 0 0 22px -6px var(--accent-glow);
-}
+.field:focus-within { outline: 2px solid var(--accent-ink); outline-offset: -1px; border-color: var(--accent-ink); }
 .icon { flex-shrink: 0; }
 .input {
   flex: 1;
   min-width: 0;
-  padding: 13px 0;
+  padding: 14px 0;
   border: 0;
   outline: none;
   box-shadow: none;
@@ -41,8 +35,6 @@
   background: var(--surface-bg);
   color: var(--text-secondary);
 }
-
-/* Global :focus-visible ger annars en kantig ruta runt själva input-fältet; hela pillen markeras istället */
+/* Hela fältet markeras vid fokus, inte bara inputen */
 .field .input:focus,
 .field .input:focus-visible { outline: none; box-shadow: none; }
-.clear:focus-visible { outline-offset: 0; border-radius: var(--radius-pill); }

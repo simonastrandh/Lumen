@@ -1,19 +1,19 @@
 /*
- * Designtokens för Lumen.
- * Värden hämtade från Figma ("Design System – Styrkeloggen").
+ * Designtokens för Lumen (Nike-affischstil, se Figma "Lugn – Nike-känsla").
  *
- * Tema väljs i denna ordning:
- *  1. data-theme="light" | "dark" på <html>
- *  2. annars prefers-color-scheme
- *  3. fallback: mörkt
+ * Mörkt läge (mörkblått) är standard. Ljust läge (neon lime) väljs i Inställningar → Utseende och
+ * sätts som data-theme="light" | "dark" på <html> (SettingsStore).
+ *
+ * Accenten (lime) används som FYLLNING med svart text. För accentfärgad text, ikoner och grafik på
+ * bakgrund finns --accent-ink: lime i mörkt läge men svart i ljust (neon har för låg kontrast som text).
  */
 
 :root {
-  /* Tema-oberoende */
-  --font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-sans: 'Geist', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-display: 'Anton', 'Bebas Neue', Impact, 'Arial Narrow', sans-serif;
 
-  --radius-card: 0px; /* korten är skarpa med kapade hörn (se chrome.module.css) */
-  --radius-pill: 2px; /* knappar, fält och etiketter: nästan skarpa */
+  --radius-card: 0px; /* skarpa hörn */
+  --radius-pill: 2px; /* knappar, fält och taggar: nästan skarpa */
 
   --space-1: 4px;
   --space-2: 8px;
@@ -33,71 +33,42 @@
   --frame-width: 390px; /* telefonramen på datorskärm */
 }
 
-/* Mörkt läge (standard) */
+/* Mörkt läge (standard) – mörkblå bakgrund */
 :root,
 :root[data-theme='dark'] {
   color-scheme: dark;
-  --page-bg: #06080a;
-  --surface-bg: #10161a;
-  --surface-border: #223238;
-  --input-bg: #0c1114;
-  --text-primary: #eaf6f6;
-  --text-secondary: #8fa7ac;
-  --accent: #3fe8da;
-  --accent-strong: #3fe8da; /* turkos som klarar kontrast för text/linjer */
-  --accent-text: #06080a;
-  --accent-2: #9b7bff;
-  --accent-2-strong: #b7a1ff; /* lila text/kant med hög kontrast (≈8:1 mot kortyta) */
-  --gold: #d9b35c;
-  --gold-text: #d9b35c;
-  --danger: #ef6e6e;
-  --accent-glow: rgba(63, 232, 218, 0.45);
-  --glass-opacity: 60%;
-  --glass-highlight: rgba(255, 255, 255, 0.08);
+  --page-bg: #11161b;
+  --surface-bg: #19212a;
+  --surface-border: #2b3641; /* hårfina linjer och kortkanter */
+  --field-border: #71808c; /* kanter på fält och knappar (minst 3:1) */
+  --input-bg: #11161b;
+  --text-primary: #e8eef2;
+  --text-secondary: #93a1ac;
+  --accent: #b8dc2a; /* fyllning (knappar, valda val, bockar) */
+  --accent-text: #0a0a0a; /* text på accentfyllning */
+  --accent-ink: #b8dc2a; /* accentfärgad text, ikoner och grafik på bakgrund */
+  --danger: #ff6b5c;
+  /* äldre namn som komponenter fortfarande använder */
+  --accent-strong: var(--accent-ink);
+  --accent-2: var(--text-primary);
+  --accent-2-strong: var(--text-primary);
+  --gold: var(--accent);
+  --gold-text: var(--accent-ink);
+  --accent-glow: transparent;
 }
 
-/* Ljust läge – följer systemet om användaren inte valt något */
-@media (prefers-color-scheme: light) {
-  :root:not([data-theme='dark']) {
-    color-scheme: light;
-    --page-bg: #f5fafa;
-    --surface-bg: #e6f2f1;
-    --surface-border: #cbe2e0;
-    --input-bg: #f5fafa;
-    --text-primary: #0b1a1a;
-    --text-secondary: #567877;
-    --accent: #0e9e90;
-    --accent-strong: #0a6f65;
-    --accent-text: #ffffff;
-    --accent-2: #7b5ce0;
-    --accent-2-strong: #5b3fc4; /* ≈6:1 mot kortyta */
-    --gold: #b8872e;
-    --gold-text: #7a5a0c; /* ≈5,6:1 mot kortyta (guldet i --gold är för ljust som text i ljust läge) */
-    --danger: #d64545;
-    --accent-glow: rgba(14, 158, 144, 0.35);
-    --glass-opacity: 75%;
-    --glass-highlight: rgba(255, 255, 255, 0.6);
-  }
-}
-
-/* Ljust läge – explicit val */
+/* Ljust läge – neon lime som fyllning, svart som text och grafik */
 :root[data-theme='light'] {
   color-scheme: light;
-  --page-bg: #f5fafa;
-  --surface-bg: #e6f2f1;
-  --surface-border: #cbe2e0;
-  --input-bg: #f5fafa;
-  --text-primary: #0b1a1a;
-  --text-secondary: #567877;
-  --accent: #0e9e90;
-  --accent-strong: #0a6f65;
-  --accent-text: #ffffff;
-  --accent-2: #7b5ce0;
-  --accent-2-strong: #5b3fc4; /* ≈6:1 mot kortyta */
-  --gold: #b8872e;
-  --gold-text: #7a5a0c; /* ≈5,6:1 mot kortyta */
-  --danger: #d64545;
-  --accent-glow: rgba(14, 158, 144, 0.35);
-  --glass-opacity: 75%;
-  --glass-highlight: rgba(255, 255, 255, 0.6);
+  --page-bg: #f7f8fa;
+  --surface-bg: #eceef2;
+  --surface-border: #d6dae1;
+  --field-border: #7c8591;
+  --input-bg: #f7f8fa;
+  --text-primary: #0c1118;
+  --text-secondary: #4d5866;
+  --accent: #c6f432;
+  --accent-text: #0a0a0a;
+  --accent-ink: #0c1118;
+  --danger: #c4161c;
 }

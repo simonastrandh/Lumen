@@ -19,8 +19,8 @@ export function GettingStarted() {
   const next = steps.findIndex((s) => !s.done)
 
   return (
-    <Card aria-labelledby="start-title">
-      <h2 id="start-title" className={styles.title}>KOM IGÅNG</h2>
+    <Card aria-labelledby="start-title" className={styles.wrap}>
+      <h2 id="start-title" className={styles.title}>Kom igång</h2>
       <ol className={styles.list}>
         {steps.map((s, i) => (
           <li key={s.text} className={styles.item}>

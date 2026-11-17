@@ -1,30 +1,31 @@
-import { Icon } from '../../components/ui/Icon'
+import { IconBadge } from '../../components/ui/IconBadge'
 import { Tag } from '../../components/ui/Tag'
 import { isCardio, type Exercise } from '../../data/exercises'
+import { StartButton } from './StartButton'
 import styles from './ExerciseCard.module.css'
 
 interface ExerciseCardProps {
   exercise: Exercise
-  saved?: boolean
   onOpen: () => void
-  /** card = kompakt kort i horisontell lista, row = rad i en lista */
-  layout?: 'card' | 'row'
+  /** Utelämnas när raden bara används för att välja (t.ex. i "Lägg till övning") */
+  onStart?: () => void
 }
 
-/** En enskild ÖVNING: turkos, kompakt, med muskelgrupp. */
-export function ExerciseCard({ exercise, onOpen, layout = 'card' }: ExerciseCardProps) {
+/** En enskild ÖVNING som rad: ikon, namn, muskelgrupp och (valfritt) en Starta-knapp. */
+export function ExerciseCard({ exercise, onOpen, onStart }: ExerciseCardProps) {
   return (
-    <button type="button" className={`${styles.base} ${styles[layout]}`} onClick={onOpen}>
-      <span className={styles.icon}>
-        <Icon name={isCardio(exercise) ? 'bolt' : 'workout'} size={18} />
-      </span>
-      <span className={styles.text}>
-        <span className={styles.name}>{exercise.name}</span>
-        <span className={styles.tags}>
-          <Tag tone="accent">ÖVNING</Tag>
+    <div className={styles.row}>
+      <button type="button" className={styles.main} onClick={onOpen}>
+        <IconBadge icon={isCardio(exercise) ? 'bolt' : 'workout'} size={40} flat />
+        <span className={styles.text}>
+          <span className={styles.name}>
+            {exercise.name}
+            <Tag>Övning</Tag>
+          </span>
           <span className={styles.muscle}>{exercise.muscleGroup}</span>
         </span>
-      </span>
-    </button>
+      </button>
+      {onStart && <StartButton label={`Starta ${exercise.name}`} onClick={onStart} />}
+    </div>
   )
 }

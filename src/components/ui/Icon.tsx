@@ -11,6 +11,7 @@ const paths = {
   stats: 'M4 4.5V19.5H20M8 15.5l3.5-4.5 3 2.5L19.5 7',
   edit: 'M4 20h4L19 9l-4-4L4 16zM13 7l4 4',
   plus: 'M12 5v14M5 12h14',
+  pause: 'M8 5v14M16 5v14',
   play: 'M8 5.5v13L19 12z',
   trendUp: 'M4.5 17 10 11.5l3.5 3.5 6-7M14.5 8h5v5',
   check: 'M5 12.5 10 17.5 19 7',

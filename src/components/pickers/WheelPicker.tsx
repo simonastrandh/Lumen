@@ -1,4 +1,4 @@
-import { useEffect, useId, useLayoutEffect, useRef, useState } from 'react'
+import { useEffect, useId, useLayoutEffect, useRef, useState, type ReactNode } from 'react'
 import { BottomSheet } from '../ui/BottomSheet'
 import { Button } from '../ui/Button'
 import { Icon } from '../ui/Icon'
@@ -115,18 +115,24 @@ interface WheelFieldProps {
   display: string
   columns: WheelColumnSpec[]
   ariaLabel?: string
+  /** Egen knapp som öppnar panelen i stället för standardknappen (får funktionen som öppnar) */
+  trigger?: (open: () => void, label: string) => ReactNode
 }
 
 /** Knapp som visar ett värde och öppnar en panel med hjul för att välja. */
-export function WheelField({ title, display, columns, ariaLabel }: WheelFieldProps) {
+export function WheelField({ title, display, columns, ariaLabel, trigger }: WheelFieldProps) {
   const [open, setOpen] = useState(false)
   const id = useId()
   return (
     <>
-      <button type="button" className={styles.pill} onClick={() => setOpen(true)} aria-haspopup="dialog" aria-label={`${ariaLabel ?? title}: ${display}. Tryck för att ändra`} id={id}>
-        <span>{display}</span>
-        <Icon name="chevronRight" size={12} className={styles.caret} />
-      </button>
+      {trigger ? (
+        trigger(() => setOpen(true), `${ariaLabel ?? title}: ${display}. Tryck för att ändra`)
+      ) : (
+        <button type="button" className={styles.pill} onClick={() => setOpen(true)} aria-haspopup="dialog" aria-label={`${ariaLabel ?? title}: ${display}. Tryck för att ändra`} id={id}>
+          <span>{display}</span>
+          <Icon name="chevronRight" size={12} className={styles.caret} />
+        </button>
+      )}
       <BottomSheet open={open} onClose={() => setOpen(false)} title={title} hideClose>
         <div className={styles.columns}>
           {columns.map((c) => <WheelColumn key={c.unit} {...c} />)}

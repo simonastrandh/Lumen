@@ -3,8 +3,6 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { BottomSheet } from '../../components/ui/BottomSheet'
 import { Button } from '../../components/ui/Button'
 import { Icon } from '../../components/ui/Icon'
-import { IconBadge } from '../../components/ui/IconBadge'
-import { workoutIcon } from '../../data/workouts'
 import { useWorkoutStore } from '../../store/WorkoutStore'
 import { clearSession, readSession } from '../active/session'
 import { exerciseCount, targetText, workoutMeta } from './labels'
@@ -28,12 +26,10 @@ export default function WorkoutOverview() {
         <button type="button" className={styles.back} onClick={() => navigate('/pass')} aria-label="Tillbaka till Pass">
           <Icon name="chevronLeft" size={20} />
         </button>
-        <IconBadge icon={workoutIcon(workout)} tone="accent-2" size={48} flat />
-        <div>
-          <h1 className={styles.title}>{workout.name}</h1>
-          <p className={styles.meta}>{workoutMeta(workout)}</p>
-        </div>
+        <p className={styles.meta}>{workoutMeta(workout)}</p>
       </header>
+
+      <h1 className={styles.name} style={{ fontSize: Math.max(56, Math.min(150, Math.floor(330 / (Math.max(3, workout.name.length) * 0.47)))) }}>{workout.name}</h1>
 
       {workout.exercises.length > 0 ? (
         <ol className={styles.list}>
@@ -41,7 +37,7 @@ export default function WorkoutOverview() {
             const ex = store.getExercise(we.exerciseId)
             return (
               <li key={`${we.exerciseId}-${i}`} className={styles.item}>
-                <span className={styles.name}>{ex?.name ?? 'Övning'}</span>
+                <span className={styles.itemName}>{ex?.name ?? 'Övning'}</span>
                 <span className={styles.target}>{targetText(we, ex)}</span>
               </li>
             )
@@ -52,7 +48,7 @@ export default function WorkoutOverview() {
       )}
 
       <div className={styles.actions}>
-        <Button variant="secondary" icon="edit" fullWidth onClick={() => navigate(`/pass/${workout.id}/redigera`)} className={styles.edit}>
+        <Button variant="secondary" icon="edit" fullWidth onClick={() => navigate(`/pass/${workout.id}/redigera`)} >
           Redigera övningar
         </Button>
         <Button variant="primary" icon="play" fullWidth onClick={() => (otherActive ? setConfirmNew(true) : navigate(`/pass/aktivt/${workout.id}`))} disabled={workout.exercises.length === 0}>
@@ -61,7 +57,7 @@ export default function WorkoutOverview() {
       </div>
 
       <BottomSheet open={confirmNew} onClose={() => setConfirmNew(false)} title="Du har ett pågående pass">
-        <p className={styles.meta}>Om du startar {workout.name} avbryts det pågående passet och dess klara set sparas inte.</p>
+        <p className={styles.note}>Om du startar {workout.name} avbryts det pågående passet och dess klara set sparas inte.</p>
         <Button variant="primary" fullWidth onClick={() => { clearSession(); navigate(`/pass/aktivt/${workout.id}`) }}>Starta {workout.name}</Button>
         <Button variant="secondary" fullWidth onClick={() => navigate(`/pass/aktivt/${active!.id}`)}>Fortsätt pågående pass</Button>
       </BottomSheet>

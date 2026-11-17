@@ -60,6 +60,8 @@ interface WorkoutStore {
   goals: Goal[]
   saveGoal: (values: Omit<Goal, 'id'>, id?: string) => void
   removeGoal: (id: string) => void
+  /** Ändrar ordningen på målen (id-listan i önskad ordning) */
+  reorderGoals: (ids: string[]) => void
   /** Tar bort ett loggat pass ur historiken och räknar om personbästa för övningarna i det */
   deleteHistoryEntry: (completedAt: string) => void
   rotation: Rotation
@@ -228,6 +230,7 @@ export function WorkoutStoreProvider({ children }: { children: ReactNode }) {
       saveGoal: (values, id) =>
         setGoals((prev) => (id && prev.some((g) => g.id === id) ? prev.map((g) => (g.id === id ? { ...g, ...values } : g)) : [...prev, { ...values, id: newId() }])),
       removeGoal: (id) => setGoals((prev) => prev.filter((g) => g.id !== id)),
+      reorderGoals: (ids) => setGoals((prev) => [...ids.flatMap((id) => prev.filter((g) => g.id === id)), ...prev.filter((g) => !ids.includes(g.id))]),
       renameExercise: (exerciseId, name) => {
         const n = name.trim()
         if (n) setCustomExercises((prev) => prev.map((e) => (e.id === exerciseId ? { ...e, name: n } : e)))

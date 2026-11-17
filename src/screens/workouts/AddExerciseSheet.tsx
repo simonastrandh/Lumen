@@ -110,7 +110,7 @@ export function AddExerciseSheet({ open, onClose, onPick, submitLabel = 'Lägg t
                 .sort((a, b) => Number((b.kind ?? 'styrka') === defaultKind) - Number((a.kind ?? 'styrka') === defaultKind)) // passets typ först
                 .filter((e) => norm(e.name).includes(norm(query)))
                 .map((e) => (
-                  <ExerciseCard key={e.id} exercise={e} layout="row" onOpen={() => pick(e)} />
+                  <ExerciseCard key={e.id} exercise={e} onOpen={() => pick(e)} />
                 ))}
               {query && !myExercises.some((e) => norm(e.name).includes(norm(query))) && <p className={styles.help}>Inga träffar på ”{query}”.</p>}
             </div>

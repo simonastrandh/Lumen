@@ -26,44 +26,25 @@
   max-width: var(--app-max-width);
   max-height: 88dvh;
   overflow: hidden; /* innehållet (.body) scrollar, så att kanten ligger still */
-  --cut: 16px;
-  /* Samma krom-stil som korten: kapat hörn uppe till höger och en iriserande hårfin kant */
-  clip-path: polygon(0 0, calc(100% - var(--cut)) 0, 100% var(--cut), 100% 100%, 0 100%);
   background: var(--surface-bg);
+  border-top: 3px solid var(--accent); /* gul ovankant */
   animation: slide-up 0.25s ease;
 }
-.panel::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  pointer-events: none;
-  background: linear-gradient(135deg, #3fe8da 0%, #9b7bff 38%, #d9b35c 66%, #3fe8da 100%);
-  background-size: 220% 220%;
-  clip-path: polygon(
-    evenodd,
-    0 0, calc(100% - var(--cut)) 0, 100% var(--cut), 100% 100%, 0 100%, 0 0,
-    1.5px 1.5px, 1.5px 100%, calc(100% - 1.5px) 100%, calc(100% - 1.5px) calc(var(--cut) + 0.62px), calc(100% - var(--cut) - 0.62px) 1.5px, 1.5px 1.5px
-  );
-  animation: sheetShift 16s linear infinite;
-}
-@keyframes sheetShift { from { background-position: 0% 0%; } to { background-position: 220% 220%; } }
-@media (prefers-reduced-motion: reduce) { .panel::before { animation: none; } }
-.body { display: flex; flex-direction: column; flex: 1 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain; gap: 16px; padding: 24px 20px calc(24px + env(safe-area-inset-bottom)); }
+.body { display: flex; flex-direction: column; flex: 1 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain; gap: 16px; padding: 22px 20px calc(28px + env(safe-area-inset-bottom)); }
 .header { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
-.eyebrow { margin-bottom: 4px; }
-.title { font-size: 20px; font-weight: 700; }
+.eyebrow { margin-bottom: 6px; }
+.title { font-family: var(--font-display); font-size: 30px; font-weight: 400; line-height: 1.05; text-transform: uppercase; }
 .close {
   display: grid;
   place-items: center;
   flex-shrink: 0;
-  width: 36px;
-  height: 36px;
+  width: 40px;
+  height: 40px;
   padding: 0;
-  border: 1px solid var(--surface-border);
+  border: 1px solid var(--field-border);
   border-radius: var(--radius-pill);
-  background: var(--input-bg);
-  color: var(--text-secondary);
+  background: transparent;
+  color: var(--text-primary);
 }
 
 @keyframes slide-up {

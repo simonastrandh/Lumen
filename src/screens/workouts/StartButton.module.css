@@ -1,0 +1,7 @@
+.start {
+  display: inline-flex; align-items: center; gap: 6px; flex-shrink: 0;
+  padding: 9px 12px; border: 1px solid var(--field-border); border-radius: var(--radius-pill);
+  background: transparent; color: var(--text-primary); font: inherit; font-size: 13px; font-weight: 600; line-height: 1.2;
+}
+.start:active { transform: translate(1px, 1px); }
+.highlight { background: var(--accent); border-color: var(--accent); color: var(--accent-text); }

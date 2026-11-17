@@ -1,16 +1,16 @@
 .wrap { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
-.label { font-size: 12px; font-weight: 600; color: var(--text-secondary); }
+.label { font-size: 13px; font-weight: 500; color: var(--text-secondary); }
 .field {
   display: inline-flex;
   align-items: center;
   gap: 2px;
   padding: 3px 10px;
-  border: 1px solid var(--surface-border);
+  border: 1px solid var(--field-border);
   border-radius: var(--radius-pill);
   background: var(--input-bg);
   transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
-.field:focus-within { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-glow); }
+.field:focus-within { outline: 2px solid var(--accent-ink); outline-offset: -1px; border-color: var(--accent-ink); }
 .invalid { border-color: var(--danger); }
 .input {
   width: 3ch;

@@ -18,7 +18,7 @@ export interface Item {
  *  - stopwatch – uppräkning för ett set utan måltid, t.ex. löpning där bara distansen är målet
  */
 export type Timer =
-  | { kind: 'rest' | 'work'; total: number; endAt: number; ei: number; si: number }
+  | { kind: 'rest' | 'work'; total: number; endAt: number; ei: number; si: number; /** Sekunder kvar när vilan är pausad */ pausedLeft?: number }
   | { kind: 'stopwatch'; startAt: number; ei: number; si: number }
 
 
@@ -41,3 +41,7 @@ export const makeSets = (we: { sets: number; reps: number; kg?: number; seconds?
   const base: ExerciseDefaults = { reps: we.reps, kg: we.kg, seconds: we.seconds, minutes: we.minutes, km: we.km }
   return Array.from({ length: Math.max(1, we.sets) }, () => ({ ...base, done: false }))
 }
+
+/** Sekunder kvar på en nedräkning (0 för stoppur). En pausad vila står still på pausedLeft. */
+export const timerRemaining = (t: Timer | null, now: number): number =>
+  !t || t.kind === 'stopwatch' ? 0 : t.pausedLeft !== undefined ? t.pausedLeft : Math.max(0, (t.endAt - now) / 1000)

@@ -9,7 +9,7 @@ import { entryForExercise } from '../../data/workouts'
 import { useSettings } from '../../store/SettingsStore'
 import { useWorkoutStore } from '../../store/WorkoutStore'
 import { EditSetSheet } from './EditSetSheet'
-import { makeSets, type Item, type Timer } from './helpers'
+import { makeSets, timerRemaining, type Item, type Timer } from './helpers'
 import { clearSession, readSession, writeSession } from './session'
 import { SetList } from './SetList'
 import { Summary, type SessionSummary } from './Summary'
@@ -73,7 +73,7 @@ export default function ActiveWorkout() {
   const restFor = (i: number) => getExercise(items[i]?.exerciseId ?? '')?.defaults?.rest ?? defaultRest
   const restSeconds = restFor(ei)
 
-  const remaining = timer && timer.kind !== 'stopwatch' ? Math.max(0, (timer.endAt - now) / 1000) : 0
+  const remaining = timerRemaining(timer, now)
 
   function updateSets(e: number, f: (sets: Item['sets']) => Item['sets']) {
     setItems((prev) => prev.map((it, i) => (i === e ? { ...it, sets: f(it.sets) } : it)))
@@ -176,8 +176,8 @@ export default function ActiveWorkout() {
   const header = (
     <header className={styles.header}>
       <div className={styles.headText}>
+        <p className={styles.sub}>{items.length > 0 ? `${name} · övning ${ei + 1} av ${items.length}` : 'Pågående'}</p>
         <h1 className={styles.title}>{exercise?.name ?? name}</h1>
-        {items.length > 0 && <p className={styles.sub}>{name} · övning {ei + 1} av {items.length}</p>}
       </div>
       <div className={styles.headTools}>
         <button type="button" className={styles.addEx} onClick={() => setAdding(true)} aria-label="Lägg till övning i passet">
@@ -210,17 +210,18 @@ export default function ActiveWorkout() {
       <div className="sr-only" role="status" aria-live="polite">{announce}</div>
       {header}
 
-      <div className={styles.dots} role="list" aria-label="Övningar i passet">
+      {items.length > 1 && <div className={styles.dots} role="list" aria-label="Övningar i passet">
         {items.map((it, i) => (
           <button key={i} type="button" role="listitem" className={`${styles.dot} ${i === ei ? styles.dotActive : ''} ${it.sets.every((x) => x.done) ? styles.dotDone : ''}`} aria-label={`Gå till ${getExercise(it.exerciseId)?.name}`} aria-current={i === ei} onClick={() => goTo(i)} />
         ))}
-      </div>
+      </div>}
 
       <TimerPanel
         timer={timer}
         now={now}
         nextSet={nextSet}
         nextIndex={nextUndone}
+        totalSets={current.length}
         exerciseName={exercise?.name ?? 'övningen'}
         restSeconds={restSeconds}
         onRestChange={(rest) => exercise && store.setExerciseDefaults(exercise.id, { rest })}

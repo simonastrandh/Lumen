@@ -1,7 +1,7 @@
 # Lumen
 
 Lumen är en webbapp för att logga träning: vikt, reps, tid och distans per övning, och att se sin utveckling över
-tid. Den är byggd mobil-först, i mörkt och ljust läge, med en krom-/holografisk ryggrad som bakgrund.
+tid. Den är byggd mobil-först, i mörkt (mörkblått) och ljust (neon lime) läge, i en affischstil inspirerad av Nike.
 
 Projektet är ett skolprojekt i UX-design, byggt på två veckor med Claude Code som AI-verktyg. Appen hette
 tidigare Styrkeloggen.
@@ -17,7 +17,6 @@ tidigare Styrkeloggen.
 - [Tech-stack](#tech-stack)
 - [Projektstruktur](#projektstruktur)
 - [Utseende](#utseende)
-- [Bakgrundsbild](#bakgrundsbild-ryggraden)
 - [Tillgänglighet](#tillgänglighet) och [prestanda](#prestanda)
 - [Data och integritet](#data-och-integritet)
 - [Design](#design)
@@ -40,25 +39,28 @@ telefon fyller den skärmen.
 | `npm run preview` | Visar det byggda resultatet lokalt |
 
 ## Funktioner
-- **Välkomnande:** första gången appen öppnas visas en landningssida där bakgrunden är i centrum. Man går vidare
-  genom att trycka på skärmen eller på knappen (Enter fungerar med tangentbord), och därefter tonar appen fram.
-- **Hem:** nästa pass (från rotationen eller slumpat), "Fortsätt pass" om ett pass pågår, startguide för nya användare
-  och "Din utveckling" med pass per månad och personliga mål.
+- **Välkomnande:** första gången appen öppnas visas LUMEN i stort. Man går vidare genom att trycka på skärmen eller på
+  knappen (Enter fungerar med tangentbord), och därefter tonar appen fram.
+- **Hem:** en stor affischsiffra (pass denna månad), nästa pass som en gul rad med spelknapp, "Starta tomt pass",
+  startguide för nya användare och "Din utveckling" med dina mål. Pennan öppnar redigeringsläge där mål läggs till,
+  tas bort och flyttas.
 - **Pass:**
-  - Egna pass av typen styrkepass eller konditionspass. Passtypen styr ikon (skivstång eller blixt) och vilka övningar som
-    visas först när man lägger till.
-  - Egna övningar. "Lägg till övning" i ett pass visar en lista med dina sparade övningar och en knapp för att skapa en ny.
-  - Rotation: en ordnad lista av pass som Hem föreslår i tur och ordning.
+  - Nuvarande rotation överst (passen i ordning, vilket som är näst, Aktiv/Pausad) med "Ändra rotation".
+  - Mina pass och Mina övningar, och på varje rad en **Starta**-knapp. Starta en övning startar ett pass med bara den.
+  - Egna pass av typen styrkepass eller konditionspass. "Lägg till övning" visar dina sparade övningar och en knapp för
+    att skapa en ny.
 - **Mäts i:** en styrkeövning mäts i valfri kombination av **reps, tid och vikt**, och en konditionsövning i **tid och/eller
   distans**. Ändrar man hur en övning mäts gäller det i alla pass som innehåller den.
-- **Aktivt pass:** en timer som visar det som tickar just nu (vila, tid för ett set eller stoppur), set som ändras med hjul,
+- **Aktivt pass:** nästa set visas som en stor siffra (t.ex. 30 kg · 10 reps) med en liten vilorad. När vilan startar
+  fälls setet ihop och en ring med tiden tar över, med −30 s, **Pausa** och +30 s. Dessutom set som ändras med hjul,
   tomt pass där man lägger till övningar under passet, samt en sammanfattning med personbästa. Passet sparas löpande
   och skärmen hålls tänd medan det pågår.
 - **Mål:** ett mål hör till en övning och man väljer själv vilka mått som ska följas (vikt, reps, tid, distans). Hur nära
   målet man är visas i procent.
-- **Statistik:** översikt (pass totalt, veckor i rad, set, tid, total vikt, graf, senaste pass, personbästa) med tidsfilter
-  och sök, samt per övning. Loggade pass går att ta bort.
-- **Inställningar:** namn, standardvilotid, **enhet (kg och km eller lb och miles)**, animerad bakgrund och rensa all data.
+- **Statistik:** en stor siffra (pass i vald period), tidsfilter, nyckeltal, diagram, senaste pass med sök, personbästa och
+  styrkeökning, samt per övning. Loggade pass går att ta bort.
+- **Inställningar:** standardvilotid, **enhet (kg och km eller lb och miles)**, **utseende (mörkt eller ljust)** och
+  rensa all data.
 
 ## Så fungerar det
 - **Appen börjar tom.** Du skapar dina egna pass, övningar och mål. Övningar från det inbyggda biblioteket känns igen när
@@ -83,7 +85,7 @@ src/
   components/
     ui/         små, generella delar: Button, Card, Icon, Tag, TextField, BottomSheet, diagram, ...
     pickers/    hjulen (WheelPicker), tidsfält och MeasureFields (set, reps, vikt, tid, distans)
-    layout/     skalet runt alla skärmar: AppShell, BottomNav, bakgrund och partiklar, välkomnandet
+    layout/     skalet runt alla skärmar: AppShell, BottomNav, välkomnandet
   screens/      en mapp per skärm, med skärmens egna delar bredvid
     home/       Hem: hälsning, Din utveckling, mål, startguide
     workouts/   Pass: lista, redigerare, översikt, övningsblad, rotation
@@ -93,48 +95,28 @@ src/
   store/        WorkoutStore (pass, övningar, mål, historik, personbästa), SettingsStore, rotation, migrering
   data/         typer och rena funktioner: övningar, pass, mål, statistik, enheter (kg/lb), navigation
   hooks/        useLocalStorageState
-  styles/       designtokens (ljust/mörkt), globala stilar och krom-kortet (chrome.module.css)
+  styles/       designtokens (mörkt/ljust), globala stilar och det platta kortet (chrome.module.css)
 ```
 
 ## Utseende
-- **Tokens:** färger, radier och typsnitt ligger som CSS-variabler i `src/styles/tokens.css`. Ljust och mörkt läge följer
-  enhetens inställning.
-- **Krom-kort:** kort har skarpa hörn med två kapade hörn och en hårfin kant som skiftar turkos, lila och guld
-  (`src/styles/chrome.module.css`, används med `composes`). Knappar och fält är nästan skarpa (2 px).
-- **Text på bakgrunden:** löpande text som ligger direkt på bakgrunden får en mjuk, mörk fläck bakom sig så att den är
-  läsbar utan att dölja ryggraden.
-- **Färg betyder något:** lila och lagerikon betyder pass, turkos betyder övningar.
-- **Responsivt:** fullbredd på telefon med fluida marginaler och hänsyn till hak och hemfält. Aktivt pass är anpassat
-  för små skärmar och liggande läge.
-
-## Bakgrundsbild (ryggraden)
-Alla sidor har en krom-/holografisk ryggrad som bakgrund, inspirerad av activetheory.net
-(`src/components/layout/BackgroundSpine.tsx`). Den är en statisk bild, inte en 3D/WebGL-scen. Bilden ligger i
-`src/assets/spine-bg.webp` (`.png`/`.jpg` fungerar också). Saknas den visas en platshållare.
-
-Bakgrunden är levande utan 3D: ryggraden svävar långsamt, ljus vandrar över olika kotor, färgtonen skiftar mellan
-turkos, lila och guld, och guldstoft driver uppåt (`src/components/layout/ParticleField.tsx`, en lätt canvas). I
-Inställningar kan animationen stängas av, och har användaren valt "minska rörelser" i systemet står allt still.
-
-Prompt som användes (Canva-bildgenerering, stående 9:16):
-
-> A photorealistic 3D render of a human spine / vertebral column made of liquid chrome and iridescent
-> holographic metal, floating vertically in a near-black void, oil-slick reflections shifting between
-> teal/cyan, violet/purple and gold/amber across its surface, soft out-of-focus golden particle dust
-> scattered around it, dramatic rim lighting, high detail, cinematic render, vertical composition,
-> dark background, no text, no logos, no watermark
+Affischstil: en yta, en accentfärg, stora versala Anton-rubriker och siffror, och Geist för all annan text. Allt är
+platt med skarpa hörn och hårfina linjer, utan glas, glöd eller skuggor. Principen är att varje skärm har **en enda hög
+röst** (en stor siffra eller ett stort ord) och att resten är tyst.
+- **Tokens:** färger, radier och typsnitt ligger som CSS-variabler i `src/styles/tokens.css`. Mörkt läge är mörkblått,
+  ljust läge är neon lime med svart text. Temat väljs i Inställningar och sätts som `data-theme` på `<html>`.
+- **Accent:** neon lime används som fyllning (knappar, valda val, bockar) med svart text. För accentfärgad text, ikoner
+  och grafik finns `--accent-ink`, som är lime i mörkt läge men svart i ljust (neon har för låg kontrast som text).
+- **Responsivt:** fullbredd på telefon med fluida marginaler och hänsyn till hak och hemfält. På dator visas appen i en
+  telefonram och alla paneler öppnas inuti den.
 
 ## Tillgänglighet
-- Text och kontroller är kontrollerade mot WCAG AA i mörkt läge. Guldtext i ljust läge använder en mörkare ton
-  (`--gold-text`).
+- Text och kontroller är kontrollerade mot WCAG AA i mörkt läge. Accentfärgad text i ljust läge använder svart
+  (`--accent-ink`).
 - Hjulen för vikt och tid är `spinbutton`-kontroller som styrs med piltangenter, och timern annonserar när vilan är slut.
-- Paneler är `<dialog>` (fokus och Esc ingår). "Minska rörelser" stänger av bakgrundens rörelse, kantens glidning och
-  välkomnandets animationer.
+- Paneler är `<dialog>` (fokus och Esc ingår). "Minska rörelser" stänger av animationerna (välkomnandet och att setet fälls ihop när vilan startar).
 
 ## Prestanda
-Bakgrundsbilden, animationerna och glaseffekten (`backdrop-filter`) kan vara tunga på äldre mobiler. Bilden är
-komprimerad till WebP, partiklarna pausar när fliken inte syns och animationen kan stängas av i Inställningar.
-Prestandan är inte mätt på en riktig telefon.
+Appen är lätt: inga bilder och inga tunga effekter, bara text och CSS. Prestandan är inte mätt på en riktig telefon.
 
 ## Data och integritet
 Allt sparas lokalt på enheten under nycklar som börjar på `styrkeloggen-` (prefixet är kvar från appens första namn,

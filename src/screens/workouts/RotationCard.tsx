@@ -1,12 +1,11 @@
 import { useState } from 'react'
-import { Button } from '../../components/ui/Button'
 import { Icon } from '../../components/ui/Icon'
 import { getSuggestion, rotationWorkouts } from '../../store/suggestions'
 import { useWorkoutStore } from '../../store/WorkoutStore'
 import { RotationSheet } from './RotationSheet'
 import styles from './RotationCard.module.css'
 
-/** Visar rotationen som en kedja (Push → Pull → Ben) och markerar vilket pass som är näst. */
+/** Nuvarande rotation: passen i ordning (Push → Pull → Löptur), markerar vilket pass som är näst. */
 export function RotationCard() {
   const store = useWorkoutStore()
   const [open, setOpen] = useState(false)
@@ -18,10 +17,8 @@ export function RotationCard() {
     <>
       <section className={styles.card} aria-label="Rotation">
         <div className={styles.head}>
-          <h2 className={styles.title}><Icon name="repeat" size={15} /> ROTATION</h2>
-          <span className={`${styles.status} ${store.rotation.active && order.length ? styles.on : ''}`}>
-            {order.length === 0 ? 'Ingen rotation' : store.rotation.active ? 'Aktiv' : 'Pausad'}
-          </span>
+          <h2 className={styles.title}><Icon name="repeat" size={16} /> {order.length ? 'Nuvarande rotation' : 'Rotation'}</h2>
+          <span className={styles.status}>{order.length === 0 ? 'Ingen rotation' : store.rotation.active ? 'Aktiv' : 'Pausad'}</span>
         </div>
 
         {order.length > 0 ? (
@@ -30,20 +27,21 @@ export function RotationCard() {
               <li key={w.id} className={styles.link}>
                 <span className={`${styles.chip} ${w.id === nextId ? styles.next : ''}`}>
                   {w.name}
-                  {w.id === nextId && <span className={styles.nextLabel}>NÄSTA</span>}
+                  {w.id === nextId && <span className={styles.nextLabel}>Nästa</span>}
                 </span>
-                {i < order.length - 1 && <Icon name="arrowRight" size={14} className={styles.arrow} />}
+                {i < order.length - 1 && <Icon name="arrowRight" size={18} className={styles.arrow} />}
               </li>
             ))}
-            <li className={styles.link} aria-hidden="true"><Icon name="repeat" size={14} className={styles.arrow} /></li>
+            <li className={styles.link} aria-hidden="true"><Icon name="repeat" size={18} className={styles.arrow} /></li>
           </ol>
         ) : (
           <p className={styles.hint}>Spara en rotation, t.ex. push → pull → ben, så föreslår Hem alltid rätt pass härnäst.</p>
         )}
 
-        <Button variant="secondary" icon={order.length ? 'edit' : 'plus'} onClick={() => setOpen(true)} fullWidth>
+        <button type="button" className={styles.button} onClick={() => setOpen(true)}>
+          <Icon name={order.length ? 'edit' : 'plus'} size={18} />
           {order.length ? 'Ändra rotation' : 'Skapa rotation'}
-        </Button>
+        </button>
       </section>
       <RotationSheet open={open} onClose={() => setOpen(false)} />
     </>

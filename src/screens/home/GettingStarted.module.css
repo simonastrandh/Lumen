@@ -1,9 +1,10 @@
-.title { font-size: 12px; font-weight: 600; color: var(--text-secondary); }
+.wrap { margin-top: 20px; }
+.title { font-size: 16px; font-weight: 600; line-height: 1.2; color: var(--text-primary); }
 .list { display: flex; flex-direction: column; gap: 14px; margin: 0; padding: 0; list-style: none; }
 .item { display: flex; align-items: flex-start; gap: 12px; }
-.badge { display: grid; place-items: center; flex-shrink: 0; width: 26px; height: 26px; border: 1.5px solid var(--surface-border); border-radius: var(--radius-pill); font-size: 12px; font-weight: 700; color: var(--text-secondary); }
+.badge { display: grid; place-items: center; flex-shrink: 0; width: 28px; height: 28px; border: 1px solid var(--field-border); border-radius: var(--radius-pill); font-size: 13px; font-weight: 600; color: var(--text-secondary); }
 .done { border-color: var(--accent); background: var(--accent); color: var(--accent-text); }
 .text { flex: 1; min-width: 0; }
-.step { font-size: 14px; font-weight: 600; }
-.hint { margin-top: 2px; font-size: 12px; line-height: 1.45; color: var(--text-secondary); }
-.go { display: grid; place-items: center; flex-shrink: 0; width: 32px; height: 32px; padding: 0; border: 1.5px solid var(--accent); border-radius: var(--radius-pill); background: none; color: var(--accent); }
+.step { font-size: 15px; font-weight: 600; line-height: 1.2; }
+.hint { margin-top: 2px; font-size: 13px; line-height: 1.35; color: var(--text-secondary); }
+.go { display: grid; place-items: center; flex-shrink: 0; width: 32px; height: 32px; padding: 0; border: 0; border-radius: var(--radius-pill); background: var(--accent); color: var(--accent-text); }

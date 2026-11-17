@@ -1,4 +1,5 @@
 import { partsOf, type CardioMeasure, ExerciseDefaults, ExerciseKind, StrengthMeasure } from '../../data/exercises'
+import type { ReactNode } from 'react'
 import { durationLabel } from './TimeField'
 import { WheelField, range } from './WheelPicker'
 import { displayToKg, displayToKm, distanceUnit, fmtDistance, fmtWeight, getUnitSystem, kgToDisplay, kmToDisplay, nearest, weightUnit } from '../../data/units'
@@ -30,7 +31,7 @@ export const fallback = { rest: 90, sets: 3, reps: 10, kg: 20, seconds: 30, minu
 const comma = (n: number) => String(n).replace('.', ',')
 
 /** Tid som tre hjul: timmar, minuter och sekunder (som iPhones timer) */
-export function TimeWheel({ title, seconds, onChange, display }: { title: string; seconds: number; onChange: (totalSeconds: number) => void; display?: string }) {
+export function TimeWheel({ title, seconds, onChange, display, trigger }: { title: string; seconds: number; onChange: (totalSeconds: number) => void; display?: string; trigger?: (open: () => void, label: string) => ReactNode }) {
   const h = Math.floor(seconds / 3600)
   const min = Math.floor((seconds % 3600) / 60)
   const sec = seconds % 60
@@ -39,6 +40,7 @@ export function TimeWheel({ title, seconds, onChange, display }: { title: string
   return (
     <WheelField
       title={title}
+      trigger={trigger}
       display={display ?? durationLabel(seconds)}
       columns={[
         { values: range(0, 23), value: h, onChange: (v) => set(v, min, sec), unit: 'tim' },

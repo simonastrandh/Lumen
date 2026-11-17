@@ -1,22 +1,21 @@
-.title { font-size: 24px; font-weight: 700; }
-.sub { margin-top: 4px; font-size: 13px; color: var(--text-secondary); }
-.note { composes: legible from '../../styles/chrome.module.css'; font-size: 12px; line-height: 1.5; color: var(--text-secondary); }
+.top { font-size: 15px; font-weight: 500; line-height: 1.2; color: var(--text-secondary); }
+.note { font-size: 15px; line-height: 1.45; color: var(--text-secondary); }
 
-.profile { composes: card from '../../styles/chrome.module.css'; display: flex; align-items: center; gap: 14px; width: 100%; padding: 18px;   background: var(--surface-bg); text-align: left; color: var(--text-primary); }
-.avatar { display: grid; place-items: center; flex-shrink: 0; width: 48px; height: 48px; border-radius: var(--radius-pill); font-size: 20px; font-weight: 700; color: var(--accent-2-strong); background: color-mix(in srgb, var(--accent-2) 14%, var(--input-bg)); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent-2) 40%, transparent); }
-.profileText { display: flex; flex: 1; flex-direction: column; gap: 2px; min-width: 0; }
-.profileName { font-size: 17px; font-weight: 700; }
-.profileEdit { font-size: 13px; font-weight: 600; color: var(--accent-strong); }
-
-.group { display: flex; flex-direction: column; gap: 10px; }
-.groupTitle { padding-left: 4px; font-size: 11px; font-weight: 600; letter-spacing: 0.06em; color: var(--text-secondary); }
-.list { composes: card from '../../styles/chrome.module.css'; display: flex; flex-direction: column; padding: 2px 16px;  background: var(--surface-bg); }
-.row { display: flex; align-items: center; gap: 12px; width: 100%; padding: 14px 0; border: 0; background: none; text-align: left; font: inherit; color: var(--text-primary); }
+.group { margin-top: 32px; }
+.list { composes: card from '../../styles/chrome.module.css'; display: flex; flex-direction: column; padding: 0 16px; }
+.row { display: flex; flex-direction: column; gap: 12px; width: 100%; padding: 14px 0; border: 0; background: none; text-align: left; font: inherit; color: var(--text-primary); }
 .row + .row { border-top: 1px solid var(--surface-border); }
-.label { flex: 1; font-size: 15px; font-weight: 600; }
-.danger { color: var(--danger); }
-.value { display: flex; align-items: center; font-size: 13px; color: var(--text-secondary); }
+.rowHead { display: flex; align-items: center; gap: 14px; width: 100%; }
+.label { flex: 1; font-size: 16px; font-weight: 500; line-height: 1.2; }
+.value { display: flex; align-items: center; }
+.control { display: block; width: 100%; }
 .chevron { flex-shrink: 0; color: var(--text-secondary); }
+.danger { color: var(--danger) !important; border-color: var(--danger) !important; }
 
-.footer { display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 8px 0 4px; font-size: 12px; color: var(--text-secondary); }
-.footer strong { font-size: 13px; color: var(--text-primary); }
+.dataGroup { margin-top: 20px; }
+.clear { composes: card from '../../styles/chrome.module.css'; display: flex; align-items: center; gap: 14px; width: 100%; padding: 16px; text-align: left; font: inherit; color: var(--danger); }
+.clearLabel { flex: 1; font-size: 15px; font-weight: 600; }
+
+.footer { display: flex; flex-direction: column; gap: 2px; padding: 32px 0 0; }
+.footer strong { font-family: var(--font-display); font-size: 28px; font-weight: 400; line-height: 1.05; text-transform: uppercase; color: var(--text-primary); }
+.footer span { font-size: 13px; color: var(--text-secondary); }
