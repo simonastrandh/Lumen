@@ -1,4 +1,5 @@
 .list { position: relative; display: flex; flex-direction: column; margin: -16px 0; padding: 0; list-style: none; }
+.list:empty { margin: 0; }
 .row {
   position: relative;
   display: flex;

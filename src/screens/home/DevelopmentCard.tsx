@@ -39,7 +39,7 @@ export function DevelopmentCard() {
 
       {goals.length === 0 && !editing && <p className={styles.empty}>Inga mål än. Tryck på pennan för att lägga till ett.</p>}
 
-      <SortableList
+      {goals.length > 0 && <SortableList
         items={goals}
         getId={(g) => g.id}
         getLabel={(g) => `${g.exercise}-mål`}
@@ -48,7 +48,7 @@ export function DevelopmentCard() {
         renderItem={(goal) => (
           <GoalRow goal={show(goal)} editing={editing} onEdit={() => setSheet({ mode: 'edit', goal })} onRemove={() => removeGoal(goal.id)} />
         )}
-      />
+      />}
 
       {editing ? (
         <div key="edit" className="reveal" style={{ display: 'contents' }}>
