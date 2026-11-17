@@ -6,7 +6,6 @@ import { SortableList } from '../../components/ui/SortableList'
 import { MeasureFields } from '../../components/pickers/MeasureFields'
 import { SegmentedControl } from '../../components/ui/SegmentedControl'
 import { TextField } from '../../components/ui/TextField'
-import { Tag } from '../../components/ui/Tag'
 import { isCardio, type Exercise } from '../../data/exercises'
 import { entryForExercise, type Workout, type WorkoutExercise } from '../../data/workouts'
 import { newId, useWorkoutStore } from '../../store/WorkoutStore'
@@ -67,7 +66,6 @@ function Editor({ initial }: { initial?: Workout }) {
           <Icon name="chevronLeft" size={20} />
         </button>
         <div className={styles.headText}>
-          <Tag tone="accent-2" icon="layers">PASS</Tag>
           <h1 className={styles.title}>{initial ? 'Redigera pass' : 'Nytt pass'}</h1>
         </div>
       </header>

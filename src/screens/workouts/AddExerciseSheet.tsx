@@ -2,7 +2,6 @@ import { useEffect, useMemo, useState } from 'react'
 import { BottomSheet } from '../../components/ui/BottomSheet'
 import { Button } from '../../components/ui/Button'
 import { Icon } from '../../components/ui/Icon'
-import { Tag } from '../../components/ui/Tag'
 import { SearchField } from '../../components/ui/SearchField'
 import { TextField } from '../../components/ui/TextField'
 import { ExerciseCard } from './ExerciseCard'
@@ -98,7 +97,7 @@ export function AddExerciseSheet({ open, onClose, onPick, submitLabel = 'Lägg t
   }
 
   return (
-    <BottomSheet open={open} onClose={close} title="Lägg till övning" eyebrow={<Tag tone="accent">ÖVNING</Tag>}>
+    <BottomSheet open={open} onClose={close} title="Lägg till övning">
       {!creating ? (
         <div className={styles.stack}>
           {myExercises.length > 6 && <SearchField value={query} onChange={setQuery} label="Sök bland dina övningar" placeholder="Sök bland dina övningar..." />}
