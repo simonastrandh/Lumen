@@ -46,23 +46,27 @@ export const legacySeedWorkouts: Workout[] = [
 ]
 
 /** Förslag på nya pass */
-const SECONDS_PER_REP = 4
+/** Antaganden för uppskattningen (sekunder) */
+const SECONDS_PER_REP = 5 // en rep inklusive sänkning, paus och lyft
+const SET_OVERHEAD = 15 // ta position och komma igång före varje set
+const EXERCISE_SETUP = 60 // gå till nästa redskap, ställa in och lasta vikter
 const MINUTES_PER_KM = 6
 
-/** Ungefärlig tid i sekunder för en övning utan vila: inlagd tid om den finns, annars reps × ca 4 s per set. */
+/** Ungefärlig tid i sekunder för en övning utan vila: inlagd tid om den finns, annars reps × ca 5 s per set, plus uppställning. */
 export function workSeconds(e: WorkoutExercise, cardio: boolean): number {
   if (cardio) {
     if (e.minutes !== undefined) return e.minutes * 60
     if (e.km !== undefined) return e.km * MINUTES_PER_KM * 60
     return 20 * 60
   }
-  const perSet = e.seconds ?? (e.reps > 0 ? e.reps * SECONDS_PER_REP : 30)
-  return e.sets * perSet
+  const perSet = (e.seconds ?? (e.reps > 0 ? e.reps * SECONDS_PER_REP : 30)) + SET_OVERHEAD
+  return EXERCISE_SETUP + e.sets * perSet
 }
 
 /**
- * Ungefärlig tid för ett pass i minuter: tiden för varje övning (inlagd tid, annars reps × ca 4 s)
- * plus vilan efter varje styrkeset, utom efter allra sista setet (som i Aktivt pass).
+ * Ungefärlig tid för ett pass i minuter: för varje styrkeövning uppställning, tid per set (inlagd tid, annars
+ * reps × ca 5 s) och en kort start före varje set, plus vilan efter varje set utom det allra sista (som i Aktivt pass).
+ * Konditionsövningar räknas med sin inlagda tid eller distans. Uppvärmning ingår inte.
  */
 export function estimateMinutes(workout: Workout, isCardio: (exerciseId: string) => boolean, restFor: (exerciseId: string) => number): number {
   let seconds = 0
