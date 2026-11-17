@@ -50,7 +50,10 @@ export default function Statistics() {
 
       {history.length > 0 && tab === 'overview' && (
         <section className={styles.big} aria-label="Pass totalt">
-          <p className={styles.bigNumber}>{inRange.length}</p>
+          <div className={styles.bigValue}>
+            <span className={styles.bigNumber}>{inRange.length}</span>
+            <span className={styles.bigUnit}>PASS</span>
+          </div>
           <p className={styles.bigSub}>{rangeText[range]}</p>
         </section>
       )}

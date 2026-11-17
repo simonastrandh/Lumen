@@ -1,6 +1,8 @@
 
 /* Den stora affischsiffran */
-.big { display: flex; flex-direction: column; gap: 14px; padding-top: 26px; }
+.big { display: flex; flex-direction: column; gap: 14px; }
+.bigValue { display: flex; align-items: flex-end; gap: 12px; }
+.bigUnit { padding-bottom: 0.12em; font-family: var(--font-display); font-size: 44px; line-height: 1; text-transform: uppercase; color: var(--accent-ink); }
 .bigLabel { font-size: 14px; font-weight: 600; line-height: 1.2; color: var(--text-secondary); }
 .bigNumber {
   font-family: var(--font-display);

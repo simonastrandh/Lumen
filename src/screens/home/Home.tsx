@@ -39,7 +39,10 @@ export default function Home() {
 
       <section className={styles.big} aria-label="Pass denna månad">
         <p className={styles.bigLabel}>Pass denna månad</p>
-        <p className={`${styles.bigNumber} ${month >= 100 ? styles.bigNumberSmall : ''}`}>{month}</p>
+        <div className={styles.bigValue}>
+          <span className={`${styles.bigNumber} ${month >= 100 ? styles.bigNumberSmall : ''}`}>{month}</span>
+          <span className={styles.bigUnit}>PASS</span>
+        </div>
         <p className={styles.bigSub}>{motivation}</p>
       </section>
 
