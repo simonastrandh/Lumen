@@ -100,7 +100,7 @@ export default function Workouts() {
             <h2 id="my-exercises" className={styles.heading}>Mina övningar</h2>
             {myExercises.length > 0 ? exerciseRows(myExercises) : <p className={styles.empty}>Inga övningar än. Övningar du skriver in när du skapar ett pass dyker upp här.</p>}
             <Button variant="secondary" icon="plus" fullWidth onClick={() => setAdding(true)}>
-              Lägg till ny övning
+              Skapa ny övning
             </Button>
           </section>
         </>
@@ -109,7 +109,8 @@ export default function Workouts() {
       <AddExerciseSheet
         open={adding}
         onClose={() => setAdding(false)}
-        pickedIds={[]}
+        submitLabel="Spara övning"
+        title="Skapa ny övning"
         submitLabel="Spara övning"
         onPick={() => {
           // Övningen sparas bland Mina övningar av AddExerciseSheet själv

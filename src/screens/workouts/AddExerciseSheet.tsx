@@ -117,7 +117,7 @@ export function AddExerciseSheet({ open, onClose, onPick, submitLabel = 'Lägg t
             </div>
           )}
           <Button variant="secondary" icon="plus" fullWidth onClick={() => { setName(query); setCreating(true) }}>
-            Lägg till övning
+            Skapa ny övning
           </Button>
         </div>
       ) : (
