@@ -1,3 +1,4 @@
+import { useFitScale } from '../../hooks/useFitScale'
 import { kgToDisplay, toDisplay, unitLabel, weightUnit } from '../../data/units'
 import { useState } from 'react'
 import { BarChart } from '../../components/ui/BarChart'
@@ -42,6 +43,7 @@ export default function Statistics() {
   const [tab, setTab] = useState<Tab>('overview')
   const [range, setRange] = useState<Range>('allt')
   const cutoff = Date.now() - rangeDays[range] * 24 * 3600 * 1000
+  const fitRef = useFitScale<HTMLDivElement>(`${history.length}-${tab}-${range}`)
   const inRange = history.filter((h) => new Date(h.completedAt).getTime() >= cutoff)
 
   return (
@@ -50,7 +52,7 @@ export default function Statistics() {
 
       {history.length > 0 && tab === 'overview' && (
         <section className={styles.big} aria-label="Pass totalt">
-          <div className={styles.bigValue}>
+          <div ref={fitRef} className={styles.bigValue}>
             <span className={styles.bigNumber}>{inRange.length}</span>
             <span className={styles.bigUnit}>PASS</span>
           </div>
@@ -226,6 +228,7 @@ function PerExercise() {
   const disp = (n: number) => toDisplay(metricUnit[sum.metric], n)
   const fmt = (n: number) => (sum.metric === 'seconds' ? formatTime(n) : `${comma(disp(n))} ${unit}`)
   const best = Math.max(sum.best, stats?.best[sum.metric] ?? 0)
+  const fitRef2 = useFitScale<HTMLDivElement>(`${best}-${unit}-${sum.metric}`)
 
   return (
     <>
@@ -238,7 +241,7 @@ function PerExercise() {
           Personbästa
           {stats?.lastPb && <Tag tone="gold">Nytt</Tag>}
         </p>
-        <div className={styles.bigValue}>
+        <div ref={fitRef2} className={styles.bigValue}>
           <span className={styles.bigNumber}>{sum.metric === 'seconds' ? formatTime(best) : comma(disp(best))}</span>
           {sum.metric !== 'seconds' && <span className={styles.bigUnit}>{unit}</span>}
         </div>

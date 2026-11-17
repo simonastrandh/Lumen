@@ -40,9 +40,9 @@
 /* Nästa set som stor siffra */
 .focus { display: flex; flex-direction: column; gap: 4px; }
 .focusLabel { font-size: 14px; font-weight: 600; line-height: 1.2; color: var(--text-secondary); }
-.focusValue { display: flex; align-items: flex-end; gap: 12px; }
-.focusNumber { font-family: var(--font-display); font-size: clamp(110px, 23dvh, 190px); line-height: 0.9; color: var(--accent-ink); }
-.focusUnit { padding-bottom: 0.14em; font-family: var(--font-display); font-size: 44px; line-height: 1; text-transform: uppercase; color: var(--accent-ink); }
+.focusValue { display: flex; align-items: flex-end; gap: calc(12px * var(--fit, 1)); min-width: 0; }
+.focusNumber { font-family: var(--font-display); font-size: calc(clamp(110px, 23dvh, 190px) * var(--fit, 1)); line-height: 0.9; white-space: nowrap; color: var(--accent-ink); }
+.focusUnit { padding-bottom: 0.14em; font-family: var(--font-display); font-size: calc(44px * var(--fit, 1)); white-space: nowrap; line-height: 1; text-transform: uppercase; color: var(--accent-ink); }
 .focusSecond { font-family: var(--font-display); font-size: clamp(32px, 6dvh, 48px); line-height: 1.05; text-transform: uppercase; }
 
 /* Liten vilorad under det stora setet */

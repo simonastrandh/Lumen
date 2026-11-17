@@ -1,3 +1,4 @@
+import { useFitScale } from '../../hooks/useFitScale'
 import { useNavigate } from 'react-router-dom'
 import { Button } from '../../components/ui/Button'
 import { Icon } from '../../components/ui/Icon'
@@ -21,6 +22,7 @@ export default function Home() {
   const active = readSession()
   const activeName = active ? (active.id === 'tomt' ? 'Tomt pass' : workouts.find((w) => w.id === active.id)?.name ?? null) : null
   const month = workoutsThisMonth(history)
+  const fitRef = useFitScale<HTMLDivElement>(month)
   const motivation = getDailyMotivation(new Date()).text
 
   const workoutMeta = (w: { exercises: unknown[] } & Parameters<typeof estimateMinutes>[0]) => `${exerciseCount(w.exercises.length)} · ca ${estimateMinutes(w)} min`
@@ -39,7 +41,7 @@ export default function Home() {
 
       <section className={styles.big} aria-label="Pass denna månad">
         <p className={styles.bigLabel}>Pass denna månad</p>
-        <div className={styles.bigValue}>
+        <div ref={fitRef} className={styles.bigValue}>
           <span className={`${styles.bigNumber} ${month >= 100 ? styles.bigNumberSmall : ''}`}>{month}</span>
           <span className={styles.bigUnit}>PASS</span>
         </div>

@@ -1,3 +1,4 @@
+import { useFitScale } from '../../hooks/useFitScale'
 import { useEffect, useState } from 'react'
 import { Icon } from '../../components/ui/Icon'
 import { TimeWheel } from '../../components/pickers/MeasureFields'
@@ -92,6 +93,7 @@ export function TimerPanel({ timer, now, nextSet, nextIndex, totalSets, exercise
 
   const showRing = timer !== null
   const focus = nextSet ? focusParts(nextSet) : null
+  const fitRef = useFitScale<HTMLDivElement>(focus ? focus.value + focus.unit : '')
 
   return (
     <div className={styles.stage}>
@@ -101,7 +103,7 @@ export function TimerPanel({ timer, now, nextSet, nextIndex, totalSets, exercise
           {focus && nextSet ? (
             <div className={styles.focus}>
               <p className={styles.focusLabel}>Set {nextIndex + 1} av {totalSets}</p>
-              <div className={styles.focusValue}>
+              <div ref={fitRef} className={styles.focusValue}>
                 <span className={styles.focusNumber}>{focus.value}</span>
                 {focus.unit && <span className={styles.focusUnit}>{focus.unit}</span>}
               </div>
