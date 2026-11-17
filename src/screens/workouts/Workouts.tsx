@@ -109,7 +109,7 @@ export default function Workouts() {
       <AddExerciseSheet
         open={adding}
         onClose={() => setAdding(false)}
-        submitLabel="Spara övning"
+        pickedIds={[]}
         title="Skapa ny övning"
         submitLabel="Spara övning"
         onPick={() => {
