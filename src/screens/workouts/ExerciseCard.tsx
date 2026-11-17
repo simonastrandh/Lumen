@@ -1,5 +1,4 @@
 import { IconBadge } from '../../components/ui/IconBadge'
-import { Tag } from '../../components/ui/Tag'
 import { isCardio, type Exercise } from '../../data/exercises'
 import { StartButton } from './StartButton'
 import styles from './ExerciseCard.module.css'
@@ -20,7 +19,6 @@ export function ExerciseCard({ exercise, onOpen, onStart }: ExerciseCardProps) {
         <span className={styles.text}>
           <span className={styles.name}>
             {exercise.name}
-            <Tag>Övning</Tag>
           </span>
           <span className={styles.muscle}>{exercise.muscleGroup}</span>
         </span>
