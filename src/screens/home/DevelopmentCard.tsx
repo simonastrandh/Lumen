@@ -54,14 +54,14 @@ export function DevelopmentCard() {
       />
 
       {editing ? (
-        <>
+        <div key="edit" className="reveal" style={{ display: 'contents' }}>
           <Button variant="secondary" icon="plus" fullWidth onClick={() => setSheet({ mode: 'add' })}>
             Lägg till mål
           </Button>
           {goals.length > 1 && <p className={styles.hint}>Håll och dra i de tre strecken för att ändra ordning.</p>}
-        </>
+        </div>
       ) : (
-        <button type="button" className={styles.more} onClick={() => navigate('/statistik')}>
+        <button key="more" type="button" className={`${styles.more} reveal`} onClick={() => navigate('/statistik')}>
           Se all statistik
           <Icon name="chevronRight" size={16} />
         </button>

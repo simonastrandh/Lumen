@@ -68,7 +68,8 @@ export function ExercisePicker({ label, value, options, onChange, error, emptyTe
         />
         <Icon name={open ? 'chevronLeft' : 'chevronRight'} size={16} className={`${styles.chevron} ${open ? styles.chevronOpen : ''}`} />
       </div>
-      {open && (
+      <div className={`${styles.drop} ${open ? styles.dropOpen : ''}`} inert={!open}>
+        <div className={styles.dropInner}>
         <ul id={`${id}-list`} role="listbox" aria-label={label} className={styles.list}>
           {results.map((o, i) => (
             <li
@@ -86,7 +87,8 @@ export function ExercisePicker({ label, value, options, onChange, error, emptyTe
           ))}
           {results.length === 0 && <li className={styles.empty}>{opts.length === 0 ? emptyText : 'Inga övningar matchar sökningen.'}</li>}
         </ul>
-      )}
+        </div>
+      </div>
       {error && <p className={styles.error} role="alert">{error}</p>}
     </div>
   )

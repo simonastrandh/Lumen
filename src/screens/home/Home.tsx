@@ -36,7 +36,6 @@ export default function Home() {
 
   return (
     <>
-      <p className={styles.greeting}>Hej!</p>
 
       <section className={styles.big} aria-label="Pass denna månad">
         <p className={styles.bigLabel}>Pass denna månad</p>

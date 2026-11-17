@@ -44,3 +44,8 @@
 .active, .option:hover { background: var(--surface-bg); }
 .empty { padding: 14px; font-size: 13px; line-height: 1.5; color: var(--text-secondary); }
 .error { font-size: 12px; color: var(--danger); padding-left: 4px; }
+
+.drop { display: grid; grid-template-rows: 0fr; opacity: 0; margin-top: -6px; transition: grid-template-rows .35s cubic-bezier(.2,.7,.2,1), opacity .25s ease, margin-top .35s cubic-bezier(.2,.7,.2,1); }
+.dropOpen { grid-template-rows: 1fr; opacity: 1; margin-top: 0; }
+.dropInner { overflow: hidden; min-height: 0; }
+@media (prefers-reduced-motion: reduce) { .drop { transition: none; } }
