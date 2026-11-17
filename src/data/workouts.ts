@@ -54,7 +54,7 @@ export function estimateMinutes(workout: Workout): number {
 
 /** Styrkepass har en skivstång som ikon, konditionspass en blixt */
 export function workoutIcon(workout?: Workout): IconName {
-  return workout?.kind === 'kondition' ? 'bolt' : 'workout'
+  return workout?.kind === 'kondition' ? 'repeat' : 'layers'
 }
 
 /** Ny rad i ett pass utifrån övningens mått och standardvärden (set, reps, vikt, tid, distans) */
