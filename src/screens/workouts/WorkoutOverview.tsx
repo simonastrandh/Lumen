@@ -6,6 +6,7 @@ import { Icon } from '../../components/ui/Icon'
 import { useWorkoutStore } from '../../store/WorkoutStore'
 import { clearSession, readSession } from '../active/session'
 import { exerciseCount, targetText, workoutMeta } from './labels'
+import { useWorkoutMinutes } from './useWorkoutMinutes'
 import styles from './WorkoutOverview.module.css'
 
 /** Översikt över ett pass innan man startar det (Figma "02 – Push"): övningarna, Redigera och Starta. */
@@ -13,6 +14,7 @@ export default function WorkoutOverview() {
   const { id } = useParams()
   const navigate = useNavigate()
   const store = useWorkoutStore()
+  const minutesOf = useWorkoutMinutes()
   const workout = id ? store.getWorkout(id) : undefined
   const [confirmNew, setConfirmNew] = useState(false)
   const active = readSession()
@@ -38,7 +40,7 @@ export default function WorkoutOverview() {
         <span className={styles.heroText}>
           <span className={styles.heroLabel}>{active && !otherActive ? 'Pågående pass' : 'Pass'}</span>
           <span className={styles.heroTitle}>{workout.name}</span>
-          <span className={styles.heroMeta}>{workoutMeta(workout)}</span>
+          <span className={styles.heroMeta}>{workoutMeta(workout, minutesOf(workout))}</span>
         </span>
         <span className={styles.play} aria-hidden="true">
           <Icon name="play" size={22} />

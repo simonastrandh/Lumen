@@ -46,10 +46,33 @@ export const legacySeedWorkouts: Workout[] = [
 ]
 
 /** Förslag på nya pass */
-/** Ungefärlig tid för ett pass (≈ 2,5 min per set inkl. vila) */
-export function estimateMinutes(workout: Workout): number {
-  const min = workout.exercises.reduce((sum, e) => sum + (e.minutes ?? e.sets * 2.5), 0)
-  return Math.max(10, Math.round(min / 5) * 5)
+const SECONDS_PER_REP = 4
+const MINUTES_PER_KM = 6
+
+/** Ungefärlig tid i sekunder för en övning utan vila: inlagd tid om den finns, annars reps × ca 4 s per set. */
+export function workSeconds(e: WorkoutExercise, cardio: boolean): number {
+  if (cardio) {
+    if (e.minutes !== undefined) return e.minutes * 60
+    if (e.km !== undefined) return e.km * MINUTES_PER_KM * 60
+    return 20 * 60
+  }
+  const perSet = e.seconds ?? (e.reps > 0 ? e.reps * SECONDS_PER_REP : 30)
+  return e.sets * perSet
+}
+
+/**
+ * Ungefärlig tid för ett pass i minuter: tiden för varje övning (inlagd tid, annars reps × ca 4 s)
+ * plus vilan efter varje styrkeset, utom efter allra sista setet (som i Aktivt pass).
+ */
+export function estimateMinutes(workout: Workout, isCardio: (exerciseId: string) => boolean, restFor: (exerciseId: string) => number): number {
+  let seconds = 0
+  workout.exercises.forEach((e, i) => {
+    const cardio = isCardio(e.exerciseId)
+    seconds += workSeconds(e, cardio)
+    if (!cardio) seconds += restFor(e.exerciseId) * (i === workout.exercises.length - 1 ? e.sets - 1 : e.sets)
+  })
+  const min = seconds / 60
+  return Math.max(1, min < 20 ? Math.round(min) : Math.round(min / 5) * 5)
 }
 
 /** Styrkepass har en skivstång som ikon, konditionspass en blixt */

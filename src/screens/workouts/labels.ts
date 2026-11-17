@@ -1,10 +1,10 @@
 import { fmtDistance, fmtWeight } from '../../data/units'
 import { durationLabel } from '../../components/pickers/TimeField'
 import { isCardio, type Exercise, type ExerciseDefaults } from '../../data/exercises'
-import { estimateMinutes, type Workout, type WorkoutExercise } from '../../data/workouts'
+import { type Workout, type WorkoutExercise } from '../../data/workouts'
 
 export const exerciseCount = (n: number) => `${n} ${n === 1 ? 'övning' : 'övningar'}`
-export const workoutMeta = (w: Workout) => `${w.kind === 'kondition' ? 'Kondition' : 'Styrka'} · ${exerciseCount(w.exercises.length)} · ~${estimateMinutes(w)} min`
+export const workoutMeta = (w: Workout, minutes: number) => `${w.kind === 'kondition' ? 'Kondition' : 'Styrka'} · ${exerciseCount(w.exercises.length)} · ~${minutes} min`
 
 
 /** Kort beskrivning av en övnings mål i ett pass, t.ex. "4 × 8 · 60 kg" eller "20 min · 3 km" */

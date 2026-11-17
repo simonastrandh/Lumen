@@ -4,7 +4,8 @@ import { Button } from '../../components/ui/Button'
 import { Icon } from '../../components/ui/Icon'
 import { getDailyMotivation } from '../../data/motivation'
 import { workoutsThisMonth } from '../../data/stats'
-import { estimateMinutes } from '../../data/workouts'
+import type { Workout } from '../../data/workouts'
+import { useWorkoutMinutes } from '../workouts/useWorkoutMinutes'
 import { getSuggestion } from '../../store/suggestions'
 import { useWorkoutStore } from '../../store/WorkoutStore'
 import { readSession } from '../active/session'
@@ -25,7 +26,8 @@ export default function Home() {
   const fitRef = useFitScale<HTMLDivElement>(month)
   const motivation = getDailyMotivation(new Date()).text
 
-  const workoutMeta = (w: { exercises: unknown[] } & Parameters<typeof estimateMinutes>[0]) => `${exerciseCount(w.exercises.length)} · ca ${estimateMinutes(w)} min`
+  const minutesOf = useWorkoutMinutes()
+  const workoutMeta = (w: Workout) => `${exerciseCount(w.exercises.length)} · ca ${minutesOf(w)} min`
 
   const hero =
     active && activeName
