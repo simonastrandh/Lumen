@@ -1,5 +1,4 @@
-import { useLayoutEffect, useRef, useState, type KeyboardEvent, type PointerEvent, type ReactNode } from 'react'
-import { flushSync } from 'react-dom'
+import { useRef, useState, type KeyboardEvent, type PointerEvent, type ReactNode } from 'react'
 import { Icon } from './Icon'
 import styles from './SortableList.module.css'
 
@@ -14,98 +13,102 @@ interface SortableListProps<T> {
   getLabel?: (item: T) => string
 }
 
-const SLIDE_MS = 320
-const SLIDE_EASING = 'cubic-bezier(0.22, 1, 0.36, 1)' // mjuk "ease-out" som bromsar in på slutet
+const SETTLE_MS = 180
+const SHIFT = 'transform 220ms cubic-bezier(0.22, 1, 0.36, 1)'
 
 const reducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
-/** Radens just nu synliga translateY, inklusive pågående animation. */
-const visibleOffset = (el: HTMLElement) => new DOMMatrix(getComputedStyle(el).transform).m42
-
-/** Låt en rad glida från `from` px till sin plats. Avbryter en eventuell pågående glidning. */
-function slideFrom(el: HTMLElement, from: number) {
-  el.getAnimations().forEach((a) => a.cancel())
-  if (reducedMotion() || Math.abs(from) < 0.5) return
-  el.animate([{ transform: `translateY(${from}px)` }, { transform: 'translateY(0)' }], {
-    duration: SLIDE_MS,
-    easing: SLIDE_EASING,
-  })
+interface DragState {
+  id: string
+  from: number
+  to: number
+  grabOffset: number
+  /** Radernas höjd och översta kant (relativt listan) när draget började, i ursprunglig ordning */
+  ids: string[]
+  heights: number[]
+  tops: number[]
+  listTop: number
+  startY: number
 }
 
 /**
  * Lista med omsortering via grepp.
- * - Den dragna raden följer pekaren direkt; de andra glider mjukt på plats (FLIP med Web Animations).
- * - Ordningen sparas (onReorder) först när du släpper, så draget är lätt även om sidan är tung.
+ * - Under draget ändras inget i React och DOM-ordningen ligger fast: den dragna raden följer pekaren
+ *   med en ren transform och grannarna glider undan med CSS-transition. Därför blir det mjukt.
+ * - Ordningen sparas (onReorder) först när du släpper, efter att raden glidit ner på sin plats.
  * - Pil upp/ner på greppet fungerar också.
  * Visar bara en vanlig lista när `sortable` är false.
  */
 export function SortableList<T>({ items, getId, onReorder, renderItem, sortable, getLabel }: SortableListProps<T>) {
-  /** Ordning (id:n) under pågående drag. null = följ `items`. */
-  const [dragOrder, setDragOrder] = useState<string[] | null>(null)
   const [draggingId, setDraggingId] = useState<string | null>(null)
   const listRef = useRef<HTMLUListElement>(null)
   const rows = useRef(new Map<string, HTMLLIElement>())
-  /** Layoutposition (offsetTop – påverkas inte av transform) vid förra renderingen */
-  const lastTop = useRef(new Map<string, number>())
-  const drag = useRef<{ id: string; grabOffset: number; pointerY: number } | null>(null)
+  const drag = useRef<DragState | null>(null)
 
-  const byId = new Map(items.map((i) => [getId(i), i]))
-  const displayed = dragOrder ? dragOrder.flatMap((id) => byId.get(id) ?? []) : items
+  /** Ny ordning (ursprungliga index) om raden läggs på plats `to` */
+  const orderFor = (d: DragState, to: number) => {
+    const order = d.ids.map((_, i) => i).filter((i) => i !== d.from)
+    order.splice(to, 0, d.from)
+    return order
+  }
 
-  const viewportTop = (el: HTMLElement) => (listRef.current?.getBoundingClientRect().top ?? 0) + el.offsetTop
-
-  // Efter varje rendering: låt rader som bytt plats glida från sin gamla position.
-  useLayoutEffect(() => {
-    rows.current.forEach((el, id) => {
-      const top = el.offsetTop
-      const prev = lastTop.current.get(id)
-      lastTop.current.set(id, top)
-      if (drag.current?.id === id) {
-        // Dragen rad: håll den under pekaren trots att dess layoutposition ändrats
-        el.style.transform = `translateY(${drag.current.pointerY - drag.current.grabOffset - viewportTop(el)}px)`
-      } else if (prev !== undefined && Math.abs(prev - top) > 0.5) {
-        slideFrom(el, visibleOffset(el) + (prev - top))
+  /** Lägg ut raderna enligt `to`: grannarna glider, den dragna raden lämnas åt pekaren. */
+  function layout(d: DragState) {
+    let y = 0
+    orderFor(d, d.to).forEach((orig) => {
+      const el = rows.current.get(d.ids[orig])
+      if (el && orig !== d.from) {
+        el.style.transition = SHIFT
+        el.style.transform = `translateY(${y - (d.tops[orig] - d.tops[0])}px)`
       }
+      y += d.heights[orig]
     })
-  })
+  }
 
   function startDrag(e: PointerEvent<HTMLButtonElement>, id: string) {
-    const el = rows.current.get(id)
-    if (!el) return
+    const list = listRef.current
+    if (!list) return
     e.currentTarget.setPointerCapture(e.pointerId)
-    el.getAnimations().forEach((a) => a.cancel())
-    drag.current = { id, grabOffset: e.clientY - el.getBoundingClientRect().top, pointerY: e.clientY }
-    setDragOrder(items.map(getId))
+    const ids = items.map(getId)
+    const els = ids.map((i) => rows.current.get(i)!)
+    const rects = els.map((el) => el.getBoundingClientRect())
+    const from = ids.indexOf(id)
+    drag.current = {
+      id,
+      from,
+      to: from,
+      grabOffset: e.clientY - rects[from].top,
+      ids,
+      heights: rects.map((r) => r.height),
+      tops: rects.map((r) => r.top),
+      listTop: rects[0].top,
+      startY: rects[from].top,
+    }
+    els.forEach((el) => el.getAnimations().forEach((a) => a.cancel()))
     setDraggingId(id)
   }
 
   function handlePointerMove(e: PointerEvent, id: string) {
     const d = drag.current
     const el = rows.current.get(id)
-    if (!d || d.id !== id || !el || !dragOrder) return
-    d.pointerY = e.clientY
+    if (!d || d.id !== id || !el) return
+    // Dragna raden följer pekaren direkt (ingen transition)
+    const top = e.clientY - d.grabOffset
+    el.style.transition = 'none'
+    el.style.transform = `translateY(${top - d.startY}px)`
 
-    // Raden följer pekaren direkt
-    const top = d.pointerY - d.grabOffset // radens översta kant i viewporten
-    el.style.transform = `translateY(${top - viewportTop(el)}px)`
-    const bottom = top + el.offsetHeight
-
-    // Byt plats när dragna radens framkant passerat en grannes mittpunkt.
-    // (Framkant = överkant när du drar uppåt, underkant nedåt – då flimrar det inte
-    // även om sektionerna har olika höjd.)
-    const from = dragOrder.indexOf(id)
-    let to = from
-    dragOrder.forEach((otherId, i) => {
-      const other = rows.current.get(otherId)
-      if (!other || otherId === id) return
-      const center = viewportTop(other) + other.offsetHeight / 2
-      if (i < from && top < center) to--
-      if (i > from && bottom > center) to++
+    // Var hamnar mitten av den dragna raden bland de andra? (relativt listans överkant)
+    const center = top + d.heights[d.from] / 2 - d.listTop
+    let to = 0
+    let y = 0
+    d.ids.forEach((_, i) => {
+      if (i === d.from) return
+      if (center > y + d.heights[i] / 2) to++
+      y += d.heights[i]
     })
-    if (to !== from) {
-      const next = [...dragOrder]
-      next.splice(to, 0, next.splice(from, 1)[0])
-      flushSync(() => setDragOrder(next)) // rendera direkt så att nästa pekarhändelse mäter rätt
+    if (to !== d.to) {
+      d.to = to
+      layout(d)
     }
   }
 
@@ -113,13 +116,33 @@ export function SortableList<T>({ items, getId, onReorder, renderItem, sortable,
     const d = drag.current
     const el = rows.current.get(id)
     if (!d || d.id !== id) return
-    const finalOffset = el ? visibleOffset(el) : 0
     drag.current = null
-    if (el) el.style.transform = ''
-    if (dragOrder && dragOrder.some((x, i) => x !== items.map(getId)[i])) onReorder(displayed)
-    setDragOrder(null)
-    setDraggingId(null)
-    if (el) slideFrom(el, finalOffset) // glid mjukt ner på platsen
+    const order = orderFor(d, d.to)
+    const commit = () => {
+      // Rensa transformer och spara ordningen; DOM-ordningen följer då med
+      rows.current.forEach((r) => {
+        r.style.transition = ''
+        r.style.transform = ''
+      })
+      setDraggingId(null)
+      if (d.to !== d.from) {
+        const next = order.map((i) => items[i])
+        onReorder(next)
+      }
+    }
+    if (!el || reducedMotion()) return commit()
+    // Glid den dragna raden ner på sin plats innan vi sparar
+    let y = 0
+    for (const orig of order) {
+      if (orig === d.from) break
+      y += d.heights[orig]
+    }
+    const target = y - (d.startY - d.listTop)
+    const anim = el.animate([{ transform: el.style.transform || 'none' }, { transform: `translateY(${target}px)` }], { duration: SETTLE_MS, easing: 'cubic-bezier(0.22, 1, 0.36, 1)', fill: 'forwards' })
+    anim.onfinish = () => {
+      anim.cancel()
+      commit()
+    }
   }
 
   function handleKeyDown(e: KeyboardEvent, index: number) {
@@ -133,14 +156,14 @@ export function SortableList<T>({ items, getId, onReorder, renderItem, sortable,
 
   return (
     <ul ref={listRef} className={styles.list}>
-      {displayed.map((item, index) => {
+      {items.map((item, index) => {
         const id = getId(item)
         return (
           <li
             key={id}
             ref={(el) => {
               if (el) rows.current.set(id, el)
-              else { rows.current.delete(id); lastTop.current.delete(id) }
+              else rows.current.delete(id)
             }}
             className={`${styles.row} ${draggingId === id ? styles.dragging : ''}`}
           >

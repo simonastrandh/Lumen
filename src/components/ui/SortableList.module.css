@@ -1,4 +1,4 @@
-.list { position: relative; display: flex; flex-direction: column; margin: 0; padding: 0; list-style: none; }
+.list { position: relative; display: flex; flex-direction: column; margin: -16px 0; padding: 0; list-style: none; }
 .row {
   position: relative;
   display: flex;
@@ -7,8 +7,6 @@
   padding: 16px 0;
   will-change: transform;
 }
-.row:first-child { padding-top: 0; }
-.row:last-child { padding-bottom: 0; }
 .row + .row { border-top: 1px solid var(--surface-border); }
 .content { flex: 1; min-width: 0; }
 
