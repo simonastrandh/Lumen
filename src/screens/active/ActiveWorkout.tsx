@@ -15,6 +15,7 @@ import { SetList } from './SetList'
 import { Summary, type SessionSummary } from './Summary'
 import { TimerPanel } from './TimerPanel'
 import { useWakeLock } from './useWakeLock'
+import { ManageExercisesSheet } from './ManageExercisesSheet'
 import { AddExerciseSheet } from '../workouts/AddExerciseSheet'
 import styles from './ActiveWorkout.module.css'
 
@@ -44,6 +45,7 @@ export default function ActiveWorkout() {
   const [editing, setEditing] = useState<{ ei: number; si: number } | null>(null)
   const [confirmEnd, setConfirmEnd] = useState(false)
   const [adding, setAdding] = useState(false)
+  const [managing, setManaging] = useState(false)
   const [summary, setSummary] = useState<SessionSummary | null>(null)
   const finishedAlarm = useRef(false)
   // Text som läses upp för skärmläsare (vila slut, ny övning, set klart)
@@ -131,6 +133,12 @@ export default function ActiveWorkout() {
     goTo(items.length)
   }
 
+  function removeExercise(i: number) {
+    if (timer) setTimer(null)
+    setItems((prev) => prev.filter((_, k) => k !== i))
+    setEi((cur) => Math.max(0, Math.min(cur > i ? cur - 1 : cur, items.length - 2)))
+  }
+
   function discard() {
     clearSession()
     navigate('/')
@@ -180,8 +188,8 @@ export default function ActiveWorkout() {
         <h1 className={styles.title}>{exercise?.name ?? name}</h1>
       </div>
       <div className={styles.headTools}>
-        <button type="button" className={styles.addEx} onClick={() => setAdding(true)} aria-label="Lägg till övning i passet">
-          <Icon name="plus" size={16} />
+        <button type="button" className={styles.addEx} onClick={() => setManaging(true)} aria-label="Ändra övningar i passet">
+          <Icon name="edit" size={16} />
         </button>
         <span className={styles.clock} role="timer" aria-label="Total tid">
           <Icon name="clock" size={14} /> {formatTime(Math.round((now - startedAt.current) / 1000))}
@@ -190,7 +198,18 @@ export default function ActiveWorkout() {
     </header>
   )
 
-  const addSheet = <AddExerciseSheet open={adding} onClose={() => setAdding(false)} listFirst onPick={addExercise} submitLabel="Lägg till i passet" />
+  const addSheet = (
+    <>
+      <ManageExercisesSheet
+        open={managing}
+        onClose={() => setManaging(false)}
+        exercises={items.map((it) => ({ name: getExercise(it.exerciseId)?.name ?? 'Övning', done: it.sets.every((x) => x.done) }))}
+        onRemove={removeExercise}
+        onAdd={() => { setManaging(false); setAdding(true) }}
+      />
+      <AddExerciseSheet open={adding} onClose={() => setAdding(false)} listFirst onPick={addExercise} submitLabel="Lägg till i passet" />
+    </>
+  )
 
   // Tomt pass utan övningar än
   if (items.length === 0) {
