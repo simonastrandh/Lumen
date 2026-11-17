@@ -3,6 +3,7 @@ import type { ReactNode } from 'react'
 import { durationLabel } from './TimeField'
 import { WheelField, range } from './WheelPicker'
 import { displayToKg, displayToKm, distanceUnit, fmtDistance, fmtWeight, getUnitSystem, kgToDisplay, kmToDisplay, nearest, weightUnit } from '../../data/units'
+import { useSettings } from '../../store/SettingsStore'
 import styles from './MeasureFields.module.css'
 
 export interface MeasureShow { rest?: boolean; sets?: boolean; reps?: boolean; kg?: boolean; seconds?: boolean; minutes?: boolean; km?: boolean }
@@ -59,12 +60,15 @@ interface MeasureFieldsProps {
 
 /** Hjulfält för set, reps, vikt, tid och distans. Alla rutor har samma storlek. Används i pass, övningar och nya övningar. */
 export function MeasureFields({ show, values: v, onChange }: MeasureFieldsProps) {
+  // Utan egen vila visas standardvilan från Inställningar
+  const { defaultRest } = useSettings()
+  const rest = v.rest ?? defaultRest
   return (
     <div className={styles.grid}>
       {show.sets && <WheelField title="Antal set" display={`${v.sets ?? fallback.sets} set`} columns={[{ values: range(1, 12), value: v.sets ?? fallback.sets, onChange: (sets) => onChange({ sets }), unit: 'set' }]} />}
       {show.reps && <WheelField title="Antal reps" display={`${v.reps ?? fallback.reps} reps`} columns={[{ values: range(1, 100), value: v.reps ?? fallback.reps, onChange: (reps) => onChange({ reps }), unit: 'reps' }]} />}
       {show.kg && <WheelField title="Vikt" display={fmtWeight((v.kg ?? defaultKg()))} columns={[{ values: getUnitSystem() === 'imperial' ? lbValues : kgValues, value: nearest(getUnitSystem() === 'imperial' ? lbValues : kgValues, kgToDisplay((v.kg ?? defaultKg()))), onChange: (x) => onChange({ kg: displayToKg(x) }), unit: weightUnit(), format: comma }]} />}
-      {show.rest && <TimeWheel title="Vila mellan set" display={`Vila ${durationLabel(v.rest ?? fallback.rest)}`} seconds={v.rest ?? fallback.rest} onChange={(rest) => onChange({ rest })} />}
+      {show.rest && <TimeWheel title="Vila mellan set" display={`Vila ${durationLabel(rest)}`} seconds={rest} onChange={(rest) => onChange({ rest })} />}
       {show.seconds && <TimeWheel title="Tid per set" seconds={v.seconds ?? fallback.seconds} onChange={(seconds) => onChange({ seconds })} />}
       {show.minutes && <TimeWheel title="Tid" seconds={Math.round((v.minutes ?? fallback.minutes) * 60)} onChange={(t) => onChange({ minutes: Math.round((t / 60) * 100) / 100 })} />}
       {show.km && <WheelField title="Distans" display={fmtDistance(v.km ?? fallback.km)} columns={[{ values: getUnitSystem() === 'imperial' ? miValues : kmValues, value: nearest(getUnitSystem() === 'imperial' ? miValues : kmValues, kmToDisplay(v.km ?? fallback.km)), onChange: (x) => onChange({ km: displayToKm(x) }), unit: distanceUnit(), format: comma }]} />}
