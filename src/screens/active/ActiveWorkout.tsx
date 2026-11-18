@@ -20,7 +20,7 @@ import { AddExerciseSheet } from '../workouts/AddExerciseSheet'
 import styles from './ActiveWorkout.module.css'
 
 /**
- * Aktivt pass (Figma "03 – Aktivt pass"): en övning i taget, en timer, set som bockas av.
+ * Aktivt pass: en övning i taget, en timer, set som bockas av.
  * Passet sparas löpande (överlever omladdning), skärmen hålls tänd och avslutade pass loggas
  * (historik för rotationen, senaste pass och personbästa). Ett tomt pass börjar utan övningar som man lägger till själv.
  */

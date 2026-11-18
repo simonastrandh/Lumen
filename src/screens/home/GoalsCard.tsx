@@ -6,12 +6,12 @@ import { effectiveGoal } from '../../data/stats'
 import { useWorkoutStore } from '../../store/WorkoutStore'
 import { EditGoalSheet } from './EditGoalSheet'
 import { GoalRow } from './GoalRow'
-import styles from './DevelopmentCard.module.css'
+import styles from './GoalsCard.module.css'
 
 type SheetState = { mode: 'add' } | { mode: 'edit'; goal: Goal } | null
 
 /** "Mina mål". Pennan växlar till redigeringsläge där mål kan läggas till, tas bort och flyttas. */
-export function DevelopmentCard() {
+export function GoalsCard() {
   const [editing, setEditing] = useState(false)
   const { goals, exerciseStats, getExercise, saveGoal: storeSaveGoal, removeGoal, reorderGoals } = useWorkoutStore()
   const [sheet, setSheet] = useState<SheetState>(null)
@@ -26,9 +26,9 @@ export function DevelopmentCard() {
   })
 
   return (
-    <section className={styles.wrap} aria-labelledby="development-title">
+    <section className={styles.wrap} aria-labelledby="goals-title">
       <div className={styles.header}>
-        <h2 id="development-title" className={styles.title}>Mina mål</h2>
+        <h2 id="goals-title" className={styles.title}>Mina mål</h2>
         <Button
           variant="ghost"
           icon={editing ? 'check' : 'edit'}

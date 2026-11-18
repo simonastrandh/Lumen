@@ -6,10 +6,10 @@ import { Icon } from '../../components/ui/Icon'
 import { useWorkoutStore } from '../../store/WorkoutStore'
 import { clearSession, readSession } from '../active/session'
 import { exerciseCount, targetText, workoutMeta } from './labels'
-import { useWorkoutMinutes } from './useWorkoutMinutes'
+import { useWorkoutMinutes } from '../../hooks/useWorkoutMinutes'
 import styles from './WorkoutOverview.module.css'
 
-/** Översikt över ett pass innan man startar det (Figma "02 – Push"): övningarna, Redigera och Starta. */
+/** Översikt över ett pass innan man startar det: övningarna, Redigera och Starta. */
 export default function WorkoutOverview() {
   const { id } = useParams()
   const navigate = useNavigate()

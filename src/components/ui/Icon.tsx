@@ -28,7 +28,6 @@ const paths = {
   clock: 'M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18ZM12 7v5l3 2',
   flag: 'M5 21V4M5 4h11l-2 4 2 4H5',
   settings: 'M12 9a3 3 0 1 0 0 6 3 3 0 0 0 0-6ZM12 5a7 7 0 1 0 0 14 7 7 0 0 0 0-14ZM12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M5 19l2-2M17 7l2-2',
-  trophy: 'M8 4h8v5a4 4 0 0 1-8 0V4ZM8 6H5v1.5A3 3 0 0 0 8 10.5M16 6h3v1.5A3 3 0 0 1 16 10.5M12 13v4M8.5 20h7M10 17h4',
   stopwatch: 'M12 21a8 8 0 1 0 0-16 8 8 0 0 0 0 16ZM12 9v4.5l2.5 2M9.5 2.5h5M18.5 6.5l1.5-1.5',
   bolt: 'M13 3 5.5 13h5.5l-1 8L18.5 11H13z',
 } as const
@@ -38,11 +37,9 @@ export type IconName = keyof typeof paths
 interface IconProps extends Omit<SVGProps<SVGSVGElement>, 'name'> {
   name: IconName
   size?: number
-  /** Lägger turkos glöd runt ikonen (aktiva/viktiga tillstånd) */
-  glow?: boolean
 }
 
-export function Icon({ name, size = 22, glow, style, ...rest }: IconProps) {
+export function Icon({ name, size = 22, style, ...rest }: IconProps) {
   return (
     <svg
       width={size}
@@ -54,7 +51,7 @@ export function Icon({ name, size = 22, glow, style, ...rest }: IconProps) {
       strokeLinecap="round"
       strokeLinejoin="round"
       aria-hidden="true"
-      style={{ flexShrink: 0, ...(glow ? { filter: 'drop-shadow(0 0 5px var(--accent-glow))' } : null), ...style }}
+      style={{ flexShrink: 0, ...style }}
       {...rest}
     >
       <path d={paths[name]} />

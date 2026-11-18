@@ -4,8 +4,8 @@ import styles from './Tag.module.css'
 
 interface TagProps {
   children: ReactNode
-  /** accent-2 (lila) = pass, accent (turkos) = övning, gold = nivå/rekord */
-  tone?: 'accent' | 'accent-2' | 'gold' | 'neutral'
+  /** neutral = kantlinje och dämpad text, highlight = accentfylld (rekord, "Nästa") */
+  tone?: 'neutral' | 'highlight'
   icon?: IconName
 }
 

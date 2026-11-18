@@ -1,4 +1,4 @@
-/* Ikonruta: kvadrat med hårfin kant och dämpad ikon */
+/* Ikonruta med hårfin kant och dämpad ikon */
 .badge {
   display: inline-flex;
   flex-shrink: 0;
@@ -9,5 +9,3 @@
   color: var(--text-secondary);
   border: 1px solid var(--surface-border);
 }
-.accent-2 { }
-.flat { }

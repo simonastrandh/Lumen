@@ -21,7 +21,7 @@ export function RotationSheet({ open, onClose }: RotationSheetProps) {
   const setIds = (ids: string[]) => setRotation({ ...rotation, workoutIds: ids })
 
   return (
-    <BottomSheet open={open} onClose={onClose} title="Din rotation" eyebrow={<Tag tone="accent-2" icon="repeat">ROTATION</Tag>}>
+    <BottomSheet open={open} onClose={onClose} title="Din rotation" eyebrow={<Tag tone="neutral" icon="repeat">ROTATION</Tag>}>
       <p className={styles.help}>
         Passen körs i den här ordningen. När du avslutar ett pass föreslår appen nästa i listan på Hem.
       </p>

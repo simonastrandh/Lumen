@@ -100,7 +100,7 @@ export function ExerciseSheet({ exercise: selected, onClose }: ExerciseSheetProp
         <p className={styles.note}>Används för nya pass. Befintliga pass ändras inte.</p>
         {livePbs.length > 0 && (
           <div className={styles.pbRow} role="status">
-            <Tag tone="gold" icon="trendUp">NYTT PB</Tag>
+            <Tag tone="highlight" icon="trendUp">NYTT PB</Tag>
             <span>{livePbs.map((m) => `${pbLabel[m]} ${pbValue(m, d[m]!)}`).join(' · ')}</span>
           </div>
         )}
@@ -116,13 +116,13 @@ export function ExerciseSheet({ exercise: selected, onClose }: ExerciseSheetProp
           )}
           {stats.bestSet ? (
             <>
-              <div className={styles.chips}><Tag tone="gold" icon="trendUp">BÄSTA SET</Tag><span className={styles.pbRow}>{describeValues(stats.bestSet)}</span></div>
+              <div className={styles.chips}><Tag tone="highlight" icon="trendUp">BÄSTA SET</Tag><span className={styles.pbRow}>{describeValues(stats.bestSet)}</span></div>
               <p className={styles.note}>Bästa set räknas som ett set: högst distans eller vikt först, sedan längst tid eller flest reps. Värdena hör alltså ihop och är inte bästa värden från olika set.</p>
             </>
           ) : (
             <div className={styles.chips}>
               {pbMetricsShown.filter((m) => stats.best[m] !== undefined).map((m) => (
-                <Tag key={m} tone="gold">PB {pbLabel[m]} {pbValue(m, stats.best[m]!)}</Tag>
+                <Tag key={m} tone="highlight">PB {pbLabel[m]} {pbValue(m, stats.best[m]!)}</Tag>
               ))}
             </div>
           )}

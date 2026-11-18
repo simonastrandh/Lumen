@@ -27,7 +27,7 @@ function Row({ icon, label, children, danger, onClick, stacked }: { icon: IconNa
   const inner = (
     <>
       <span className={styles.rowHead}>
-        <IconBadge icon={icon} size={40} flat />
+        <IconBadge icon={icon} size={40} />
         <span className={`${styles.label} ${danger ? styles.danger : ''}`}>{label}</span>
         {!stacked && <span className={styles.value}>{children}</span>}
         {onClick && <Icon name="chevronRight" size={16} className={styles.chevron} />}

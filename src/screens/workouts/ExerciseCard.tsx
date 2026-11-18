@@ -15,7 +15,7 @@ export function ExerciseCard({ exercise, onOpen, onStart }: ExerciseCardProps) {
   return (
     <div className={styles.row}>
       <button type="button" className={styles.main} onClick={onOpen}>
-        <IconBadge icon={isCardio(exercise) ? 'bolt' : 'workout'} size={40} flat />
+        <IconBadge icon={isCardio(exercise) ? 'bolt' : 'workout'} size={40} />
         <span className={styles.text}>
           <span className={styles.name}>
             {exercise.name}

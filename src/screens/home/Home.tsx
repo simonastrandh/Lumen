@@ -5,12 +5,12 @@ import { Icon } from '../../components/ui/Icon'
 import { getDailyMotivation } from '../../data/motivation'
 import { workoutsThisMonth } from '../../data/stats'
 import type { Workout } from '../../data/workouts'
-import { useWorkoutMinutes } from '../workouts/useWorkoutMinutes'
+import { useWorkoutMinutes } from '../../hooks/useWorkoutMinutes'
 import { getSuggestion } from '../../store/suggestions'
 import { useWorkoutStore } from '../../store/WorkoutStore'
 import { readSession } from '../active/session'
 import { exerciseCount } from '../workouts/labels'
-import { DevelopmentCard } from './DevelopmentCard'
+import { GoalsCard } from './GoalsCard'
 import { GettingStarted } from './GettingStarted'
 import styles from './Home.module.css'
 
@@ -74,7 +74,7 @@ export default function Home() {
 
       <GettingStarted />
 
-      <DevelopmentCard />
+      <GoalsCard />
     </>
   )
 }

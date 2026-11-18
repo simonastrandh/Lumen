@@ -10,6 +10,8 @@ tidigare Styrkeloggen.
 - **Användningskontext:** appen används mitt i ett pass, med kort tid mellan set. Därför är knapparna stora, kontrasten
   hög och inmatningen minimal (hjul i stället för tangentbord).
 
+Prova appen: https://simonastrandh.github.io/Lumen/
+
 ## Innehåll
 - [Kom igång](#kom-igång)
 - [Funktioner](#funktioner)
@@ -19,6 +21,7 @@ tidigare Styrkeloggen.
 - [Utseende](#utseende)
 - [Tillgänglighet](#tillgänglighet) och [prestanda](#prestanda)
 - [Data och integritet](#data-och-integritet)
+- [Publicering](#publicering)
 - [Design](#design)
 
 ## Kom igång
@@ -52,13 +55,14 @@ telefon fyller den skärmen.
 - **Mäts i:** en styrkeövning mäts i valfri kombination av **reps, tid och vikt**, och en konditionsövning i **tid och/eller
   distans**. Ändrar man hur en övning mäts gäller det i alla pass som innehåller den.
 - **Aktivt pass:** nästa set visas som en stor siffra (t.ex. 30 kg · 10 reps) med en liten vilorad. När vilan startar
-  fälls setet ihop och en ring med tiden tar över, med −30 s, **Pausa** och +30 s. Dessutom set som ändras med hjul,
-  tomt pass där man lägger till övningar under passet, samt en sammanfattning med personbästa. Passet sparas löpande
+  fälls setet ihop och en ring med tiden tar över, med −30 s, **Pausa** och +30 s. Set ändras med hjul. Pennan öppnar
+  "Ändra pass", där man lägger till, tar bort, byter ut och flyttar övningar i det pågående passet (det sparade passet
+  påverkas inte). Ett tomt pass börjar utan övningar. Passet avslutas med en sammanfattning med personbästa, sparas löpande
   och skärmen hålls tänd medan det pågår.
 - **Mål:** ett mål hör till en övning och man väljer själv vilka mått som ska följas (vikt, reps, tid, distans). Hur nära
   målet man är visas i procent.
-- **Statistik:** en stor siffra (pass i vald period), tidsfilter, nyckeltal, diagram, senaste pass med sök, personbästa och
-  styrkeökning, samt per övning. Loggade pass går att ta bort.
+- **Statistik:** en stor siffra (pass i vald period), tidsfilter, nyckeltal, diagram, senaste pass (5 åt gången, "Visa mer")
+  med sök, personbästa och styrkeökning, samt per övning. Loggade pass går att ta bort.
 - **Inställningar:** standardvilotid, **enhet (kg och km eller lb och miles)**, **utseende (mörkt eller ljust)** och
   rensa all data.
 
@@ -69,6 +73,9 @@ telefon fyller den skärmen.
   att du passerar målet uppdateras både personbästa, mål och statistik.
 - **Personbästa räknas som bästa set**, med högst distans eller vikt först och därefter tid eller flest reps. Värdena hör
   alltså ihop i samma set.
+- **Tidsuppskattning:** tiden som visas för ett pass räknas från övningarna: uppställning (60 s per övning), tid per set
+  (inlagd tid, annars 5 s per rep plus 15 s för att komma igång) och vilan mellan seten. Konditionsövningar räknas med sin
+  tid eller distans (6 min per km). Det är en grov uppskattning och ingen uppvärmning ingår.
 - **Enheter:** allt sparas alltid i kg och km. Valet av lb och miles ändrar bara hur vikter och sträckor visas och
   matas in, så man kan byta fram och tillbaka utan att något räknas om i datan.
 
@@ -83,18 +90,18 @@ telefon fyller den skärmen.
 src/
   App.tsx, main.tsx   routing och start
   components/
-    ui/         små, generella delar: Button, Card, Icon, Tag, TextField, BottomSheet, diagram, ...
-    pickers/    hjulen (WheelPicker), tidsfält och MeasureFields (set, reps, vikt, tid, distans)
+    ui/         små, generella delar: Button, Card, Icon, Tag, TextField, BottomSheet, SortableList, BarChart, ...
+    pickers/    hjulen (WheelPicker), tidsfält, MeasureFields (set, reps, vikt, tid, distans) och ExercisePicker
     layout/     skalet runt alla skärmar: AppShell, BottomNav, välkomnandet
   screens/      en mapp per skärm, med skärmens egna delar bredvid
-    home/       Hem: Mina mål, startguide
+    home/       Hem: Mina mål (GoalsCard), startguide, mål-panel
     workouts/   Pass: lista, redigerare, översikt, övningsblad, rotation
     active/     Aktivt pass: timer, setlista, sammanfattning, sparat pågående pass
     statistics/ Statistik
     settings/   Inställningar
   store/        WorkoutStore (pass, övningar, mål, historik, personbästa), SettingsStore, rotation, migrering
   data/         typer och rena funktioner: övningar, pass, mål, statistik, enheter (kg/lb), navigation
-  hooks/        useLocalStorageState
+  hooks/        useLocalStorageState, useFitScale (stora siffror som alltid får plats), useWorkoutMinutes
   styles/       designtokens (mörkt/ljust), globala stilar och det platta kortet (chrome.module.css)
 ```
 
@@ -110,10 +117,10 @@ röst** (en stor siffra eller ett stort ord) och att resten är tyst.
   telefonram och alla paneler öppnas inuti den.
 
 ## Tillgänglighet
-- Text och kontroller är kontrollerade mot WCAG AA i mörkt läge. Accentfärgad text i ljust läge använder svart
-  (`--accent-ink`).
+- Färgerna är valda för hög kontrast. Accentfärgad text i ljust läge använder svart (`--accent-ink`), eftersom neon lime
+  har för låg kontrast som textfärg.
 - Hjulen för vikt och tid är `spinbutton`-kontroller som styrs med piltangenter, och timern annonserar när vilan är slut.
-- Paneler är `<dialog>` (fokus och Esc ingår). "Minska rörelser" stänger av animationerna (välkomnandet och att setet fälls ihop när vilan startar).
+- Paneler är `<dialog>` (fokus och Esc ingår). Listor som kan sorteras går att flytta med piltangenter. "Minska rörelser" stänger av animationerna.
 
 ## Prestanda
 Appen är lätt: inga bilder och inga tunga effekter, bara text och CSS. Prestandan är inte mätt på en riktig telefon.
@@ -123,7 +130,12 @@ Allt sparas lokalt på enheten under nycklar som börjar på `styrkeloggen-` (pr
 så att redan sparad data inte försvinner). Inget skickas någonstans. "Rensa all data" i Inställningar tar bort allt.
 Ett engångssteg (`src/store/migrate.ts`) städar bort äldre exempeldata.
 
+## Publicering
+Appen publiceras automatiskt till GitHub Pages när något pushas till `main` (se `.github/workflows/deploy.yml`):
+https://simonastrandh.github.io/Lumen/. Vid bygget används sökvägen `/Lumen/` (`vite.config.ts`), och `404.html` är en kopia
+av appen så att adresser som `/pass` fungerar även vid omladdning.
+
 ## Design
-Figma: https://www.figma.com/design/dEvjPxsadnhzsDhsxzXlii/Content-Studio
-(sidorna "Brief" och "Mind-map"). Figma-skärmarna ligger före flera av ändringarna ovan och är inte helt synkade med
-den färdiga appen.
+Skisserna ligger i Figma: https://www.figma.com/design/dEvjPxsadnhzsDhsxzXlii/Content-Studio
+Sidan "Lugn – Nike-känsla" innehåller skärmarna i den färdiga stilen (mörkt och ljust läge). Sidorna "Brief" och
+"Mind-map" är tidigare underlag.

@@ -29,11 +29,3 @@ export function getDailyMotivation(date: Date): Motivation {
   return lines[dayOfYear(date) % lines.length]
 }
 
-/** Hälsning efter tid på dygnet. */
-export function getTimeGreeting(date: Date): string {
-  const h = date.getHours()
-  if (h >= 5 && h < 10) return 'God morgon'
-  if (h >= 10 && h < 17) return 'Hej'
-  if (h >= 17 && h < 23) return 'God kväll'
-  return 'Uppe sent'
-}

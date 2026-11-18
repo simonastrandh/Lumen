@@ -88,11 +88,6 @@ export function resolveExercise(id: string, custom: Exercise[], overrides: Recor
   return base ? withOverride(base, overrides) : undefined
 }
 
-export const loadLabel: Record<LoadType, string> = {
-  kg: 'Fria vikter',
-  kroppsvikt: 'Kroppsvikt',
-  maskin: 'Maskin',
-}
 
 /** Mått där ett högre värde är ett personbästa (PB) */
 export type PbMetric = 'kg' | 'reps' | 'seconds' | 'km'

@@ -1,5 +1,5 @@
 /*
- * Designtokens för Lumen (Nike-affischstil, se Figma "Lugn – Nike-känsla").
+ * Designtokens för Lumen (Nike-affischstil).
  *
  * Mörkt läge (mörkblått) är standard. Ljust läge (neon lime) väljs i Inställningar → Utseende och
  * sätts som data-theme="light" | "dark" på <html> (SettingsStore).
@@ -48,13 +48,6 @@
   --accent-text: #0a0a0a; /* text på accentfyllning */
   --accent-ink: #b8dc2a; /* accentfärgad text, ikoner och grafik på bakgrund */
   --danger: #ff6b5c;
-  /* äldre namn som komponenter fortfarande använder */
-  --accent-strong: var(--accent-ink);
-  --accent-2: var(--text-primary);
-  --accent-2-strong: var(--text-primary);
-  --gold: var(--accent);
-  --gold-text: var(--accent-ink);
-  --accent-glow: transparent;
 }
 
 /* Ljust läge – neon lime som fyllning, svart som text och grafik */

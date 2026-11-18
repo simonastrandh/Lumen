@@ -36,7 +36,7 @@ export function Summary({ name, summary }: { name: string; summary: SessionSumma
           {summary.pbs.map((p) => (
             <div key={p.name} className={styles.pbRow}>
               <span>{p.name}</span>
-              <Tag tone="gold">PB {p.metrics.map((m) => pbLabel[m]).join(' + ')}</Tag>
+              <Tag tone="highlight">PB {p.metrics.map((m) => pbLabel[m]).join(' + ')}</Tag>
             </div>
           ))}
         </section>

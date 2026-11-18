@@ -1,7 +1,7 @@
-import { isCardio } from '../../data/exercises'
-import { estimateMinutes, type Workout } from '../../data/workouts'
-import { useSettings } from '../../store/SettingsStore'
-import { useWorkoutStore } from '../../store/WorkoutStore'
+import { isCardio } from '../data/exercises'
+import { estimateMinutes, type Workout } from '../data/workouts'
+import { useSettings } from '../store/SettingsStore'
+import { useWorkoutStore } from '../store/WorkoutStore'
 
 /** Ungefärlig tid för ett pass, med övningarnas egna viloetider (annars standardvilan i Inställningar). */
 export function useWorkoutMinutes() {

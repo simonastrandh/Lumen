@@ -8,7 +8,7 @@ import { autoCurrent } from '../../data/stats'
 import { fromDisplay, toDisplay, unitLabel } from '../../data/units'
 import { goalMetrics, goalUnitMax, isTimeUnit, type Goal, type GoalMetric, type GoalUnit } from '../../data/goals'
 import { useWorkoutStore } from '../../store/WorkoutStore'
-import { ExercisePicker } from './ExercisePicker'
+import { ExercisePicker } from '../../components/pickers/ExercisePicker'
 import styles from './EditGoalSheet.module.css'
 
 interface EditGoalSheetProps {

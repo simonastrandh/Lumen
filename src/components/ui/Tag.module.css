@@ -9,7 +9,7 @@
   line-height: 1.2;
   white-space: nowrap;
 }
-/* Standard: kantlinje och dämpad text (Övning, Pass, Förslag) */
-.accent, .accent-2, .neutral { color: var(--text-secondary); border: 1px solid var(--field-border); background: transparent; }
-/* Fylld: Nästa, PB */
-.gold { color: var(--accent-text); background: var(--accent); }
+/* Standard: kantlinje och dämpad text */
+.neutral { color: var(--text-secondary); border: 1px solid var(--field-border); background: transparent; }
+/* Fylld: rekord, Nästa */
+.highlight { color: var(--accent-text); background: var(--accent); }

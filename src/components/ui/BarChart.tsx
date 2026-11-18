@@ -7,7 +7,7 @@ interface BarChartProps {
   unit?: string
 }
 
-/** Stapeldiagram (Figma "per övning"): senaste stapeln är markerad. */
+/** Stapeldiagram: senaste stapeln är markerad. */
 export function BarChart({ data, label, unit = '' }: BarChartProps) {
   const max = Math.max(1, ...data.map((d) => d.value))
   return (

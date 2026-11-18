@@ -1,3 +1,0 @@
-.chip { display: flex; flex-direction: column; gap: 2px; }
-.value { font-family: var(--font-display); font-size: 36px; line-height: 1; color: var(--text-primary); }
-.label { font-size: 12px; font-weight: 500; color: var(--text-secondary); }

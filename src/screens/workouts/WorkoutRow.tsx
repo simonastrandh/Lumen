@@ -3,7 +3,7 @@ import { IconBadge } from '../../components/ui/IconBadge'
 import { Tag } from '../../components/ui/Tag'
 import { workoutIcon, type Workout } from '../../data/workouts'
 import { workoutMeta } from './labels'
-import { useWorkoutMinutes } from './useWorkoutMinutes'
+import { useWorkoutMinutes } from '../../hooks/useWorkoutMinutes'
 import { StartButton } from './StartButton'
 import styles from './WorkoutRow.module.css'
 
@@ -21,11 +21,11 @@ export function WorkoutRow({ workout, badge, onStart }: WorkoutRowProps) {
   return (
     <li className={styles.row}>
       <button type="button" className={styles.main} onClick={() => navigate(`/pass/${workout.id}`)} aria-label={`Öppna ${workout.name}`}>
-        <IconBadge icon={workoutIcon(workout)} size={40} flat />
+        <IconBadge icon={workoutIcon(workout)} size={40} />
         <span className={styles.text}>
           <span className={styles.name}>
             {workout.name}
-            {badge && <Tag tone="gold">{badge}</Tag>}
+            {badge && <Tag tone="highlight">{badge}</Tag>}
           </span>
           <span className={styles.meta}>{workoutMeta(workout, minutesOf(workout))}</span>
         </span>

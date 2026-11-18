@@ -23,7 +23,7 @@ import {
   workoutsThisMonth,
 } from '../../data/stats'
 import { useWorkoutStore, type CompletedWorkout } from '../../store/WorkoutStore'
-import { ExercisePicker } from '../home/ExercisePicker'
+import { ExercisePicker } from '../../components/pickers/ExercisePicker'
 import { describeSets, describeValues } from '../workouts/labels'
 import styles from './Statistics.module.css'
 
@@ -150,7 +150,7 @@ function Overview({ history }: { history: CompletedWorkout[] }) {
               <div className={styles.rowMain}>
                 <p className={styles.rowTitle}>
                   {h.name}
-                  {h.pbs && h.pbs.length > 0 && <Tag tone="gold">PB</Tag>}
+                  {h.pbs && h.pbs.length > 0 && <Tag tone="highlight">PB</Tag>}
                 </p>
                 <p className={styles.rowMeta}>
                   {when(h.completedAt)}
@@ -249,7 +249,7 @@ function PerExercise() {
       <section className={styles.big} aria-label="Personbästa">
         <p className={styles.bigLabel}>
           Personbästa
-          {stats?.lastPb && <Tag tone="gold">Nytt</Tag>}
+          {stats?.lastPb && <Tag tone="highlight">Nytt</Tag>}
         </p>
         <div ref={fitRef2} className={styles.bigValue}>
           <span className={styles.bigNumber}>{sum.metric === 'seconds' ? formatTime(best) : comma(disp(best))}</span>
