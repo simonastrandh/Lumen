@@ -20,6 +20,7 @@ Prova appen: https://simonastrandh.github.io/Lumen/
 - [Utseende](#utseende)
 - [Tillgänglighet](#tillgänglighet) och [prestanda](#prestanda)
 - [Data och integritet](#data-och-integritet)
+- [AI-verktyg](#ai-verktyg)
 - [Publicering](#publicering)
 - [Design](#design)
 
@@ -129,6 +130,10 @@ Allt sparas lokalt på enheten under nycklar som börjar på `styrkeloggen-` (pr
 så att redan sparad data inte försvinner). Inget skickas någonstans. "Rensa all data" i Inställningar tar bort allt.
 Ett engångssteg (`src/store/migrate.ts`) städar bort äldre exempeldata och gör om övningar från det gamla
 biblioteket till vanliga egna övningar, så att inget i redan sparad data försvinner.
+
+## AI-verktyg
+Appen är byggd med Claude Code. Instruktionerna som verktyget följer i det här repot (kommandon, struktur, stilregler och
+arbetssätt) finns i [AGENTS.md](AGENTS.md). `CLAUDE.md` pekar bara dit, eftersom Claude Code läser den filen.
 
 ## Publicering
 Appen publiceras automatiskt till GitHub Pages när något pushas till `main` (se `.github/workflows/deploy.yml`):
