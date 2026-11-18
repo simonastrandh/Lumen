@@ -69,25 +69,50 @@ function Back() {
   )
 }
 
-/** Fyra fingrar mot högerkanten med naglar vid topparna; pekfingret överst och längst */
+/** Ett finger: platt topp som trycker mot ramen till vänster, rund knoge till höger, något tjockare mot knogen */
+function fingerPath(x: number, cy: number, w: number, h: number) {
+  const hl = h * 0.84 // tunnare vid fingertoppen
+  const rl = hl * 0.36 // fingertoppen är tillplattad mot telefonen
+  const r = h / 2
+  return `M ${x + rl} ${cy - hl / 2} L ${x + w - r} ${cy - r} A ${r} ${r} 0 0 1 ${x + w - r} ${cy + r} L ${x + rl} ${cy + hl / 2} A ${rl} ${hl / 2} 0 0 1 ${x + rl} ${cy - hl / 2} Z`
+}
+
+/** Fyra fingrar mot högerkanten; pekfingret överst. Ritas nerifrån så att varje finger ligger lite över det under. */
 function Front() {
+  const x = 401
   const fingers = [
-    { y: -458, w: 94, h: 66, tilt: -8 },
-    { y: -364, w: 98, h: 66, tilt: -4 },
-    { y: -272, w: 94, h: 62, tilt: -1 },
-    { y: -184, w: 78, h: 58, tilt: 3 },
+    { cy: -425, w: 100, h: 78, tilt: -7 },
+    { cy: -331, w: 104, h: 78, tilt: -3 },
+    { cy: -241, w: 98, h: 72, tilt: 0 },
+    { cy: -158, w: 82, h: 64, tilt: 4 },
   ]
   return (
     <svg className={styles.frontSvg} viewBox="380 -500 170 420" width="170" height="420">
       <Defs id="hf" />
-      {fingers.map((f, i) => (
-        <g key={i} transform={`rotate(${f.tilt} 404 ${f.y + f.h / 2})`}>
-          <rect x="404" y={f.y} width={f.w} height={f.h} rx={f.h / 2} fill="url(#hf-tube)" />
-          <rect x="404" y={f.y} width={f.w} height={f.h} rx={f.h / 2} fill="url(#hf-bend)" />
-          <ellipse cx="426" cy={f.y + f.h / 2 - 1} rx="15" ry={f.h / 2 - 12} fill="url(#hf-nail)" stroke="#d8a690" strokeWidth="1" />
-          <path d={`M 436 ${f.y + 7} H ${404 + f.w - f.h / 2}`} stroke="#fff1e8" strokeWidth="4" strokeLinecap="round" opacity="0.55" />
-        </g>
-      ))}
+      <defs>
+        <filter id="hf-shadow" x="-20%" y="-30%" width="140%" height="170%">
+          <feDropShadow dx="0" dy="5" stdDeviation="4" floodColor="#5a2f20" floodOpacity="0.35" />
+        </filter>
+        <linearGradient id="hf-shine" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stopColor="#fff4ec" stopOpacity="0.75" />
+          <stop offset="0.35" stopColor="#fff4ec" stopOpacity="0" />
+        </linearGradient>
+      </defs>
+      {[...fingers].reverse().map((f, i) => {
+        const d = fingerPath(x, f.cy, f.w, f.h)
+        const hl = f.h * 0.84
+        return (
+          <g key={i} transform={`rotate(${f.tilt} ${x} ${f.cy})`} filter="url(#hf-shadow)">
+            <path d={d} fill="url(#hf-tube)" />
+            <path d={d} fill="url(#hf-bend)" />
+            <path d={d} fill="url(#hf-shine)" />
+            {/* nageln: ljus, lite insjunken, i fingertoppens övre del */}
+            <ellipse cx={x + 22} cy={f.cy - 3} rx="13" ry={hl / 2 - 11} fill="url(#hf-nail)" opacity="0.95" />
+            <ellipse cx={x + 22} cy={f.cy - 3} rx="13" ry={hl / 2 - 11} fill="none" stroke="#c98d76" strokeOpacity="0.45" strokeWidth="1.2" />
+            <ellipse cx={x + 18} cy={f.cy - hl / 2 + 16} rx="5" ry="3" fill="#fff" opacity="0.55" />
+          </g>
+        )
+      })}
     </svg>
   )
 }
