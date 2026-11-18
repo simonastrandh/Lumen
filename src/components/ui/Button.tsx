@@ -3,7 +3,7 @@ import { Icon, type IconName } from './Icon'
 import styles from './Button.module.css'
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  /** primary = fylld turkos CTA, secondary = lila kontur, tonal = lila kontur med färgad bakgrund, ghost = liten neutral pill */
+  /** primary = fylld accentfärg (huvudhandling), secondary = kontur, tonal = ytfärgad kontur (större), ghost = liten och diskret */
   variant?: 'primary' | 'secondary' | 'tonal' | 'ghost'
   fullWidth?: boolean
   /** Ikon framför texten (eller ensam i en ikonknapp) */

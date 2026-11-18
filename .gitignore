@@ -12,5 +12,3 @@ dist-ssr
 *.log
 *.tsbuildinfo
 
-# Projektdokument ligger bara lokalt
-docs/

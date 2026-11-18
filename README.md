@@ -13,6 +13,7 @@ Prova appen: https://simonastrandh.github.io/Lumen/
 
 ## Innehåll
 - [Kom igång](#kom-igång)
+- [Så använder du appen](#så-använder-du-appen)
 - [Funktioner](#funktioner)
 - [Så fungerar det](#så-fungerar-det)
 - [Tech-stack](#tech-stack)
@@ -22,6 +23,7 @@ Prova appen: https://simonastrandh.github.io/Lumen/
 - [Data och integritet](#data-och-integritet)
 - [AI-verktyg](#ai-verktyg)
 - [Publicering](#publicering)
+- [Dokumentation](#dokumentation)
 - [Design](#design)
 
 ## Kom igång
@@ -40,6 +42,13 @@ telefon fyller den skärmen.
 | `npm run dev` | Startar utvecklingsservern |
 | `npm run build` | Typkontrollerar och bygger för produktion i `dist/` |
 | `npm run preview` | Visar det byggda resultatet lokalt |
+
+## Så använder du appen
+1. Öppna appen. Första gången visas LUMEN, tryck på skärmen eller på knappen.
+2. Gå till **Pass** och tryck på **Skapa ny övning** (t.ex. Bänkpress). Välj om den mäts i reps, tid och/eller vikt.
+3. Tryck på **Skapa nytt pass**, ge det ett namn och lägg till övningen. Spara.
+4. Tryck på **Starta** och logga seten: bocka av ett set, så startar vilotimern. Ändra värden genom att trycka på dem.
+5. Avsluta passet och se sammanfattningen. Under **Statistik** syns dina pass och personbästa, och på **Hem** kan du sätta **mål**.
 
 ## Funktioner
 - **Välkomnande:** första gången appen öppnas visas LUMEN i stort. Man går vidare genom att trycka på skärmen eller på
@@ -139,6 +148,10 @@ arbetssätt) finns i [AGENTS.md](AGENTS.md). `CLAUDE.md` pekar bara dit, efterso
 Appen publiceras automatiskt till GitHub Pages när något pushas till `main` (se `.github/workflows/deploy.yml`):
 https://simonastrandh.github.io/Lumen/. Vid bygget används sökvägen `/Lumen/` (`vite.config.ts`), och `404.html` är en kopia
 av appen så att adresser som `/pass` fungerar även vid omladdning.
+
+## Dokumentation
+Brief och krav, avgränsning och tidsplan, AI-fel, säkerhetsbeslut, tillgänglighet (uppmätt kontrast) och designsystemet
+(färger, typografi, komponenter, ikoner, spacing) finns i mappen [`docs/`](docs/README.md).
 
 ## Design
 Skisserna ligger i Figma: https://www.figma.com/design/dEvjPxsadnhzsDhsxzXlii/Content-Studio

@@ -6,7 +6,7 @@ interface ToggleProps {
   label: string
 }
 
-/** Av/på-reglage (lila när det är på, enligt designen). */
+/** Av/på-reglage (accentfärgat när det är på). */
 export function Toggle({ checked, onChange, label }: ToggleProps) {
   return (
     <button

@@ -45,6 +45,7 @@ Delar som används av flera skärmar ska ligga i `components/`, inte i en skärm
 - **Lagring:** nycklarna i `localStorage` börjar på `styrkeloggen-` (prefixet är kvar från appens första namn och får inte
   ändras, annars försvinner användarnas data). Ändras formen på sparad data ska `src/store/migrate.ts` få ett nytt steg och
   en högre `CURRENT`.
+- **Dokumentation i repot:** inga personuppgifter eller hemligheter i `docs/` heller.
 - **Inga hemligheter:** lägg aldrig nycklar, lösenord, tokens eller personuppgifter i repot. `.env`-filer är ignorerade i
   `.gitignore`.
 - **Tillgänglighet:** knappar ska ha tydlig `aria-label` när de saknar text, paneler är `<dialog>` (se `BottomSheet`).
@@ -52,6 +53,7 @@ Delar som används av flera skärmar ska ligga i `components/`, inte i en skärm
 ## Arbetssätt
 - Gör bara det som efterfrågas. En ren designändring ska inte ändra funktioner.
 - Håll rapporter och commit-meddelanden korta och på svenska.
-- Skriv inget i `docs/` (ignorerad mapp för lokala projektdokument).
+- Dokumentationen ligger i `docs/` (se `docs/README.md`). Nya beslut loggas i `docs/beslutslogg.md`, och ändras färger,
+  komponenter eller tillgänglighet ska `docs/design-system/` och `docs/tillganglighet.md` uppdateras.
 - Pusha aldrig till GitHub utan att användaren har sagt det. Ett push till `main` publicerar sidan automatiskt på GitHub
   Pages (`.github/workflows/deploy.yml`).

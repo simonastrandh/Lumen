@@ -11,8 +11,8 @@ import { useWorkoutStore } from '../../store/WorkoutStore'
 import { describeValues } from './labels'
 import styles from './Sheets.module.css'
 
-// Övningar är turkosa (pass är lila) så att man ser skillnaden
-const teal = { color: 'var(--accent)', borderColor: 'var(--accent)' } as const
+// Accentfärgad text använder --accent-ink (neon lime är för ljus som textfärg i ljust läge)
+const accentStyle = { color: 'var(--accent-ink)', borderColor: 'var(--accent-ink)' } as const
 
 interface ExerciseSheetProps {
   exercise: Exercise | null
@@ -129,7 +129,7 @@ export function ExerciseSheet({ exercise: selected, onClose }: ExerciseSheetProp
 
       {!picking ? (
         <div className={styles.actions}>
-          <Button variant="secondary" icon="plus" fullWidth onClick={() => setPicking(true)} disabled={workouts.length === 0} style={teal}>
+          <Button variant="secondary" icon="plus" fullWidth onClick={() => setPicking(true)} disabled={workouts.length === 0} style={accentStyle}>
             Lägg till i pass
           </Button>
         </div>
