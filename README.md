@@ -3,8 +3,7 @@
 Lumen är en webbapp för att logga träning: vikt, reps, tid och distans per övning, och att se sin utveckling över
 tid. Den är byggd mobil-först, i mörkt (mörkblått) och ljust (neon lime) läge, i en affischstil inspirerad av Nike.
 
-Projektet är ett skolprojekt i UX-design, byggt på två veckor med Claude Code som AI-verktyg. Appen hette
-tidigare Styrkeloggen.
+Projektet är ett skolprojekt i UX-design, byggt på två veckor med Claude Code som AI-verktyg. Tidigare variation av appen hette Styrkeloggen.
 
 - **Målgrupp:** personer som tränar och vill logga pass digitalt i stället för i en anteckningsbok.
 - **Användningskontext:** appen används mitt i ett pass, med kort tid mellan set. Därför är knapparna stora, kontrasten
@@ -32,7 +31,7 @@ npm install
 npm run dev
 ```
 
-Öppna adressen som visas (normalt http://localhost:5173). På en dator visas appen i en telefonram, och på en
+Öppna adressen som visas. På en dator visas appen i en telefonram, och på en
 telefon fyller den skärmen.
 
 | Kommando | Vad det gör |
