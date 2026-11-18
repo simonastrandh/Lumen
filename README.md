@@ -66,8 +66,8 @@ telefon fyller den skärmen.
   rensa all data.
 
 ## Så fungerar det
-- **Appen börjar tom.** Du skapar dina egna pass, övningar och mål. Övningar från det inbyggda biblioteket känns igen när
-  du skriver deras namn (t.ex. Bänkpress).
+- **Appen börjar tom.** Du skapar dina egna pass, övningar och mål. Det finns inget inbyggt övningsbibliotek och inga
+  föreslagna övningar.
 - **Mål följer det du gör.** "Nuvarande" i ett mål följer ditt bästa utförda värde. Ändrar du en övnings standardvärde så
   att du passerar målet uppdateras både personbästa, mål och statistik.
 - **Personbästa räknas som bästa set**, med högst distans eller vikt först och därefter tid eller flest reps. Värdena hör
@@ -127,7 +127,8 @@ Appen är lätt: inga bilder och inga tunga effekter, bara text och CSS. Prestan
 ## Data och integritet
 Allt sparas lokalt på enheten under nycklar som börjar på `styrkeloggen-` (prefixet är kvar från appens första namn,
 så att redan sparad data inte försvinner). Inget skickas någonstans. "Rensa all data" i Inställningar tar bort allt.
-Ett engångssteg (`src/store/migrate.ts`) städar bort äldre exempeldata.
+Ett engångssteg (`src/store/migrate.ts`) städar bort äldre exempeldata och gör om övningar från det gamla
+biblioteket till vanliga egna övningar, så att inget i redan sparad data försvinner.
 
 ## Publicering
 Appen publiceras automatiskt till GitHub Pages när något pushas till `main` (se `.github/workflows/deploy.yml`):

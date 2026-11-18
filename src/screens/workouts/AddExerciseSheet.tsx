@@ -7,7 +7,6 @@ import { TextField } from '../../components/ui/TextField'
 import { ExerciseCard } from './ExerciseCard'
 import {
   cardioMeasureLabel,
-  exercises as library,
   type CardioMeasure,
   type ExerciseDefaults,
   type Exercise,
@@ -44,7 +43,7 @@ const measures: CardioMeasure[] = ['tid', 'distans', 'tid-distans']
 
 /** "Lägg till övning": man skriver in en egen övning (styrka eller kondition, som mäts olika). */
 export function AddExerciseSheet({ open, onClose, onPick, submitLabel = 'Lägg till i passet', title = 'Lägg till övning', listFirst = false, defaultKind = 'styrka' }: AddExerciseSheetProps) {
-  const { customExercises, addCustomExercise, getExercise, myExercises, savedExerciseIds, toggleSavedExercise } = useWorkoutStore()
+  const { customExercises, addCustomExercise, getExercise } = useWorkoutStore()
   const [creating, setCreating] = useState(!listFirst)
   const [query, setQuery] = useState('')
   const [name, setName] = useState('')
@@ -59,7 +58,7 @@ export function AddExerciseSheet({ open, onClose, onPick, submitLabel = 'Lägg t
     if (open) setKind(defaultKind)
   }, [open, defaultKind])
 
-  const all = useMemo(() => [...customExercises, ...library].map((e) => getExercise(e.id) ?? e), [customExercises, getExercise])
+  const all = useMemo(() => customExercises.map((e) => getExercise(e.id) ?? e), [customExercises, getExercise])
   function reset() {
     setName('')
     setKind(defaultKind)
@@ -75,8 +74,6 @@ export function AddExerciseSheet({ open, onClose, onPick, submitLabel = 'Lägg t
     onClose()
   }
   const pick = (e: Exercise) => {
-    // Övningar från biblioteket sparas bland Mina övningar när de används (egna sparas redan när de skapas)
-    if (!e.custom && !savedExerciseIds.includes(e.id)) toggleSavedExercise(e.id)
     onPick(e)
     reset()
   }
@@ -92,8 +89,8 @@ export function AddExerciseSheet({ open, onClose, onPick, submitLabel = 'Lägg t
     if (existing) return pick(existing)
     const created: Exercise =
       kind === 'kondition'
-        ? { id: newId(), name: trimmed, muscleGroup: 'Kondition', load: 'kroppsvikt', kind, measure, defaults, custom: true }
-        : { id: newId(), name: trimmed, muscleGroup: 'Helkropp', load: 'kg', kind, strengthMeasure, defaults, custom: true }
+        ? { id: newId(), name: trimmed, muscleGroup: 'Kondition', load: 'kroppsvikt', kind, measure, defaults }
+        : { id: newId(), name: trimmed, muscleGroup: 'Helkropp', load: 'kg', kind, strengthMeasure, defaults }
     addCustomExercise(created)
     pick(created)
   }
@@ -102,18 +99,18 @@ export function AddExerciseSheet({ open, onClose, onPick, submitLabel = 'Lägg t
     <BottomSheet open={open} onClose={close} title={title}>
       {!creating ? (
         <div className={styles.stack}>
-          {myExercises.length > 6 && <SearchField value={query} onChange={setQuery} label="Sök bland dina övningar" placeholder="Sök bland dina övningar..." />}
-          {myExercises.length === 0 ? (
+          {customExercises.length > 6 && <SearchField value={query} onChange={setQuery} label="Sök bland dina övningar" placeholder="Sök bland dina övningar..." />}
+          {customExercises.length === 0 ? (
             <p className={styles.help}>Du har inga sparade övningar än. Skapa din första nedan.</p>
           ) : (
             <div className={styles.results}>
-              {[...myExercises]
+              {[...customExercises]
                 .sort((a, b) => Number((b.kind ?? 'styrka') === defaultKind) - Number((a.kind ?? 'styrka') === defaultKind)) // passets typ först
                 .filter((e) => norm(e.name).includes(norm(query)))
                 .map((e) => (
                   <ExerciseCard key={e.id} exercise={e} onOpen={() => pick(e)} />
                 ))}
-              {query && !myExercises.some((e) => norm(e.name).includes(norm(query))) && <p className={styles.help}>Inga träffar på ”{query}”.</p>}
+              {query && !customExercises.some((e) => norm(e.name).includes(norm(query))) && <p className={styles.help}>Inga träffar på ”{query}”.</p>}
             </div>
           )}
           <Button variant="secondary" icon="plus" fullWidth onClick={() => { setName(query); setCreating(true) }}>

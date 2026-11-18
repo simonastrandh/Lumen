@@ -1,5 +1,4 @@
-// Övningsbibliotek: vanliga övningar som känns igen när man skriver ett namn. Varje övning har en belastningstyp
-// så att jämförelser inte blandar ihop kg, kroppsvikt och maskinnivåer.
+// Typer och hjälpfunktioner för övningar. Alla övningar skapas av användaren (appen har inget inbyggt bibliotek).
 
 export type MuscleGroup = 'Bröst' | 'Rygg' | 'Axlar' | 'Armar' | 'Ben' | 'Baksida lår' | 'Säte' | 'Mage' | 'Helkropp' | 'Kondition'
 /** Styrka mäts i set × reps (+ vikt), kondition i tid och/eller distans. */
@@ -35,56 +34,19 @@ export interface Exercise {
   strengthMeasure?: StrengthMeasure
   /** Användarens standardvärden när övningen läggs i ett pass */
   defaults?: ExerciseDefaults
-  /** Egen övning som användaren skrivit in själv */
-  custom?: boolean
 }
 
 export const isCardio = (e?: Exercise): boolean => e?.kind === 'kondition'
 
-export const exercises: Exercise[] = [
-  { id: 'bench-press', name: 'Bänkpress', muscleGroup: 'Bröst', load: 'kg' },
-  { id: 'incline-db-press', name: 'Lutande hantelpress', muscleGroup: 'Bröst', load: 'kg' },
-  { id: 'cable-fly', name: 'Cable flyes', muscleGroup: 'Bröst', load: 'maskin' },
-  { id: 'dips', name: 'Dips', muscleGroup: 'Bröst', load: 'kroppsvikt' },
-  { id: 'shoulder-press', name: 'Axelpress', muscleGroup: 'Axlar', load: 'kg' },
-  { id: 'lateral-raise', name: 'Sidolyft', muscleGroup: 'Axlar', load: 'kg' },
-  { id: 'face-pull', name: 'Face pulls', muscleGroup: 'Axlar', load: 'maskin' },
-  { id: 'tricep-pushdown', name: 'Tricep pushdown', muscleGroup: 'Armar', load: 'maskin' },
-  { id: 'bicep-curl', name: 'Bicepscurl', muscleGroup: 'Armar', load: 'kg' },
-  { id: 'hammer-curl', name: 'Hammercurl', muscleGroup: 'Armar', load: 'kg' },
-  { id: 'deadlift', name: 'Marklyft', muscleGroup: 'Rygg', load: 'kg' },
-  { id: 'pull-up', name: 'Chins', muscleGroup: 'Rygg', load: 'kroppsvikt' },
-  { id: 'lat-pulldown', name: 'Latsdrag', muscleGroup: 'Rygg', load: 'maskin' },
-  { id: 'barbell-row', name: 'Skivstångsrodd', muscleGroup: 'Rygg', load: 'kg' },
-  { id: 'seated-row', name: 'Sittande rodd', muscleGroup: 'Rygg', load: 'maskin' },
-  { id: 'squat', name: 'Knäböj', muscleGroup: 'Ben', load: 'kg' },
-  { id: 'leg-press', name: 'Benpress', muscleGroup: 'Ben', load: 'maskin' },
-  { id: 'bulgarian-split-squat', name: 'Bulgarian split squat', muscleGroup: 'Ben', load: 'kg' },
-  { id: 'leg-extension', name: 'Benspark', muscleGroup: 'Ben', load: 'maskin' },
-  { id: 'romanian-deadlift', name: 'Rumänsk marklyft', muscleGroup: 'Baksida lår', load: 'kg' },
-  { id: 'leg-curl', name: 'Lårcurl', muscleGroup: 'Baksida lår', load: 'maskin' },
-  { id: 'hip-thrust', name: 'Hip thrust', muscleGroup: 'Säte', load: 'kg' },
-  { id: 'calf-raise', name: 'Tåhävningar', muscleGroup: 'Ben', load: 'maskin' },
-  { id: 'plank', name: 'Plankan', muscleGroup: 'Mage', load: 'kroppsvikt' },
-  { id: 'hanging-leg-raise', name: 'Hängande benlyft', muscleGroup: 'Mage', load: 'kroppsvikt' },
-  { id: 'running', name: 'Löpning', muscleGroup: 'Kondition', load: 'kroppsvikt', kind: 'kondition', measure: 'tid-distans' },
-  { id: 'cycling', name: 'Cykling', muscleGroup: 'Kondition', load: 'maskin', kind: 'kondition', measure: 'tid-distans' },
-  { id: 'rowing-machine', name: 'Roddmaskin', muscleGroup: 'Kondition', load: 'maskin', kind: 'kondition', measure: 'tid-distans' },
-  { id: 'walking', name: 'Promenad', muscleGroup: 'Kondition', load: 'kroppsvikt', kind: 'kondition', measure: 'tid' },
-  { id: 'swimming', name: 'Simning', muscleGroup: 'Kondition', load: 'kroppsvikt', kind: 'kondition', measure: 'distans' },
-  { id: 'jump-rope', name: 'Hopprep', muscleGroup: 'Kondition', load: 'kroppsvikt', kind: 'kondition', measure: 'tid' },
-]
-
-const byId = new Map(exercises.map((e) => [e.id, e]))
-/** Användarens ändringar av hur en övning mäts (gäller även bibliotekets övningar) */
+/** Användarens ändringar av hur en övning mäts  */
 export interface ExerciseDefaults { rest?: number; sets?: number; reps?: number; kg?: number; seconds?: number; minutes?: number; km?: number }
 export type MeasureOverride = Partial<Pick<Exercise, 'strengthMeasure' | 'measure'>> & { defaults?: ExerciseDefaults }
 /** Lägger användarens ändringar (mått, standardvärden) ovanpå en övning */
 export const withOverride = (e: Exercise, overrides: Record<string, MeasureOverride>): Exercise => (overrides[e.id] ? { ...e, ...overrides[e.id] } : e)
 
-/** Hittar en övning (bibliotek eller egen) med användarens ändringar. Ren funktion – state ligger i WorkoutStore. */
-export function resolveExercise(id: string, custom: Exercise[], overrides: Record<string, MeasureOverride>): Exercise | undefined {
-  const base = byId.get(id) ?? custom.find((e) => e.id === id)
+/** Hittar en övning med användarens ändringar. Ren funktion – state ligger i WorkoutStore. */
+export function resolveExercise(id: string, list: Exercise[], overrides: Record<string, MeasureOverride>): Exercise | undefined {
+  const base = list.find((e) => e.id === id)
   return base ? withOverride(base, overrides) : undefined
 }
 

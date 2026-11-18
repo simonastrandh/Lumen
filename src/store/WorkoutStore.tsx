@@ -1,5 +1,5 @@
 import { createContext, useContext, useMemo, type ReactNode } from 'react'
-import { partsOf, exercises as exercisesLibrary, isBetterSet, resolveExercise, type CardioMeasure, type ExerciseDefaults, type ExerciseStats, type PbMetric, pbMetrics, type Exercise, type MeasureOverride, type StrengthMeasure } from '../data/exercises'
+import { partsOf, isBetterSet, resolveExercise, type CardioMeasure, type ExerciseDefaults, type ExerciseStats, type PbMetric, pbMetrics, type Exercise, type MeasureOverride, type StrengthMeasure } from '../data/exercises'
 import { entryForExercise, type Workout } from '../data/workouts'
 import type { Goal } from '../data/goals'
 import { useLocalStorageState } from '../hooks/useLocalStorageState'
@@ -28,12 +28,10 @@ export type CompletedDetails = Pick<CompletedWorkout, 'durationSeconds' | 'setsD
 
 interface WorkoutStore {
   workouts: Workout[]
-  /** Hittar en övning (bibliotek eller egen) med användarens ändringar */
+  /** Hittar en av användarens övningar, med dennes ändringar av mått och standardvärden */
   getExercise: (id: string) => Exercise | undefined
-  savedExerciseIds: string[]
+  /** Användarens övningar */
   customExercises: Exercise[]
-  /** Användarens övningar: egna + sparade bibliotekövningar */
-  myExercises: Exercise[]
   exerciseOverrides: Record<string, MeasureOverride>
   /** Ändrar hur en övning mäts och uppdaterar alla pass som innehåller den */
   setExerciseMeasure: (exerciseId: string, change: { strengthMeasure: StrengthMeasure } | { measure: CardioMeasure }) => void
@@ -69,7 +67,6 @@ interface WorkoutStore {
   getWorkout: (id: string) => Workout | undefined
   saveWorkout: (workout: Workout) => void
   deleteWorkout: (id: string) => void
-  toggleSavedExercise: (exerciseId: string) => void
   addExerciseToWorkout: (workoutId: string, exerciseId: string) => void
   setRotation: (rotation: Rotation) => void
   completeWorkout: (workoutId: string | null, name: string, details?: CompletedDetails) => void
@@ -117,7 +114,6 @@ export const newId = () => crypto.randomUUID?.() ?? `${Date.now()}-${Math.random
  */
 export function WorkoutStoreProvider({ children }: { children: ReactNode }) {
   const [workouts, setWorkouts] = useLocalStorageState<Workout[]>('styrkeloggen-workouts', [])
-  const [savedExerciseIds, setSavedExerciseIds] = useLocalStorageState<string[]>('styrkeloggen-saved-exercises', [])
   const [customExercises, setCustomExercises] = useLocalStorageState<Exercise[]>('styrkeloggen-custom-exercises', [])
   const [exerciseOverrides, setExerciseOverrides] = useLocalStorageState<Record<string, MeasureOverride>>('styrkeloggen-exercise-overrides', {})
   const [exerciseStats, setExerciseStats] = useLocalStorageState<Record<string, ExerciseStats>>('styrkeloggen-exercise-stats', {})
@@ -131,7 +127,7 @@ export function WorkoutStoreProvider({ children }: { children: ReactNode }) {
 
   // Äldre mål saknar övningens id: koppla dem via namnet så att de följer övningen om den byter namn
   const goals = useMemo(
-    () => goalsRaw.map((g) => (g.exerciseId ? g : { ...g, exerciseId: [...customExercises, ...exercisesLibrary].find((e) => e.name === g.exercise)?.id })),
+    () => goalsRaw.map((g) => (g.exerciseId ? g : { ...g, exerciseId: customExercises.find((e) => e.name === g.exercise)?.id })),
     [goalsRaw, customExercises],
   )
 
@@ -141,9 +137,7 @@ export function WorkoutStoreProvider({ children }: { children: ReactNode }) {
     return {
       workouts,
       getExercise,
-      savedExerciseIds,
       customExercises,
-      myExercises: [...customExercises, ...savedExerciseIds.flatMap((id) => getExercise(id) ?? []).filter((e) => !e.custom)],
       exerciseOverrides,
       exerciseStats,
       recordSession: (results) => {
@@ -237,7 +231,6 @@ export function WorkoutStoreProvider({ children }: { children: ReactNode }) {
       },
       deleteExercise: (exerciseId) => {
         setCustomExercises((prev) => prev.filter((e) => e.id !== exerciseId))
-        setSavedExerciseIds((prev) => prev.filter((x) => x !== exerciseId))
         setWorkouts((prev) => prev.map((w) => ({ ...w, exercises: w.exercises.filter((e) => e.exerciseId !== exerciseId) })))
         setGoals((prev) => prev.filter((g) => g.exerciseId !== exerciseId && !(g.exerciseId === undefined && g.exercise === getExercise(exerciseId)?.name)))
         setExerciseOverrides((prev) => {
@@ -269,8 +262,6 @@ export function WorkoutStoreProvider({ children }: { children: ReactNode }) {
         setWorkouts((prev) => prev.filter((w) => w.id !== id))
         setRotation((prev) => ({ ...prev, workoutIds: prev.workoutIds.filter((x) => x !== id) }))
       },
-      toggleSavedExercise: (exerciseId) =>
-        setSavedExerciseIds((prev) => (prev.includes(exerciseId) ? prev.filter((x) => x !== exerciseId) : [...prev, exerciseId])),
       addExerciseToWorkout: (workoutId, exerciseId) =>
         setWorkouts((prev) =>
           prev.map((w) =>
@@ -281,7 +272,7 @@ export function WorkoutStoreProvider({ children }: { children: ReactNode }) {
       completeWorkout: (workoutId, name, details) =>
         setHistory((prev) => [...prev, { workoutId, name, completedAt: new Date().toISOString(), ...details }]),
     }
-  }, [workouts, savedExerciseIds, goals, setGoals, exerciseStats, setExerciseStats, customExercises, setCustomExercises, exerciseOverrides, setExerciseOverrides, rotation, history, setWorkouts, setSavedExerciseIds, setRotation, setHistory])
+  }, [workouts, goals, setGoals, exerciseStats, setExerciseStats, customExercises, setCustomExercises, exerciseOverrides, setExerciseOverrides, rotation, history, setWorkouts, setRotation, setHistory])
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>
 }

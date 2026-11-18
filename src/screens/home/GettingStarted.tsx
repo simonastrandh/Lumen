@@ -7,12 +7,12 @@ import styles from './GettingStarted.module.css'
 /** Startguide för nya användare: tre steg som bockas av när de är gjorda. Försvinner när första passet är loggat. */
 export function GettingStarted() {
   const navigate = useNavigate()
-  const { myExercises, workouts, history } = useWorkoutStore()
+  const { customExercises, workouts, history } = useWorkoutStore()
   if (history.length > 0) return null
 
   const first = workouts[0]
   const steps = [
-    { done: myExercises.length > 0 || workouts.some((w) => w.exercises.length > 0), text: 'Lägg till en övning', hint: 'Skriv in en övning du gör, t.ex. Bänkpress eller Löpning.', go: () => navigate('/pass') },
+    { done: customExercises.length > 0 || workouts.some((w) => w.exercises.length > 0), text: 'Lägg till en övning', hint: 'Skriv in en övning du gör, t.ex. Bänkpress eller Löpning.', go: () => navigate('/pass') },
     { done: workouts.length > 0, text: 'Skapa ett pass', hint: 'Ett pass är en lista övningar du tränar i en följd.', go: () => navigate('/pass/ny') },
     { done: false, text: 'Starta och avsluta ett pass', hint: 'Då loggas det i Statistik och dina mål börjar följa dig.', go: () => navigate(first ? `/pass/aktivt/${first.id}` : '/pass/aktivt/tomt') },
   ]

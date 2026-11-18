@@ -65,17 +65,17 @@ export function EditGoalSheet({ open, goal, onClose, onSave }: EditGoalSheetProp
 }
 
 function GoalForm({ goal, onClose, onSave }: Omit<EditGoalSheetProps, 'open'>) {
-  const { myExercises, exerciseStats, getExercise } = useWorkoutStore()
+  const { customExercises, exerciseStats, getExercise } = useWorkoutStore()
   // Målet hör till övningens id. Äldre mål utan id (eller med borttagen övning) behåller sitt namn som "legacy".
-  const [exerciseId, setExerciseId] = useState(goal ? (goal.exerciseId && myExercises.some((e) => e.id === goal.exerciseId) ? goal.exerciseId : 'legacy') : '')
+  const [exerciseId, setExerciseId] = useState(goal ? (goal.exerciseId && customExercises.some((e) => e.id === goal.exerciseId) ? goal.exerciseId : 'legacy') : '')
   const [submitted, setSubmitted] = useState(false)
 
   // Bara sparade övningar kan väljas (ett befintligt mål behåller sin övning även om den inte längre finns)
   const options = [
     ...(goal && exerciseId === 'legacy' ? [{ value: 'legacy', label: goal.exercise }] : []),
-    ...myExercises.map((e) => ({ value: e.id, label: e.name })),
+    ...customExercises.map((e) => ({ value: e.id, label: e.name })),
   ]
-  const found = myExercises.find((e) => e.id === exerciseId)
+  const found = customExercises.find((e) => e.id === exerciseId)
   const ex = found ? getExercise(found.id) : undefined
   const exercise = options.find((o) => o.value === exerciseId)?.label ?? ''
   const stats = found ? exerciseStats[found.id] : undefined
@@ -107,7 +107,7 @@ function GoalForm({ goal, onClose, onSave }: Omit<EditGoalSheetProps, 'open'>) {
   function pickExercise(id: string) {
     setExerciseId(id)
     setChosen(null)
-    const next = myExercises.find((e) => e.id === id)
+    const next = customExercises.find((e) => e.id === id)
     const e = next ? getExercise(next.id) : undefined
     // Nuvarande förifylls med övningens aktuella vikt/tid; målet fyller man i själv
     const v: Values = {}

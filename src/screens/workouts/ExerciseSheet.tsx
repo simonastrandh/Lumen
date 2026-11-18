@@ -60,19 +60,17 @@ export function ExerciseSheet({ exercise: selected, onClose }: ExerciseSheetProp
   return (
     <BottomSheet open onClose={close} closeIcon={changed ? 'check' : 'close'} title={exercise.name}>
 
-      {exercise.custom && (
-        <TextField
-          key={exercise.id}
-          label="Namn"
-          defaultValue={exercise.name}
-          autoComplete="off"
-          onBlur={(e) => {
-            const n = e.target.value.trim()
-            if (n && n !== exercise.name) { setChanged(true); renameExercise(exercise.id, n) }
-            else e.target.value = exercise.name
-          }}
-        />
-      )}
+      <TextField
+        key={exercise.id}
+        label="Namn"
+        defaultValue={exercise.name}
+        autoComplete="off"
+        onBlur={(e) => {
+          const n = e.target.value.trim()
+          if (n && n !== exercise.name) { setChanged(true); renameExercise(exercise.id, n) }
+          else e.target.value = exercise.name
+        }}
+      />
 
       <fieldset className={styles.group}>
         <legend className={styles.label}>Mäts i</legend>
@@ -165,13 +163,11 @@ export function ExerciseSheet({ exercise: selected, onClose }: ExerciseSheetProp
       {!picking && (
         confirmDelete ? (
           <Button variant="secondary" fullWidth onClick={() => { deleteExercise(exercise.id); setConfirmDelete(false); setChanged(false); setPicking(false); onClose() }} style={{ color: 'var(--danger)', borderColor: 'var(--danger)' }}>
-            {exercise.custom
-              ? `Ja, ta bort övningen${inWorkouts > 0 ? ` (även ur ${inWorkouts} pass)` : ''}`
-              : `Ja, ta bort från Mina övningar${inWorkouts > 0 ? ` (även ur ${inWorkouts} pass)` : ''}`}
+            {`Ja, ta bort övningen${inWorkouts > 0 ? ` (även ur ${inWorkouts} pass)` : ''}`}
           </Button>
         ) : (
           <Button variant="ghost" icon="trash" onClick={() => setConfirmDelete(true)} style={{ alignSelf: 'center', padding: '10px 16px', fontSize: 12, color: 'var(--danger)' }}>
-            {exercise.custom ? 'Ta bort övning' : 'Ta bort från Mina övningar'}
+            Ta bort övning
           </Button>
         )
       )}

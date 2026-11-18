@@ -35,11 +35,11 @@ export default function Workouts() {
     return store.rotation.active && s.kind === 'rotation' ? s.workout.id : null
   })()
 
-  // Bara användarens egna övningar: sparade samt de som skrivits in själv
-  const myExercises = store.myExercises
+  // Användarens övningar
+  const customExercises = store.customExercises
 
   const matchedWorkouts = store.workouts.filter((w) => norm(w.name).includes(q))
-  const matchedExercises = myExercises.filter((e) => norm(e.name).includes(q) || norm(e.muscleGroup).includes(q))
+  const matchedExercises = customExercises.filter((e) => norm(e.name).includes(q) || norm(e.muscleGroup).includes(q))
   const noResults = searching && !matchedWorkouts.length && !matchedExercises.length
 
   const workoutRows = (list: typeof store.workouts) => (
@@ -98,7 +98,7 @@ export default function Workouts() {
 
           <section className={`${styles.section} ${styles.last}`} aria-labelledby="my-exercises">
             <h2 id="my-exercises" className={styles.heading}>Mina övningar</h2>
-            {myExercises.length > 0 ? exerciseRows(myExercises) : <p className={styles.empty}>Inga övningar än. Övningar du skriver in när du skapar ett pass dyker upp här.</p>}
+            {customExercises.length > 0 ? exerciseRows(customExercises) : <p className={styles.empty}>Inga övningar än. Övningar du skriver in när du skapar ett pass dyker upp här.</p>}
             <Button variant="secondary" icon="plus" fullWidth onClick={() => setAdding(true)}>
               Skapa ny övning
             </Button>
