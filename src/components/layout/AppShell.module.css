@@ -32,7 +32,7 @@
   .shell {
     width: var(--frame-width);
     max-width: var(--frame-width);
-    --shell-h: var(--frame-h);
+    --shell-h: min(860px, calc(100dvh - 48px));
     height: var(--shell-h);
     min-height: 0;
     margin: 24px auto;

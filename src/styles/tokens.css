@@ -31,7 +31,6 @@
 
   --app-max-width: 560px; /* på mobil fyller appen hela bredden; bredare skärmar (t.ex. liggande telefon) begränsas */
   --frame-width: 390px; /* telefonramen på datorskärm */
-  --frame-h: min(800px, calc(100dvh - 130px)); /* telefonramens höjd; plats under för handen */
 }
 
 /* Mörkt läge (standard) – mörkblå bakgrund */

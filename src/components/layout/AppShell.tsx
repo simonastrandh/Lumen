@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Outlet } from 'react-router-dom'
 import { BottomNav } from './BottomNav'
-import { DesktopHand } from './DesktopHand'
 import { Welcome } from './Welcome'
 import styles from './AppShell.module.css'
 
@@ -37,8 +36,6 @@ export function AppShell() {
   }, [phase])
 
   return (
-    <>
-    <DesktopHand layer="back" />
     <div className={styles.shell}>
       {/* Bara det här lagret scrollar i telefonramen */}
       <div className={`${styles.scroller} ${phase === 'intro' ? styles.hidden : ''} ${phase === 'enter' ? styles.entering : ''}`} aria-hidden={phase === 'intro' || undefined}>
@@ -49,7 +46,5 @@ export function AppShell() {
       </div>
       {phase !== 'done' && <Welcome leaving={phase === 'enter'} onSkip={() => phase === 'intro' && setPhase('enter')} />}
     </div>
-    <DesktopHand layer="front" />
-    </>
   )
 }
